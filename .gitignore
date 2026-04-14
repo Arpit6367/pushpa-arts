@@ -36,8 +36,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-# uploaded files (persist on server, don't overwrite on deploy)
-/public/uploads/products/*
+# uploaded files (committed for initial deploy, but ignored if dynamic)
+# /public/uploads/products/*
 !/public/uploads/products/.gitkeep
 
 # typescript
