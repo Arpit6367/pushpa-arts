@@ -15,6 +15,8 @@ export default function AdminProductsPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
+  const [showImportModal, setShowImportModal] = useState(false);
+
   const fetchProducts = () => {
     setLoading(true);
     const params = new URLSearchParams({ page, limit: 20 });
@@ -80,7 +82,10 @@ export default function AdminProductsPage() {
     <>
       <div className="admin-header">
         <h1>Products</h1>
-        <Link href="/admin/products/new" className="btn btn-primary btn-sm">+ Add Product</Link>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <button onClick={() => setShowImportModal(true)} className="btn btn-outline btn-sm">Bulk Import</button>
+          <Link href="/admin/products/new" className="btn btn-primary btn-sm">+ Add Product</Link>
+        </div>
       </div>
 
       <div className="admin-content">
@@ -158,6 +163,130 @@ export default function AdminProductsPage() {
           </div>
         )}
       </div>
+
+      {showImportModal && (
+        <BulkImportModal 
+          onClose={() => {
+            setShowImportModal(false);
+            fetchProducts();
+          }} 
+        />
+      )}
     </>
+  );
+}
+
+function BulkImportModal({ onClose }) {
+  const [file, setFile] = useState(null);
+  const [importing, setImporting] = useState(false);
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState('');
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.name.endsWith('.csv')) {
+      setFile(selectedFile);
+      setError('');
+    } else {
+      setError('Please select a valid CSV file');
+      setFile(null);
+    }
+  };
+
+  const handleImport = async () => {
+    if (!file) return;
+    setImporting(true);
+    setError('');
+    setResults(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/products/import', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResults(data);
+      } else {
+        setError(data.error || 'Failed to import products');
+      }
+    } catch (err) {
+      setError('An error occurred during import');
+    }
+    setImporting(false);
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #f0f0f0', paddingBottom: '1rem' }}>
+          <h3 style={{ margin: 0, border: 'none', padding: 0 }}>Bulk Import Products</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999' }}>&times;</button>
+        </div>
+
+        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+          Upload a CSV file to import products in bulk. You can download our sample file to see the required format.
+        </p>
+
+        <a href="/api/products/import/sample-csv" className="sample-link" download>
+          <span>📥</span> Download Sample CSV
+        </a>
+
+        <div 
+          className={`import-area ${importing ? 'loading' : ''}`}
+          onClick={() => !importing && document.getElementById('csv-upload').click()}
+        >
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
+          <p style={{ margin: 0, fontWeight: '500', color: file ? '#111' : '#888' }}>
+            {file ? file.name : 'Click to select CSV file'}
+          </p>
+          <input 
+            id="csv-upload" 
+            type="file" 
+            accept=".csv" 
+            onChange={handleFileChange} 
+            style={{ display: 'none' }} 
+          />
+        </div>
+
+        {error && <div style={{ color: '#e53e3e', fontSize: '0.85rem', marginBottom: '1rem', padding: '0.75rem', background: '#fff5f5', borderRadius: '8px', border: '1px solid #fce4e4' }}>{error}</div>}
+
+        {results && (
+          <div className="import-results">
+            <h4 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {results.failed === 0 ? '✅ Import Successful' : '⚠️ Import Completed with Issues'}
+            </h4>
+            <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '0.5rem' }}>
+              <div><strong style={{ color: '#059669' }}>{results.success}</strong> Succeeded</div>
+              <div><strong style={{ color: results.failed > 0 ? '#dc2626' : '#666' }}>{results.failed}</strong> Failed</div>
+            </div>
+            {results.errors && results.errors.length > 0 && (
+              <ul className="import-error-list">
+                {results.errors.map((err, i) => <li key={i}>{err}</li>)}
+              </ul>
+            )}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+          <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={onClose} disabled={importing}>
+            {results ? 'Close' : 'Cancel'}
+          </button>
+          {!results && (
+            <button 
+              className="btn btn-primary btn-sm" 
+              style={{ flex: 1 }} 
+              onClick={handleImport} 
+              disabled={!file || importing}
+            >
+              {importing ? 'Processing...' : 'Start Import'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

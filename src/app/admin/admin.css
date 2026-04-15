@@ -798,6 +798,64 @@ select.form-input {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
 }
 
+.import-area {
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  transition: all 0.3s;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.import-area:hover {
+  border-color: #bf9140;
+  background: #fff;
+}
+
+.import-area.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.import-results {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border-radius: 10px;
+  background: #f8f9fa;
+  font-size: 0.9rem;
+}
+
+.import-results h4 {
+  margin-bottom: 0.8rem;
+  color: #111;
+}
+
+.import-error-list {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  color: #e53e3e;
+  font-size: 0.8rem;
+}
+
+.sample-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #bf9140;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.sample-link:hover {
+  text-decoration: underline;
+}
+
 .modal h3 {
   font-family: 'Playfair Display', serif;
   color: #111;
