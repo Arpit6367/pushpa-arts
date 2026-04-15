@@ -11,7 +11,7 @@ export default function AboutPage() {
 
       <section className="section">
         <div className="container">
-          <div className="about-section" style={{ marginBottom: 'var(--space-4xl)' }}>
+          <div className="about-section reveal" style={{ marginBottom: 'var(--space-4xl)' }}>
             <div className="about-image">
               <div className="no-image" style={{ height: '100%', fontSize: '1.2rem' }}>
                 🏛️ Craftsmanship
@@ -33,7 +33,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="about-section" style={{ marginBottom: 'var(--space-4xl)' }}>
+          <div className="about-section reveal" style={{ marginBottom: 'var(--space-4xl)' }}>
             <div className="about-image">
               <div className="no-image" style={{ height: '100%', fontSize: '1.2rem' }}>
                 ✨ Materials
@@ -55,7 +55,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="about-section">
+          <div className="about-section reveal">
             <div className="about-image">
               <div className="no-image" style={{ height: '100%', fontSize: '1.2rem' }}>
                 🌍 Global Reach
@@ -80,7 +80,7 @@ export default function AboutPage() {
       </section>
 
       {/* Features */}
-      <section className="section" style={{ background: 'var(--color-bg-secondary)' }}>
+      <section className="section reveal" style={{ background: 'var(--color-bg-secondary)' }}>
         <div className="container">
           <div className="features-grid">
             <div className="feature-card">

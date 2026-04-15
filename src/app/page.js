@@ -131,11 +131,6 @@ export default function HomePage() {
             />
           ))}
         </div>
-
-        {/* Scroll Indicator */}
-        {/* <div className="hero-scroll-indicator">
-          <div className="hero-scroll-line" />
-        </div> */}
       </section>
 
       {/* ===== TRUST STRIP ===== */}
@@ -175,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CATEGORIES SECTION ===== */}
-      <section className="section" id="categories-section">
+      <section className="section reveal" id="categories-section">
         <div className="container">
           <h2 className="section-title">Shop by Collection</h2>
           <div className="gold-line"></div>
@@ -191,6 +186,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="empty-state">
+              <div className="spinner"></div>
               <h3>Discovering Collections...</h3>
             </div>
           )}
@@ -198,7 +194,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== VIDEO / STORY SECTION ===== */}
-      <section className="video-story-section" id="story-section">
+      <section className="video-story-section reveal" id="story-section">
         <div className="video-story-grid">
           <div className="video-story-media">
             <div className="video-wrapper">
@@ -225,9 +221,8 @@ export default function HomePage() {
               Rajasthan to discerning homes worldwide.
             </p>
             <p>
-              From the intricate carving of pure silver to the geometric precision of bone inlay,
-              our Udaipur workshop is where tradition meets contemporary elegance.
-              Every piece is a collaboration between master artisans and the finest natural materials.
+              Every piece is a collaboration between master artisans and the finest natural materials, 
+              crafted in our Udaipur workshop where tradition meets contemporary elegance.
             </p>
             <div className="video-story-stats">
               <div className="stat-item">
@@ -243,7 +238,7 @@ export default function HomePage() {
                 <span>Countries</span>
               </div>
             </div>
-            <Link href="/about" className="btn btn-outline" style={{ marginTop: '1.5rem' }}>
+            <Link href="/about" className="btn btn-outline" style={{ marginTop: '2.5rem' }}>
               Read Our Full Story →
             </Link>
           </div>
@@ -252,7 +247,7 @@ export default function HomePage() {
 
       {/* ===== FEATURED PRODUCTS ===== */}
       {featuredProducts.length > 0 && (
-        <section className="section" id="featured-section" style={{ background: '#fafafa' }}>
+        <section className="section reveal" id="featured-section" style={{ background: '#fafafa' }}>
           <div className="container">
             <h2 className="section-title">Handpicked Masterpieces</h2>
             <div className="gold-line"></div>
@@ -276,7 +271,7 @@ export default function HomePage() {
       )}
 
       {/* ===== FEATURES / USP SECTION ===== */}
-      <section className="section" id="features-section">
+      <section className="section reveal" id="features-section">
         <div className="container">
           <h2 className="section-title">Why Pushpa Arts</h2>
           <div className="gold-line"></div>

@@ -37,7 +37,7 @@ yarn-error.log*
 .vercel
 
 # uploaded files (committed for initial deploy, but ignored if dynamic)
-# /public/uploads/products/*
+/public/uploads/products/*
 !/public/uploads/products/.gitkeep
 
 # typescript

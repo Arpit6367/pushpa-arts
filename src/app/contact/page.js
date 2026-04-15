@@ -27,11 +27,11 @@ export default function ContactPage() {
         <div className="container">
           <div className="contact-grid">
             {/* Contact Info */}
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', color: 'var(--color-cream)', marginBottom: 'var(--space-xl)' }}>
+            <div className="reveal">
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: 'var(--color-text-primary)', marginBottom: 'var(--space-md)' }}>
                 Get in <span className="gold-accent">Touch</span>
               </h2>
-              <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-2xl)', lineHeight: 1.8 }}>
+              <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-2xl)', lineHeight: 1.8, fontSize: '1.05rem' }}>
                 Have a question or interested in our products? We&apos;d love to hear from you. 
                 Reach out to us through any of the channels below or fill out the inquiry form.
               </p>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                 <div className="icon">✉</div>
                 <div>
                   <h4>Email Us</h4>
-                  <p><a href="mailto:info@pushpaexport.com" style={{ color: 'var(--color-gold)' }}>info@pushpaexport.com</a></p>
+                  <p><a href="mailto:info@pushpaarts.com" style={{ color: 'var(--color-gold)' }}>info@pushpaarts.com</a></p>
                 </div>
               </div>
 
@@ -56,7 +56,7 @@ export default function ContactPage() {
                 <div className="icon">📞</div>
                 <div>
                   <h4>Call Us</h4>
-                  <p>+91 XXXXXXXXXX</p>
+                  <p>+91 94141 62629</p>
                 </div>
               </div>
 
@@ -66,7 +66,7 @@ export default function ContactPage() {
                   <h4>WhatsApp</h4>
                   <p>
                     <a 
-                      href="https://wa.me/91XXXXXXXXXX" 
+                      href="https://wa.me/919414162629" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       style={{ color: 'var(--color-gold)' }}
@@ -79,14 +79,15 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div>
+            <div className="reveal">
               <div style={{ 
-                background: 'var(--color-bg-card)', 
-                padding: 'var(--space-2xl)', 
-                borderRadius: 'var(--radius-lg)',
-                border: '1px solid var(--color-border)'
+                background: '#fff', 
+                padding: 'clamp(1.5rem, 5vw, 3.5rem)', 
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid var(--color-border)',
+                boxShadow: 'var(--shadow-lg)'
               }}>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-cream)', marginBottom: 'var(--space-xl)' }}>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', color: 'var(--color-text-primary)', marginBottom: 'var(--space-xl)' }}>
                   Send an Inquiry
                 </h3>
 
