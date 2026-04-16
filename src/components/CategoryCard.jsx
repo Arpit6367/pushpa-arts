@@ -1,20 +1,23 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CategoryCard({ category }) {
   return (
-    <Link 
-      href={`/product-category/${category.slug_path || category.slug}`} 
-      className="block relative aspect-[0.75] overflow-hidden group reveal rounded-[2px] border border-black/5" 
+    <Link
+      href={`/product-category/${category.slug_path || category.slug}`}
+      className="block relative aspect-[0.75] overflow-hidden group reveal rounded-[2px] border border-black/5"
       id={`category-${category.id}`}
     >
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] group-hover:scale-110" 
-        style={{ 
-          backgroundImage: category.image ? `url(${category.image})` : 'none',
-          backgroundColor: '#f5f5f7'
-        }}
-      >
-        {!category.image && (
+      <div className="absolute inset-0 transition-transform duration-[2s] group-hover:scale-110 bg-[#f5f5f7]">
+        {category.image ? (
+          <Image
+            src={category.image}
+            alt={category.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        ) : (
           <div className="flex w-full h-full items-center justify-center font-heading italic opacity-20 text-sm tracking-widest uppercase">
             Studio Aesthetic
           </div>

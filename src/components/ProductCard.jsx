@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProductCard({ product }) {
@@ -6,23 +7,24 @@ export default function ProductCard({ product }) {
   const catSlug = product.category_slug_path || product.categories?.[0]?.slug_path || 'uncategorized';
 
   return (
-    <Link 
-      href={`/shop/${catSlug}/${product.slug}`} 
-      className="block bg-white transition-all duration-500 reveal group relative border border-black/5 hover:border-black/10 hover:shadow-2xl hover:shadow-[#1F1F1F]/5 overflow-hidden rounded-[2px]" 
+    <Link
+      href={`/shop/${catSlug}/${product.slug}`}
+      className="block bg-white transition-all duration-500 reveal group relative border border-black/5 hover:border-black/10 hover:shadow-2xl hover:shadow-[#1F1F1F]/5 overflow-hidden rounded-[2px]"
       id={`product-${product.id}`}
     >
       <div className="relative aspect-square bg-[#fdfdfd] overflow-hidden">
         {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={product.name} 
-            loading="lazy" 
-            className="w-full h-full object-contain p-10 transition-transform duration-[1.5s] ease-out group-hover:scale-110" 
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            fill
+            className="w-full h-full object-contain p-10 transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         ) : (
           <div className="flex items-center justify-center font-heading italic opacity-40 text-xs text-center p-8 bg-[#f5f5f7] w-full h-full">Studio Imagery</div>
         )}
-        
+
         {/* Modern Hover Overlay */}
         <div className="absolute inset-0 bg-[#1F1F1F]/5 backdrop-blur-[1px] flex items-center justify-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:backdrop-blur-[2px]">
           <span className="bg-white text-[#1F1F1F] text-[0.6rem] uppercase tracking-[0.3em] font-bold py-4 px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0">

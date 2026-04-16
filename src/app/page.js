@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 
@@ -132,9 +133,17 @@ export default function HomePage() {
           {heroSlides.map((s, i) => (
             <div
               key={i}
-              className={`absolute inset-0 bg-cover bg-center transition-all duration-[2000ms] ${i === currentSlide ? 'opacity-55 scale-100 z-10' : 'opacity-0 scale-110 z-0'}`}
-              style={{ backgroundImage: `url(${s.image})` }}
-            />
+              className={`absolute inset-0 transition-all duration-[2000ms] ${i === currentSlide ? 'opacity-55 scale-100 z-10' : 'opacity-0 scale-110 z-0'}`}
+            >
+              <Image 
+                src={s.image} 
+                alt={s.badge} 
+                fill 
+                priority={i === 0}
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
           ))}
           <div className="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_60%,rgba(0,0,0,0.8)_100%),linear-gradient(90deg,rgba(0,0,0,0.7)_0%,transparent_40%,transparent_60%,rgba(0,0,0,0.7)_100%)]" />
         </div>
@@ -181,7 +190,13 @@ export default function HomePage() {
             {materials.map((m, i) => (
               <div key={i} className={`relative aspect-[0.8] overflow-hidden group reveal stagger-${i + 1}`}>
                 <div className="w-full h-full relative">
-                  <img src={m.image} alt={m.name} className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110" />
+                  <Image 
+                    src={m.image} 
+                    alt={m.name} 
+                    fill
+                    className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                  />
                   <div className="absolute inset-0 p-10 flex flex-col justify-end bg-gradient-to-t from-black/70 to-transparent text-white">
                     <h3 className="text-[1.8rem] mb-2 font-heading">{m.name}</h3>
                     <p className="text-[0.6rem] uppercase tracking-[0.2em] opacity-80">{m.desc}</p>
