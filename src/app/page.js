@@ -1,56 +1,42 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 
 const heroSlides = [
   {
-    image: '/images/hero-1.png',
-    badge: 'Silver Furniture Collection',
-    title: 'Handcrafted Silver\nFurniture',
-    subtitle: 'Exquisite throne chairs, beds and more — covered in pure silver sheet with intricate hand-carved motifs.',
+    image: '/images/hero-refined-1.png',
+    badge: 'The Silver Collection',
+    title: 'Silver Throne of\nMajesty',
+    subtitle: 'Hand-carved solid teak, encased in pure silver sheet. A masterpiece of royal heritage.',
   },
   {
-    image: '/images/hero-2.png',
-    badge: 'Bone Inlay Collection',
-    title: 'Artistry in\nBone Inlay',
-    subtitle: 'Geometric precision meets centuries-old tradition. Console tables, dressers and cabinets crafted with camel bone.',
+    image: '/images/hero-refined-2.png',
+    badge: 'Art of Bone Inlay',
+    title: 'Labyrinth of\nElegance',
+    subtitle: 'Thousands of bone fragments, inlaid with surgical precision to create timeless floral mosaics.',
   },
   {
-    image: '/images/hero-3.png',
-    badge: 'Marble & Stone',
-    title: 'Natural Marble\nMasterpieces',
-    subtitle: 'Pietra dura dining tables and surfaces inlaid with semi-precious stones — lapis lazuli, malachite and mother of pearl.',
+    image: '/images/hero-refined-3.png',
+    badge: 'Marble Masterpieces',
+    title: 'The Stone of\nGods',
+    subtitle: 'Pietra Dura surfaces featuring semi-precious stone inlays. Eternal beauty for modern spaces.',
   },
+];
+
+const materials = [
+  { name: 'Silver', image: '/images/material-silver-v2.png', desc: '99% Pure Silver Sheet' },
+  { name: 'Bone Inlay', image: '/images/material-bone-v2.png', desc: 'Ethically Sourced Camel Bone' },
+  { name: 'Mother of Pearl', image: '/images/material-mop-v2.png', desc: 'Iridescent Ocean Shells' },
+  { name: 'Marble', image: '/images/material-marble.png', desc: 'Makrana & Semi-Precious Stones' },
 ];
 
 export default function HomePage() {
   const [categories, setCategories] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slideDirection, setSlideDirection] = useState('right');
-
-  const nextSlide = useCallback(() => {
-    setSlideDirection('right');
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  }, []);
-
-  const prevSlide = useCallback(() => {
-    setSlideDirection('left');
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  }, []);
-
-  const goToSlide = useCallback((index) => {
-    setSlideDirection(index > currentSlide ? 'right' : 'left');
-    setCurrentSlide(index);
-  }, [currentSlide]);
-
-  // Auto-advance slides
-  useEffect(() => {
-    const timer = setInterval(nextSlide, 6000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     fetch('/api/categories?active_only=true')
@@ -62,7 +48,7 @@ export default function HomePage() {
       })
       .catch(() => { });
 
-    fetch('/api/products?featured=true&limit=8')
+    fetch('/api/products?featured=true&limit=6')
       .then(res => res.json())
       .then(data => {
         if (data.products) {
@@ -72,237 +58,201 @@ export default function HomePage() {
       .catch(() => { });
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [categories, featuredProducts]);
+
   const slide = heroSlides[currentSlide];
 
   return (
-    <>
-      {/* ===== HERO SLIDESHOW ===== */}
-      <section className="hero-slideshow" id="hero-section">
-        {/* Background Images */}
-        {heroSlides.map((s, i) => (
-          <div
-            key={i}
-            className={`hero-slide-bg ${i === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${s.image})` }}
-          />
-        ))}
+    <main>
+      {/* ===== HERO SECTION ===== */}
+      <section className="hero-editorial">
+        <div className="hero-bg-wrapper">
+          {heroSlides.map((s, i) => (
+            <div
+              key={i}
+              className={`hero-bg-img ${i === currentSlide ? 'active' : ''}`}
+              style={{ backgroundImage: `url(${s.image})` }}
+            />
+          ))}
+          <div className="hero-overlay-soft" />
+        </div>
 
-        {/* Dark Overlay */}
-        <div className="hero-overlay" />
-
-        {/* Content */}
-        <div className="hero-slide-content" key={currentSlide}>
-          <div className="hero-badge-pill">{slide.badge}</div>
-          <h1 className="hero-title">
-            {slide.title.split('\n').map((line, i) => (
-              <span key={i}>
-                {i === 0 ? <span className="hero-title-gold">{line}</span> : line}
-                {i < slide.title.split('\n').length - 1 && <br />}
-              </span>
-            ))}
-          </h1>
-          <p className="hero-description">{slide.subtitle}</p>
-          <div className="hero-actions">
-            <Link href="/categories" className="btn btn-hero-primary">
-              Explore Collections
-            </Link>
-            <Link href="/contact" className="btn btn-hero-outline">
-              Get a Quote
-            </Link>
+        <div className="container hero-content-container">
+          <div className="hero-text-area" key={currentSlide}>
+            <span className="hero-badge-minimal">{slide.badge}</span>
+            <h1 className="title-display">
+              {slide.title.split('\n').map((line, i) => (
+                <span key={i} className="block-reveal">
+                  {line}
+                  {i < slide.title.split('\n').length - 1 && <br />}
+                </span>
+              ))}
+            </h1>
+            <p className="hero-para-refined">{slide.subtitle}</p>
+            <div className="hero-btn-row">
+              <Link href="/product-category" className="btn-premium">Explore Collection</Link>
+              <Link href="/about" className="btn-link-elegant">Our Craftsmanship →</Link>
+            </div>
           </div>
         </div>
 
-        {/* Navigation Arrows */}
-        <button className="hero-arrow hero-arrow-left" onClick={prevSlide} aria-label="Previous slide">
-          ‹
-        </button>
-        <button className="hero-arrow hero-arrow-right" onClick={nextSlide} aria-label="Next slide">
-          ›
-        </button>
-
-        {/* Dots */}
-        <div className="hero-dots">
+        <div className="hero-controls-refined">
           {heroSlides.map((_, i) => (
             <button
               key={i}
-              className={`hero-dot ${i === currentSlide ? 'active' : ''}`}
-              onClick={() => goToSlide(i)}
-              aria-label={`Go to slide ${i + 1}`}
+              className={`hero-dot-line ${i === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(i)}
             />
           ))}
         </div>
       </section>
 
-      {/* ===== TRUST STRIP ===== */}
-      <section className="trust-strip">
+      {/* ===== SHOP BY MATERIAL ===== */}
+      <section className="section bg-latte section-material">
         <div className="container">
-          <div className="trust-items">
-            <div className="trust-item">
-              <span className="trust-icon">🏆</span>
-              <div>
-                <strong>Heritage Artisans</strong>
-                <p>7+ Generations of Craft</p>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-icon">✈️</span>
-              <div>
-                <strong>Global Delivery</strong>
-                <p>White-Glove Shipping</p>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-icon">🎨</span>
-              <div>
-                <strong>Custom Design</strong>
-                <p>Bespoke to Your Needs</p>
-              </div>
-            </div>
-            <div className="trust-item">
-              <span className="trust-icon">💎</span>
-              <div>
-                <strong>Genuine Materials</strong>
-                <p>Silver, Bone, Marble</p>
-              </div>
-            </div>
+          <div className="section-header-left reveal">
+            <h2 className="section-title" style={{ textAlign: 'left' }}>The Elements of Artistry</h2>
+            <p className="section-subtitle" style={{ textAlign: 'left', marginLeft: 0 }}>Discover pieces categorized by their core materials.</p>
           </div>
-        </div>
-      </section>
 
-      {/* ===== CATEGORIES SECTION ===== */}
-      <section className="section reveal" id="categories-section">
-        <div className="container">
-          <h2 className="section-title">Shop by Collection</h2>
-          <div className="gold-line"></div>
-          <p className="section-subtitle">
-            Explore our curated range of luxury handcrafted furniture, each piece a work of art.
-          </p>
-
-          {categories.length > 0 ? (
-            <div className="categories-grid">
-              {categories.map(cat => (
-                <CategoryCard key={cat.id} category={cat} />
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <div className="spinner"></div>
-              <h3>Discovering Collections...</h3>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ===== VIDEO / STORY SECTION ===== */}
-      <section className="video-story-section reveal" id="story-section">
-        <div className="video-story-grid">
-          <div className="video-story-media">
-            <div className="video-wrapper">
-              <img
-                src="/images/workshop.png"
-                alt="Pushpa Arts Workshop — Master artisans at work"
-                className="video-poster"
-              />
-              <div className="video-play-overlay">
-                <div className="video-play-btn">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+          <div className="material-grid">
+            {materials.map((m, i) => (
+              <div key={i} className={`material-card reveal stagger-${i + 1}`}>
+                <div className="material-img-box">
+                  <img src={m.image} alt={m.name} />
+                  <div className="material-overlay">
+                    <h3>{m.name}</h3>
+                    <p>{m.desc}</p>
+                  </div>
                 </div>
-                <span>Watch Our Story</span>
               </div>
-            </div>
-          </div>
-          <div className="video-story-content">
-            <div className="video-story-badge">Our Heritage</div>
-            <h2>A Legacy of <span>Precision</span> & Artistry</h2>
-            <p>
-              Pushpa Arts was founded with a single vision: to bring the rare handicrafts of
-              Rajasthan to discerning homes worldwide.
-            </p>
-            <p>
-              Every piece is a collaboration between master artisans and the finest natural materials, 
-              crafted in our Udaipur workshop where tradition meets contemporary elegance.
-            </p>
-            <div className="video-story-stats">
-              <div className="stat-item">
-                <strong>7+</strong>
-                <span>Generations</span>
-              </div>
-              <div className="stat-item">
-                <strong>50+</strong>
-                <span>Artisans</span>
-              </div>
-              <div className="stat-item">
-                <strong>30+</strong>
-                <span>Countries</span>
-              </div>
-            </div>
-            <Link href="/about" className="btn btn-outline" style={{ marginTop: '2.5rem' }}>
-              Read Our Full Story →
-            </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== FEATURED PRODUCTS ===== */}
-      {featuredProducts.length > 0 && (
-        <section className="section reveal" id="featured-section" style={{ background: '#fafafa' }}>
-          <div className="container">
-            <h2 className="section-title">Handpicked Masterpieces</h2>
-            <div className="gold-line"></div>
-            <p className="section-subtitle">
-              Some of our most intricate and popular creations, available for order worldwide.
-            </p>
+      {/* ===== CATEGORIES EDITORIAL GRID ===== */}
+      <section className="section reveal">
+        <div className="container">
+          <div className="editorial-grid">
+            <div className="editorial-text-col">
+              <span className="gold-accent uppercase ls-2">Curation</span>
+              <h2 className="section-title" style={{ textAlign: 'left', marginTop: '1rem' }}>Celestial Rooms</h2>
+              <p className="editorial-p">From grand Rajasthani palaces to contemporary minimal lofts, our pieces bring a soul to every space they inhabit.</p>
+              <Link href="/product-category" className="btn-premium-outline" style={{ marginTop: '2rem' }}>View All Categories</Link>
+            </div>
 
-            <div className="products-grid">
-              {featuredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
+            <div className="editorial-main-item">
+              {categories[0] && <CategoryCard category={categories[0]} variant="large" />}
+            </div>
+
+            <div className="editorial-sub-items">
+              {categories.slice(1, 4).map((cat, i) => (
+                <CategoryCard key={cat.id} category={cat} variant="compact" />
               ))}
             </div>
-
-            <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-              <Link href="/categories" className="btn btn-outline">
-                Explore Full Range →
-              </Link>
-            </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* ===== FEATURES / USP SECTION ===== */}
-      <section className="section reveal" id="features-section">
-        <div className="container">
-          <h2 className="section-title">Why Pushpa Arts</h2>
-          <div className="gold-line"></div>
-          <p className="section-subtitle">
-            Authenticity, quality, and timeless craftsmanship in every detail.
-          </p>
-
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">🏅</div>
-              <h3>Artisan Heritage</h3>
-              <p>Crafted by native Udaipur artisans who have mastered these traditional crafts over seven generations.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">✨</div>
-              <h3>Bespoke Design</h3>
-              <p>Every piece can be customized to your specific dimensions, colors, and pattern requirements.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🌎</div>
-              <h3>Global Shipping</h3>
-              <p>Expert packaging and white-glove delivery to clients across the US, UK, and Europe.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">💎</div>
-              <h3>Authentic Materials</h3>
-              <p>We use genuine silver, ethically sourced camel bone, and the finest Makrana marble.</p>
+      {/* ===== THE ARTISAN'S PROCESS ===== */}
+      <section className="section-story reveal">
+        <div className="story-parallax-bg" style={{ backgroundImage: 'url(/images/workshop-ambient.png)' }}>
+          <div className="story-overlay" />
+          <div className="container story-content">
+            <div className="story-box reveal">
+              <span className="uppercase ls-3 gold-accent">The Process</span>
+              <h2 className="title-display" style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}>Slow Made, <br />Forever Loved</h2>
+              <p>A single bone inlay dresser takes over 4 weeks of hand-carving and precision placement. This is not manufacturing; this is a slow conversation between wood, bone, and artist.</p>
+              <div className="story-stats-premium">
+                <div className="stat"><strong>300+</strong> <span>Hours/Piece</span></div>
+                <div className="stat"><strong>100%</strong> <span>Handmade</span></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-    </>
+
+      {/* ===== BESPOKE SERVICES ===== */}
+      <section className="section bg-latte reveal">
+        <div className="container">
+          <div className="editorial-grid" style={{ gridTemplateColumns: '1fr 1fr', alignItems: 'center', gap: '8rem' }}>
+            <div className="reveal">
+              <span className="gold-accent uppercase ls-2">Bespoke</span>
+              <h2 className="title-display" style={{ marginTop: '1.5rem', fontSize: '3.5rem' }}>Commission a <br />Masterpiece</h2>
+              <p className="editorial-p" style={{ maxWidth: '500px', margin: '2rem 0' }}>
+                Your vision, our heritage. We offer complete customization for our entire collection, allowing you to select specific motifs, materials, and dimensions to suit your unique space.
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '2rem 0', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: 'var(--color-gold)' }}>●</span> Custom Dimensions & Layouts
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: 'var(--color-gold)' }}>●</span> Choice of Silver, Bone, or MOP
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: 'var(--color-gold)' }}>●</span> Direct Consultation with Master Artisans
+                </li>
+              </ul>
+              <Link href="/contact" className="btn-premium" style={{ display: 'inline-block' }}>Inquire for Customization</Link>
+            </div>
+            <div className="reveal delay-200">
+              <div className="about-image" style={{ aspectRatio: '1', position: 'relative' }}>
+                <img src="/images/hero-luxury-1.png" alt="Custom Silver Throne" style={{ objectPosition: 'center 20%' }} />
+                <div style={{ position: 'absolute', bottom: '-40px', left: '-40px', background: '#fff', padding: '2.5rem', boxShadow: 'var(--shadow-lg)', maxWidth: '300px' }}>
+                  <p style={{ fontStyle: 'italic', margin: 0, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>"The attention to detail in our custom bone inlay dresser was remarkable. A true heirloom."</p>
+                  <p style={{ marginTop: '1rem', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700 }}>— Private Collector, London</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TRENDING MASTERPIECES ===== */}
+      <section className="section reveal" style={{ background: '#fff' }}>
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+            <div>
+              <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Trending Now</h2>
+              <p className="editorial-p" style={{ margin: 0 }}>The most coveted pieces of the season.</p>
+            </div>
+            <Link href="/product-category" className="btn-link-elegant">View Gallery →</Link>
+          </div>
+
+          <div className="featured-carousel-grid">
+            {featuredProducts.map((p, i) => (
+              <div key={p.id} className={`reveal stagger-${i % 3 + 1}`}>
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FINAL CTA / NEWSLETTER ===== */}
+      <section className="section bg-dark reveal" style={{ padding: '8rem 0' }}>
+        <div className="container text-center">
+          <h2 className="title-display" style={{ color: '#fff' }}>Bring Royalty Home</h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto 3rem' }}>Join our inner circle for exclusive previews of new artisan drops and custom interior inspiration.</p>
+          <div className="newsletter-premium">
+            <input type="email" placeholder="YOUR EMAIL ADDRESS" />
+            <button>Subscribe</button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -6,7 +6,7 @@ import ProductCard from '@/components/ProductCard';
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const { slug } = params;
+  const { product_slug: slug } = params; // Map the new param name to 'slug'
 
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
@@ -38,7 +38,7 @@ export default function ProductDetailPage() {
       <div className="empty-state" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h3>Product not found</h3>
         <p>The product you&apos;re looking for doesn&apos;t exist.</p>
-        <Link href="/categories" className="btn btn-outline" style={{ marginTop: 'var(--space-lg)' }}>
+        <Link href="/product-category" className="btn btn-outline" style={{ marginTop: 'var(--space-lg)' }}>
           Browse Products
         </Link>
       </div>
@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
                   <div className="no-image" style={{ height: '100%', fontSize: '1.2rem' }}>No Image Available</div>
                 )}
               </div>
-              
+
               {images.length > 1 && (
                 <div className="product-gallery-thumbs">
                   {images.map((img, index) => (
@@ -84,36 +84,44 @@ export default function ProductDetailPage() {
                 <Link href="/">Home</Link> <span>/</span>
                 {product.category_name && (
                   <>
-                    <Link href={`/categories/${product.category_slug}`}>{product.category_name}</Link>
+                    <Link href={`/product-category/${product.category_slug}`}>{product.category_name}</Link>
                     <span>/</span>
                   </>
                 )}
                 <span>{product.name}</span>
               </div>
 
-              <h1>{product.name}</h1>
+              <h1 className="reveal">{product.name}</h1>
 
               {product.sku && (
-                <div className="sku">SKU: {product.sku}</div>
+                <div className="sku reveal delay-100">SKU: {product.sku}</div>
               )}
 
               {product.description && (
-                <div className="description" dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br/>') }} />
+                <div className="description reveal delay-200" dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br/>') }} />
               )}
 
-              <a 
-                href={`https://wa.me/?text=Hi, I am interested in ${product.name} (${typeof window !== 'undefined' ? window.location.href : ''})`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inquiry-btn"
-              >
-                💬 Inquire on WhatsApp
-              </a>
+              <div className="reveal delay-300">
+                <a
+                  href={`https://wa.me/?text=Hi, I am interested in ${product.name} (${typeof window !== 'undefined' ? window.location.href : ''})`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inquiry-btn"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                >
+                  💬 Inquire on WhatsApp
+                </a>
 
-              <div style={{ marginTop: 'var(--space-lg)' }}>
-                <Link href="/contact" className="btn btn-outline">
-                  ✉ Send Inquiry
-                </Link>
+                <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem' }}>
+                  <Link href="/contact" className="btn-premium-outline" style={{ flex: 1, textAlign: 'center' }}>
+                    ✉ Email Inquiry
+                  </Link>
+                </div>
+              </div>
+
+              <div className="reveal delay-400" style={{ marginTop: '4rem', padding: '2rem', border: '1px solid var(--color-border-light)', background: 'var(--color-bg-secondary)' }}>
+                <span className="gold-accent uppercase ls-2" style={{ fontSize: '0.65rem' }}>Heritage Certification</span>
+                <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--color-text-secondary)' }}>Each piece is certified as an authentic Udaipur handcrafted creation, following royal artisan protocols passed down through generations.</p>
               </div>
             </div>
           </div>

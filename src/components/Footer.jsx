@@ -5,48 +5,50 @@ export default function Footer() {
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
-          <div className="footer-brand">
+          <div className="footer-col reveal">
             <div className="logo">
-              <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" style={{ height: '110px', width: 'auto', marginBottom: '1.5rem' }} />
+              <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" style={{ height: '70px', width: 'auto', marginBottom: '2rem' }} />
             </div>
-            <p>
-              Premium manufacturers and exporters of luxury handcrafted furniture. 
-              Bringing Udaipur's royal artisan heritage to high-end homes worldwide.
+            <h4>Our Heritage</h4>
+            <p className="footer-story-p">
+              Born in the historic city of Udaipur, Pushpa Arts represents generations of refined craftsmanship. 
+              We preserve the royal art of Inlay and Carving, bringing timeless Rajasthani elegance to the world's most distinguished interiors.
             </p>
           </div>
 
-          <div>
-            <h4>Furniture Types</h4>
+          <div className="footer-col reveal delay-100">
+            <h4>Collections</h4>
             <ul className="footer-links">
-              <li><Link href="/categories/silver-furniture">Silver Furniture</Link></li>
-              <li><Link href="/categories/bone-inlay-furniture">Bone Inlay Furniture</Link></li>
-              <li><Link href="/categories/mop-inlay-furniture">MOP Inlay Furniture</Link></li>
-              <li><Link href="/categories/marble-furniture">Marble Furniture</Link></li>
+              <li><Link href="/product-category/silver-furniture">Silver Legacy</Link></li>
+              <li><Link href="/product-category/bone-inlay-furniture">Bone Inlay Masters</Link></li>
+              <li><Link href="/product-category/mop-inlay-furniture">Mother of Pearl</Link></li>
+              <li><Link href="/product-category/marble-furniture">Marble Masterpieces</Link></li>
             </ul>
           </div>
 
-          <div>
-            <h4>Company</h4>
+          <div className="footer-col reveal delay-200">
+            <h4>Concierge</h4>
             <ul className="footer-links">
-              <li><Link href="/about">Our Story</Link></li>
-              <li><Link href="/categories">Collections</Link></li>
-              <li><Link href="/contact">Get in Touch</Link></li>
+              <li><Link href="/about">The Artisan Story</Link></li>
+              <li><Link href="/contact">Bespoke Inquiry</Link></li>
+              <li><Link href="/admin">Craftsman Portal</Link></li>
+              <li><Link href="/privacy">Privacy & Heritage</Link></li>
             </ul>
           </div>
 
-          <div>
-            <h4>Contact Details</h4>
+          <div className="footer-col reveal delay-300">
+            <h4>Connect</h4>
             <ul className="footer-links">
               <li>Udaipur, Rajasthan, India</li>
-              <li>info@pushpaarts.com</li>
+              <li>bespoke@pushpaarts.com</li>
               <li>+91 94141 62629</li>
             </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Pushpa Arts. All rights reserved.</p>
-          <p>Handcrafted Excellence since Generations.</p>
+          <p>© {new Date().getFullYear()} Pushpa Arts — Handcrafted Excellence.</p>
+          <div className="footer-tagline">Preserving Royale Udaipur Craftsmanship</div>
         </div>
       </div>
     </footer>

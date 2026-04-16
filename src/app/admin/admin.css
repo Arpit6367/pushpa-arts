@@ -19,7 +19,8 @@
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: 1000; /* Much higher than overlay */
+  z-index: 1000;
+  /* Much higher than overlay */
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.03);
@@ -172,7 +173,8 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
-  z-index: 900; /* Lower than sidebar */
+  z-index: 900;
+  /* Lower than sidebar */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -189,13 +191,15 @@
   .admin-sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 1050; /* Ensure mobile state is always on top */
+    z-index: 1050;
+    /* Ensure mobile state is always on top */
   }
 
   .admin-sidebar.open {
     transform: translateX(0);
     box-shadow: 10px 0 40px rgba(0, 0, 0, 0.15);
-    z-index: 1200; /* Topmost */
+    z-index: 1200;
+    /* Topmost */
   }
 
   .admin-main {
@@ -969,4 +973,9 @@ select.form-input {
   .admin-content {
     padding: 1.5rem;
   }
+}
+
+.btn-sm {
+  padding: 0.8rem 1.8rem;
+  font-size: 0.75rem;
 }
