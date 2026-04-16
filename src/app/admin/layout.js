@@ -60,11 +60,11 @@ export default function AdminLayout({ children }) {
   if (!isAuthenticated) return null;
 
   const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: '📊' },
-    { href: '/admin/categories', label: 'Categories', icon: '📁' },
-    { href: '/admin/products', label: 'Products', icon: '📦' },
-    { href: '/admin/products/new', label: 'Add Product', icon: '➕' },
-    { href: '/admin/file-manager', label: 'File Manager', icon: '🖼️' },
+    { href: '/admin', label: 'Overview', icon: '📊' },
+    { href: '/admin/categories', label: 'Collections', icon: '📁' },
+    { href: '/admin/products', label: 'Masterpieces', icon: '📦' },
+    { href: '/admin/products/new', label: 'New Masterpiece', icon: '➕' },
+    { href: '/admin/file-manager', label: 'Studio Gallery', icon: '🖼️' },
   ];
 
   return (
@@ -81,15 +81,15 @@ export default function AdminLayout({ children }) {
 
       <aside className={`w-[260px] bg-white/75 backdrop-blur-xl border-r border-black/10 p-0 fixed top-0 left-0 bottom-0 flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0 shadow-[10px_0_40px_rgba(0,0,0,0.15)] z-[1200]' : '-translate-x-full z-[1050]'} lg:z-[1000]`}>
         <div className="px-8 py-12 flex flex-col gap-2">
-          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className="h-[50px] w-auto self-start brightness-0 invert-0 saturate-100" />
-          <p className="text-[0.65rem] text-[#86868b] uppercase tracking-[0.2rem] font-semibold">Artisanal Management</p>
+          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className="h-[70px] ml-8 w-auto self-start" />
+          <p className="text-[0.65rem] text-[#86868b] uppercase tracking-[0.2rem] font-semibold">Studio Management</p>
         </div>
         <nav className="flex-1 py-4 px-3 overflow-y-auto">
           {navItems.map(item => {
-            const isActive = item.href === '/admin' 
-              ? pathname === '/admin' 
+            const isActive = item.href === '/admin'
+              ? pathname === '/admin'
               : pathname.startsWith(item.href) && (pathname.length === item.href.length || pathname[item.href.length] === '/');
-            
+
             return (
               <Link
                 key={item.href}
@@ -104,7 +104,7 @@ export default function AdminLayout({ children }) {
         </nav>
         <div className="px-5 py-6 border-t border-black/10 flex flex-col gap-3">
           <Link href="/" className="w-full p-3 bg-black/5 border border-black/10 text-[#1d1d1f] rounded-[10px] text-[0.9rem] font-semibold text-center mt-2 transition-all hover:bg-[#ff3b30]/10 hover:border-[#ff3b30]/20 hover:text-[#ff3b30]">
-            View Gallery
+            Visit Store
           </Link>
           <button onClick={handleLogout} className="w-full p-3 bg-black/5 border border-black/10 text-[#1d1d1f] rounded-[10px] text-[0.9rem] font-medium cursor-pointer transition-all hover:bg-[#ff3b30]/10 hover:border-[#ff3b30]/20 hover:text-[#ff3b30]">Sign Out</button>
         </div>
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }) {
 
       <div className="flex-1 bg-[#fbfbfd] min-h-screen transition-all duration-300 lg:ml-[260px] ml-0 pt-[60px] lg:pt-0">
         <div className="px-12 lg:pt-10 pt-6 text-[0.85rem] font-medium text-[#86868b] flex items-center gap-2">
-          <Link href="/admin" className="hover:text-[#1d1d1f] transition-colors">Admin</Link>
+          <Link href="/admin" className="hover:text-[#1d1d1f] transition-colors">Studio</Link>
           {pathname !== '/admin' && (
             <>
               <span className="mx-1">/</span>

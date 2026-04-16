@@ -8,6 +8,8 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === '/';
+  const isDarkHeader = isHome && !scrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,26 +43,26 @@ export default function Header() {
       <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
         <div className={`grid grid-cols-[1fr_auto_1fr] items-center transition-all duration-500 lg:grid-cols-[1fr_auto_1fr] ${mobileOpen ? 'lg:flex' : ''} ${scrolled ? 'py-4' : 'py-8'}`}>
           <nav className="hidden lg:flex gap-12 justify-start">
-            <Link href="/" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : 'opacity-70 text-[#1F1F1F]'}`}>Heritage</Link>
-            <Link href="/product-category" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname?.startsWith('/product-category') ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : 'opacity-70 text-[#1F1F1F]'}`}>Collections</Link>
+            <Link href="/" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Home</Link>
+            <Link href="/product-category" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname?.startsWith('/product-category') ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Collections</Link>
           </nav>
 
           <Link href="/" className="text-center px-0 lg:px-16 col-start-2">
-            <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className={`w-auto transition-all duration-500 mx-auto brightness-90 sepia hue-rotate-[-12deg] saturate-[3] contrast-[1.15] ${scrolled ? 'h-12' : 'h-[clamp(50px,7vw,75px)]'}`} />
+            <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className={`w-auto transition-all duration-500 mx-auto ${isDarkHeader ? 'brightness-0 invert' : 'brightness-90'} ${scrolled ? 'h-14' : 'h-[clamp(50px,7vw,75px)]'}`} />
           </Link>
 
           <nav className="hidden lg:flex gap-12 justify-end items-center col-start-3">
-            <Link href="/about" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/about' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : 'opacity-70 text-[#1F1F1F]'}`}>Our Story</Link>
-            <Link href="/contact" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/contact' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : 'opacity-70 text-[#1F1F1F]'}`}>Bespoke</Link>
-            <a href="https://wa.me/919414162629" className="text-[0.65rem] font-bold text-[#B8860B] border border-[#B8860B] px-5 py-2 tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#B8860B] hover:text-white hover:shadow-[0_5px_15px_rgba(184,134,11,0.1)]" target="_blank" rel="noopener noreferrer">
+            <Link href="/about" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/about' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Our Story</Link>
+            <Link href="/contact" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/contact' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Contact</Link>
+            <a href="https://wa.me/919414162629" className={`text-[0.65rem] font-bold border px-5 py-2 tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#B8860B] hover:text-white hover:shadow-[0_5px_15px_rgba(184,134,11,0.1)] ${isDarkHeader ? 'text-white border-white/30' : 'text-[#B8860B] border-[#B8860B]'}`} target="_blank" rel="noopener noreferrer">
               Chat with Artisan
             </a>
           </nav>
 
           <button className="flex lg:hidden flex-col justify-center items-end gap-1.5 w-[30px] h-[30px] border-none bg-transparent cursor-pointer z-[2200] col-start-3 ml-auto" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
-            <span className="w-full h-[1.5px] bg-[#1F1F1F] transition-all"></span>
-            <span className="w-[70%] h-[1.5px] bg-[#1F1F1F] transition-all"></span>
-            <span className="w-full h-[1.5px] bg-[#1F1F1F] transition-all"></span>
+            <span className={`w-full h-[1.5px] transition-all ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}></span>
+            <span className={`w-[70%] h-[1.5px] transition-all ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}></span>
+            <span className={`w-full h-[1.5px] transition-all ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}></span>
           </button>
         </div>
       </div>

@@ -75,8 +75,51 @@ export default function NestedCategoryPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": category?.name || "Product Collection",
+            "description": category?.description || "A curated collection of handcrafted luxury furniture masterpieces.",
+            "url": typeof window !== 'undefined' ? window.location.href : '',
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListElement": products.map((product, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "url": `https://pushpaarts.com/shop/${category?.slug || 'collection'}/${product.slug}`
+              }))
+            }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://pushpaarts.com"
+              },
+              ...slugArray.map((slug, index) => ({
+                "@type": "ListItem",
+                "position": index + 2,
+                "name": slug.replace(/-/g, ' '),
+                "item": `https://pushpaarts.com/product-category/${slugArray.slice(0, index + 1).join('/')}`
+              }))
+            ]
+          })
+        }}
+      />
       <div className="bg-[#F5F1EE] border-b border-[#E5E0DA] reveal">
-        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)] pt-32 pb-16">
+        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)] py-16">
           <span className="text-[#B8860B] uppercase tracking-[0.2em] text-[0.7rem] font-bold">Collection</span>
           <h1 className="mt-4 text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
             {category?.name || <span className="text-[#B8860B]">Loading...</span>}
@@ -109,10 +152,10 @@ export default function NestedCategoryPage() {
                         className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" 
                         style={{ backgroundImage: subCat.image ? `url(${subCat.image})` : 'none' }}
                       >
-                        {!subCat.image && <div className="absolute inset-0 flex items-center justify-center bg-[#F5F1EE] text-[#8C8C8C] uppercase tracking-widest text-xs">Artistic Texture</div>}
+                        {!subCat.image && <div className="absolute inset-0 flex items-center justify-center bg-[#F5F1EE] text-[#8C8C8C] uppercase tracking-widest text-xs">Studio Aesthetic</div>}
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-8 text-white">
-                        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#D4AF37] mb-2">Discovery Sub-Collection</p>
+                        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#D4AF37] mb-2">Explore Sub-Collection</p>
                         <h3 className="text-2xl font-heading mb-4 transform transition-transform duration-500 group-hover:-translate-y-2">{subCat.name}</h3>
                         <span className="text-[0.7rem] uppercase tracking-[0.2em] border-b border-white/30 pb-1 inline-block w-max opacity-0 transform translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 group-hover:border-white">Explore Collection</span>
                       </div>
@@ -159,7 +202,7 @@ export default function NestedCategoryPage() {
               <h3 className="italic text-[#8C8C8C] text-2xl font-light">No masterpieces in this collection yet.</h3>
               <p className="mt-4 text-[#4A4A4A]">Our artisans are currently curating new pieces for this collection.</p>
               <Link href="/" className="mt-12 inline-block px-10 py-4 bg-[#1F1F1F] text-white text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all hover:bg-[#B8860B]">
-                Return to Gallery
+                Return to Collections
               </Link>
             </div>
           )}

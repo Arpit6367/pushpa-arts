@@ -1,6 +1,22 @@
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            "name": "About Pushpa Arts",
+            "description": "Learn about Pushpa Arts, a renowned manufacturer and exporter of luxury handcrafted furniture based in Udaipur, Rajasthan, India.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Pushpa Arts",
+              "logo": "https://pushpaarts.com/images/Pushpa-Exports.svg"
+            }
+          })
+        }}
+      />
       <div className="bg-[#F5F1EE] pt-32 pb-16 border-b border-[#E5E0DA]">
         <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
           <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">

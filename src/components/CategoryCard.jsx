@@ -16,13 +16,13 @@ export default function CategoryCard({ category }) {
       >
         {!category.image && (
           <div className="flex w-full h-full items-center justify-center font-heading italic opacity-20 text-sm tracking-widest uppercase">
-            Artisan Texture
+            Studio Aesthetic
           </div>
         )}
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-12 md:p-14 flex flex-col justify-end text-white transition-all duration-500 group-hover:via-black/40">
         <p className="text-[0.6rem] tracking-[0.3em] uppercase opacity-70 mb-3 font-bold translate-y-2 transition-all duration-700 group-hover:translate-y-0">
-          Discovery Collection
+          Explore Collection
         </p>
         <h3 className="font-heading text-4xl md:text-5xl mb-6 leading-tight translate-y-2 transition-all duration-700 group-hover:translate-y-0 delay-100">
           {category.name}

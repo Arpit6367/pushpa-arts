@@ -84,6 +84,62 @@ export default function ShopProductDetailPage() {
 
   return (
     <div className="bg-[#FCFAF8]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name,
+            "description": product.description?.replace(/<[^>]*>?/gm, '').substring(0, 160),
+            "image": images.map(img => img.file_path),
+            "sku": product.sku || '',
+            "brand": {
+              "@type": "Brand",
+              "name": "Pushpa Arts"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": typeof window !== 'undefined' ? window.location.href : '',
+              "priceCurrency": "INR",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "Pushpa Arts"
+              }
+            }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://pushpaarts.com"
+              },
+              ...(product.category_slug_path ? product.category_slug_path.split('/').map((part, index) => ({
+                "@type": "ListItem",
+                "position": index + 2,
+                "name": part.replace(/-/g, ' '),
+                "item": `https://pushpaarts.com/product-category/${product.category_slug_path.split('/').slice(0, index + 1).join('/')}`
+              })) : []),
+              {
+                "@type": "ListItem",
+                "position": (product.category_slug_path?.split('/').length || 0) + 2,
+                "name": product.name,
+                "item": typeof window !== 'undefined' ? window.location.href : ''
+              }
+            ]
+          })
+        }}
+      />
       <section className="pt-40 pb-24 md:pt-48 md:pb-32">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
@@ -95,7 +151,7 @@ export default function ShopProductDetailPage() {
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center text-[#8C8C8C] bg-[#F5F1EE]">
                     <span className="text-4xl mb-4 opacity-20">🖼️</span>
-                    <span className="text-[0.6rem] tracking-[0.2em] uppercase font-bold opacity-40">Artistic Photography Pending</span>
+                    <span className="text-[0.6rem] tracking-[0.2em] uppercase font-bold opacity-40">Studio Imagery Curating</span>
                   </div>
                 )}
                 {product.is_featured && (
@@ -160,7 +216,7 @@ export default function ShopProductDetailPage() {
 
                   <Link href="/contact" className="flex-1 text-center inline-block px-10 py-6 border border-[#1F1F1F] text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all hover:bg-[#1F1F1F] hover:text-white group">
                     <span className="mr-2 opacity-50 transition-opacity group-hover:opacity-100">✉</span>
-                    Bespoke Request
+                    Contact Request
                   </Link>
                 </div>
 
@@ -185,7 +241,7 @@ export default function ShopProductDetailPage() {
                 <h2 className="text-[clamp(2.2rem,5vw,3.5rem)] text-[#1F1F1F] font-heading m-0">
                   Related <span className="text-[#B8860B]">Creations</span>
                 </h2>
-                <Link href="/product-category" className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-[#B8860B] border-b border-[#B8860B] pb-1 hover:opacity-70 transition-opacity italic">View Catalog</Link>
+                <Link href="/product-category" className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-[#B8860B] border-b border-[#B8860B] pb-1 hover:opacity-70 transition-opacity italic">Explore Collections</Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 {product.related_products.map(rp => (

@@ -48,11 +48,11 @@ export default function AdminDashboard() {
     <>
       <div className="px-12 py-10 flex justify-between items-center sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
-          <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Admin Control Center</p>
+          <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Studio Control Center</p>
           <h1 className="text-[#0071e3] text-3xl font-bold tracking-tight">Overview</h1>
         </div>
         <div className="flex gap-3">
-          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">+ Launch New Product</Link>
+          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">+ Launch New Masterpiece</Link>
         </div>
       </div>
 
@@ -61,13 +61,13 @@ export default function AdminDashboard() {
           {/* Main Stat: Stock Health */}
           <div className="col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold text-[#1d1d1f]">Inventory Health</h3>
+              <h3 className="text-xl font-bold text-[#1d1d1f]">Collection Status</h3>
               <span className="text-2xl">🪴</span>
             </div>
             <div className="mt-10">
               <div className="mb-8">
                 <div className="flex justify-between text-[0.8rem] text-[#86868b] mb-3">
-                  <span>Collection Visibility</span>
+                  <span>Studio Visibility</span>
                   <span className="text-[#1d1d1f] font-semibold">{Math.round((stats.activeProds / (stats.products || 1)) * 100)}% Live</span>
                 </div>
                 <div className="h-2.5 bg-[#f0f0f0] rounded-full overflow-hidden">
@@ -77,8 +77,8 @@ export default function AdminDashboard() {
 
               <div>
                 <div className="flex justify-between text-[0.8rem] text-[#86868b] mb-3">
-                  <span>Categories Utilized</span>
-                  <span className="text-[#1d1d1f] font-semibold">{stats.categories} Sections</span>
+                  <span>Collections Curated</span>
+                  <span className="text-[#1d1d1f] font-semibold">{stats.categories} Collections</span>
                 </div>
                 <div className="h-2.5 bg-[#f0f0f0] rounded-full overflow-hidden">
                   <div className="h-full bg-[#bf9140] transition-all duration-1000 rounded-full" style={{ width: '65%' }}></div>
@@ -95,15 +95,15 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4 mt-2">
               <Link href="/admin/products/new" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
                 <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">📦</span>
-                <span className="text-[0.75rem] font-semibold leading-tight mt-1">New Product</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">New Masterpiece</span>
               </Link>
               <Link href="/admin/categories" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
                 <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">📁</span>
-                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Manage Cat</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Collections</span>
               </Link>
               <Link href="/admin/file-manager" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
                 <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">🖼️</span>
-                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Media Center</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Gallery Studio</span>
               </Link>
             </div>
           </div>
@@ -120,10 +120,10 @@ export default function AdminDashboard() {
           {/* Media Count */}
           <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-[#1d1d1f]">Total Assets</h3>
+              <h3 className="text-lg font-bold text-[#1d1d1f]">Total Media</h3>
             </div>
             <h3 className="text-[2.5rem] my-2 font-bold tracking-tight text-[#1d1d1f]">{stats.files}</h3>
-            <p className="text-[0.85rem] text-[#86868b] font-medium">Artisanal media files</p>
+            <p className="text-[0.85rem] text-[#86868b] font-medium">Artisanal Media</p>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-[20px] p-10 shadow-sm border border-black/10">
           <div className="flex justify-between items-center mb-10">
             <h3 className="m-0 text-xl font-bold text-[#1d1d1f]">Latest Additions</h3>
-            <Link href="/admin/products" className="text-[0.85rem] text-[#0071e3] font-semibold hover:underline">View Full Catalog →</Link>
+            <Link href="/admin/products" className="text-[0.85rem] text-[#0071e3] font-semibold hover:underline">View Full Collection →</Link>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">

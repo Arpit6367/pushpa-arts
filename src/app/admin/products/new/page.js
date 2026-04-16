@@ -90,12 +90,12 @@ export default function AdminProductNewPage() {
     <>
       <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
-          <p className="text-[0.75rem] uppercase tracking-wider text-[#86868b] font-semibold mb-1">Inventory / New Item</p>
-          <h1 className="text-3xl font-heading text-[#1d1d1f]">Publish Product</h1>
+          <p className="text-[0.75rem] uppercase tracking-wider text-[#86868b] font-semibold mb-1">Studio / New Masterpiece</p>
+          <h1 className="text-3xl font-heading text-[#1d1d1f]">Launch Masterpiece</h1>
         </div>
         <div className="flex gap-3">
           <button className="bg-white border border-black/10 text-[#1d1d1f] px-6 py-2.5 rounded-[12px] text-[0.85rem] font-semibold hover:bg-black/5 transition-all cursor-pointer" onClick={() => router.back()}>Cancel</button>
-          <button className="bg-[#0071e3] text-white px-6 py-2.5 rounded-[12px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-all shadow-lg shadow-[#0071e3]/20 cursor-pointer disabled:opacity-50" onClick={handleSubmit} disabled={saving}>{saving ? 'Publishing...' : 'Publish Product'}</button>
+          <button className="bg-[#0071e3] text-white px-6 py-2.5 rounded-[12px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-all shadow-lg shadow-[#0071e3]/20 cursor-pointer disabled:opacity-50" onClick={handleSubmit} disabled={saving}>{saving ? 'Launching...' : 'Launch Masterpiece'}</button>
         </div>
       </div>
 
@@ -108,7 +108,7 @@ export default function AdminProductNewPage() {
             <div className="bg-white border border-black/10 rounded-3xl p-8 md:p-12 shadow-sm">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[0.85rem] font-semibold text-[#1d1d1f] ml-1">Product Name</label>
+                  <label className="text-[0.85rem] font-semibold text-[#1d1d1f] ml-1">Masterpiece Title</label>
                   <input
                     type="text"
                     className="bg-[#f5f5f7] border border-transparent px-6 py-5 rounded-2xl text-2xl font-semibold w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none placeholder:text-[#d2d2d7]"
@@ -133,7 +133,7 @@ export default function AdminProductNewPage() {
 
             <div className="bg-white border border-black/10 rounded-3xl p-8 md:p-12 shadow-sm">
               <div className="flex justify-between items-center mb-8">
-                <h3 className="text-xl font-bold text-[#1d1d1f]">Product Media</h3>
+                <h3 className="text-xl font-bold text-[#1d1d1f]">Studio Imagery</h3>
                 <button type="button" className="bg-[#f5f5f7] text-[#1d1d1f] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#e8e8ed] transition-colors" onClick={() => fileInputRef.current?.click()}>Add Media</button>
               </div>
 
@@ -192,7 +192,7 @@ export default function AdminProductNewPage() {
                     />
                     <div className="absolute left-1 h-4 w-4 rounded-full bg-white transition-all peer-checked:left-6"></div>
                   </div>
-                  <span className="text-sm font-semibold text-[#1d1d1f]">Live on Catalog</span>
+                  <span className="text-sm font-semibold text-[#1d1d1f]">Live on Gallery</span>
                 </label>
 
                 <label className="flex items-center gap-3 p-4 rounded-2xl hover:bg-[#f5f5f7] transition-colors cursor-pointer group">
@@ -211,7 +211,7 @@ export default function AdminProductNewPage() {
             </div>
 
             <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-sm">
-              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Classification</h5>
+              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Collections & Tags</h5>
               <div className="space-y-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Reference SKU</label>
@@ -225,7 +225,7 @@ export default function AdminProductNewPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Category Tags</label>
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Associated Collections</label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {categories.map(cat => (
                       <button
@@ -267,9 +267,9 @@ export default function AdminProductNewPage() {
             </div>
 
             <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-sm">
-              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Organization</h5>
+              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Gallery Arrangement</h5>
               <div className="flex flex-col gap-2">
-                <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Display Sort Order</label>
+                <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Presentation Order</label>
                 <input
                   type="number"
                   className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"

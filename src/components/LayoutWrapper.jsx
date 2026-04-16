@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
+  const isHome = pathname === '/';
 
   useEffect(() => {
     const observerOptions = {
@@ -32,10 +33,8 @@ export default function LayoutWrapper({ children }) {
       elements.forEach((el) => observer.observe(el));
     };
 
-    // Initial observation
     observeElements();
 
-    // Watch for DOM changes (for dynamically loaded content like featured products)
     const mutationObserver = new MutationObserver(() => {
       observeElements();
     });
@@ -49,7 +48,7 @@ export default function LayoutWrapper({ children }) {
       observer.disconnect();
       mutationObserver.disconnect();
     };
-  }, [pathname]); // Re-run when pathname changes to catch new reveal elements
+  }, [pathname]);
 
   if (isAdmin) {
     return <>{children}</>;
@@ -57,8 +56,8 @@ export default function LayoutWrapper({ children }) {
 
   return (
     <>
-      <Header className='mb-20' />
-      <main>{children}</main>
+      <Header />
+      <main className={!isHome ? 'pt-[160px]' : ''}>{children}</main>
       <Footer />
     </>
   );

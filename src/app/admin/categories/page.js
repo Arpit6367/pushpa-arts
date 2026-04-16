@@ -124,10 +124,10 @@ export default function AdminCategoriesPage() {
     <>
       <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
-          <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Inventory Hierarchy</p>
-          <h1 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">Categories</h1>
+          <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Collection Hierarchy</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">Collections</h1>
         </div>
-        <button className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm" onClick={openCreate}>+ Add Category Here</button>
+        <button className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm" onClick={openCreate}>+ New Collection</button>
       </div>
 
       <div className="px-12 pb-20">
@@ -161,7 +161,7 @@ export default function AdminCategoriesPage() {
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa]">Category</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa]">Collection</th>
                   <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa]">Description</th>
                   <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa]">Order</th>
                   <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa]">Status</th>
@@ -181,7 +181,7 @@ export default function AdminCategoriesPage() {
                         <div>
                           <div className="font-semibold text-[#1d1d1f]">{cat.name}</div>
                           <div className="text-[0.8rem] text-[#86868b] mt-1">
-                            {cat.product_count || 0} Products
+                            {cat.product_count || 0} Masterpieces
                           </div>
                         </div>
                       </div>
@@ -208,8 +208,8 @@ export default function AdminCategoriesPage() {
           </div>
         ) : (
           <div className="text-center p-20 bg-white rounded-3xl border border-black/10 shadow-sm">
-            <p className="text-[#888] mb-6">No sub-categories in this section.</p>
-            <button className="bg-white border border-black/10 text-[#1d1d1f] px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-black/5 transition-colors" onClick={openCreate}>Create First Sub-category</button>
+            <p className="text-[#888] mb-6">No sub-collections in this section.</p>
+            <button className="bg-white border border-black/10 text-[#1d1d1f] px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-black/5 transition-colors" onClick={openCreate}>Create First Sub-collection</button>
           </div>
         )}
       </div>
@@ -218,10 +218,10 @@ export default function AdminCategoriesPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-[2000] p-8" onClick={() => setShowModal(false)}>
           <div className="bg-white border border-black/10 rounded-[24px] p-12 w-full max-w-[800px] max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-8">{editingCategory ? 'Edit Category' : 'Add Category'}</h3>
+            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-8">{editingCategory ? 'Edit Collection' : 'Launch New Collection'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-2 mb-6">
-                <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Category Name *</label>
+                <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Collection Name *</label>
                 <input type="text" className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
               </div>
               <div className="flex flex-col gap-2 mb-6">
@@ -230,7 +230,7 @@ export default function AdminCategoriesPage() {
               </div>
               <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Parent Category</label>
+                  <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Parent Collection</label>
                   <select className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none appearance-none cursor-pointer" style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23999\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center', backgroundSize: '16px' }} value={form.parent_id} onChange={e => setForm({ ...form, parent_id: e.target.value })}>
                     <option value="">Root (No Parent)</option>
                     {categories.filter(c => c.id !== editingCategory?.id).map(c => (
@@ -257,7 +257,7 @@ export default function AdminCategoriesPage() {
               </div>
               <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-black/10">
                 <button type="button" className="bg-white border border-black/10 text-[#1d1d1f] px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-black/5 transition-colors" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="bg-[#0071e3] text-white px-8 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">{editingCategory ? 'Update' : 'Create'}</button>
+                <button type="submit" className="bg-[#0071e3] text-white px-8 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">{editingCategory ? 'Update' : 'Launch Collection'}</button>
               </div>
             </form>
           </div>

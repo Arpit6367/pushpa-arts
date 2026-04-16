@@ -6,6 +6,12 @@ import CategoryCard from '@/components/CategoryCard';
 
 const heroSlides = [
   {
+    image: '/images/hero-refined-3.png',
+    badge: 'Marble Masterpieces',
+    title: 'The Stone of\nGods',
+    subtitle: 'Pietra Dura surfaces featuring semi-precious stone inlays. Eternal beauty for modern spaces.',
+  },
+  {
     image: '/images/hero-refined-1.png',
     badge: 'The Silver Collection',
     title: 'Silver Throne of\nMajesty',
@@ -16,12 +22,6 @@ const heroSlides = [
     badge: 'Art of Bone Inlay',
     title: 'Labyrinth of\nElegance',
     subtitle: 'Thousands of bone fragments, inlaid with surgical precision to create timeless floral mosaics.',
-  },
-  {
-    image: '/images/hero-refined-3.png',
-    badge: 'Marble Masterpieces',
-    title: 'The Stone of\nGods',
-    subtitle: 'Pietra Dura surfaces featuring semi-precious stone inlays. Eternal beauty for modern spaces.',
   },
 ];
 
@@ -58,6 +58,13 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 3); // Changed manually as heroSlides is a constant of 3 items
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -75,6 +82,50 @@ export default function HomePage() {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Pushpa Arts",
+            "url": "https://pushpaarts.com",
+            "logo": "https://pushpaarts.com/images/Pushpa-Exports.svg",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+91-94141-62629",
+              "contactType": "Sales and Inquiries",
+              "areaServed": "Worldwide",
+              "availableLanguage": ["English", "Hindi"]
+            },
+            "sameAs": [
+              "https://www.instagram.com/pushpaarts",
+              "https://www.facebook.com/pushpaarts"
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Udaipur",
+              "addressRegion": "Rajasthan",
+              "addressCountry": "India"
+            }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://pushpaarts.com",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://pushpaarts.com/product-category?search={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }}
+      />
       {/* ===== HERO SECTION ===== */}
       <section className="relative h-[100svh] min-h-[750px] flex items-center bg-black overflow-hidden">
         <div className="absolute inset-0 z-[1]">
@@ -150,7 +201,7 @@ export default function HomePage() {
               <span className="text-[#B8860B] uppercase tracking-[0.2em]">Curation</span>
               <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading mt-4 mb-6">Celestial Rooms</h2>
               <p className="text-[#4A4A4A] text-base leading-[1.9] font-light">From grand Rajasthani palaces to contemporary minimal lofts, our pieces bring a soul to every space they inhabit.</p>
-              <Link href="/product-category" className="inline-block px-10 py-4 mt-8 border border-[#1F1F1F] text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all hover:bg-[#1F1F1F] hover:text-white">View All Categories</Link>
+              <Link href="/product-category" className="inline-block px-10 py-4 mt-8 border border-[#1F1F1F] text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all hover:bg-[#1F1F1F] hover:text-white">Explore All Collections</Link>
             </div>
 
             <div>
@@ -184,12 +235,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== BESPOKE SERVICES ===== */}
+      {/* ===== Contact SERVICES ===== */}
       <section className="py-[var(--spacing-section)] bg-[#F5F1EE] reveal">
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 lg:gap-32">
             <div className="reveal">
-              <span className="text-[#B8860B] uppercase tracking-[0.2em]">Bespoke</span>
+              <span className="text-[#B8860B] uppercase tracking-[0.2em]">Contact</span>
               <h2 className="text-[#1F1F1F] font-heading text-[3.5rem] mt-6 leading-none">Commission a <br />Masterpiece</h2>
               <p className="text-[1rem] text-[#4A4A4A] leading-[1.9] font-light max-w-[500px] my-8">
                 Your vision, our heritage. We offer complete customization for our entire collection, allowing you to select specific motifs, materials, and dimensions to suit your unique space.
@@ -217,10 +268,10 @@ export default function HomePage() {
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
             <div>
-              <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading m-0">Trending Now</h2>
+              <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading m-0">Coveted Masterpieces</h2>
               <p className="text-[1rem] text-[#4A4A4A] leading-[1.9] font-light m-0 mt-2">The most coveted pieces of the season.</p>
             </div>
-            <Link href="/product-category" className="text-[0.7rem] uppercase tracking-[0.15em] font-semibold border-b border-[#1F1F1F]/30 pb-1 text-[#1F1F1F] hover:border-[#1F1F1F] transition-all">View Gallery →</Link>
+            <Link href="/product-category" className="text-[0.7rem] uppercase tracking-[0.15em] font-semibold border-b border-[#1F1F1F]/30 pb-1 text-[#1F1F1F] hover:border-[#1F1F1F] transition-all">Explore Collections →</Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

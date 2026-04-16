@@ -104,10 +104,10 @@ export default function AdminProductsPage() {
   return (
     <>
       <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
-        <h1 className="text-3xl font-heading text-[#1d1d1f]">Products</h1>
+        <h1 className="text-3xl font-heading text-[#1d1d1f]">Masterpieces</h1>
         <div className="flex gap-3">
-          <button onClick={() => setShowImportModal(true)} className="bg-white border border-black/10 text-[#1d1d1f] px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap">Bulk Import</button>
-          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm cursor-pointer whitespace-nowrap">+ Add Product</Link>
+          <button onClick={() => setShowImportModal(true)} className="bg-white border border-black/10 text-[#1d1d1f] px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap">Import Collection</button>
+          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm cursor-pointer whitespace-nowrap">+ New Masterpiece</Link>
         </div>
       </div>
 

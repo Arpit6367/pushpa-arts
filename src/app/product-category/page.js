@@ -20,16 +20,28 @@ export default function CategoriesPage() {
 
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "CollectionPage",
+                        "name": "Pushpa Arts Furniture Collections",
+                        "description": "Explore our curated collections of luxury handcrafted Silver, Bone Inlay, Mother of Pearl, and Marble furniture.",
+                        "url": "https://pushpaarts.com/product-category"
+                    })
+                }}
+            />
             <div className="bg-[#F5F1EE] pt-32 pb-16 border-b border-[#E5E0DA]">
                 <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
                   <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
-                    Our <span className="text-[#B8860B]">Collections</span>
+                    Our <span className="text-[#B8860B]">Artisanal Collections</span>
                   </h1>
                   <div className="w-16 h-[2px] bg-[#B8860B] my-8"></div>
                   <div className="flex flex-wrap items-center gap-2 text-[0.8rem] tracking-[0.2em] uppercase text-[#1F1F1F]">
                       <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a> 
                       <span className="opacity-30">/</span> 
-                      <span className="font-semibold">Categories</span>
+                      <span className="font-semibold text-[#B8860B]">Artisanal Collections</span>
                   </div>
                 </div>
             </div>
@@ -48,8 +60,9 @@ export default function CategoriesPage() {
                         </div>
                     ) : (
                         <div className="text-center py-24">
-                            <h3 className="text-2xl font-heading mb-4 text-[#1F1F1F]">No categories available</h3>
-                            <p className="text-[#8C8C8C]">Please add categories from the admin panel.</p>
+                            <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#D4AF37] mb-2">Explore Collections</p>
+                            <h3 className="text-2xl font-heading mb-4 text-[#1F1F1F]">No collections available</h3>
+                            <p className="text-[#8C8C8C]">Explore our other curated galleries.</p>
                         </div>
                     )}
                 </div>

@@ -20,13 +20,13 @@ export default function ProductCard({ product }) {
             className="w-full h-full object-contain p-10 transition-transform duration-[1.5s] ease-out group-hover:scale-110" 
           />
         ) : (
-          <div className="flex items-center justify-center font-heading italic opacity-40 text-xs text-center p-8 bg-[#f5f5f7] w-full h-full">Artistic Photography</div>
+          <div className="flex items-center justify-center font-heading italic opacity-40 text-xs text-center p-8 bg-[#f5f5f7] w-full h-full">Studio Imagery</div>
         )}
         
         {/* Modern Hover Overlay */}
         <div className="absolute inset-0 bg-[#1F1F1F]/5 backdrop-blur-[1px] flex items-center justify-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:backdrop-blur-[2px]">
           <span className="bg-white text-[#1F1F1F] text-[0.6rem] uppercase tracking-[0.3em] font-bold py-4 px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0">
-            View Details
+            Explore Masterpiece
           </span>
         </div>
       </div>

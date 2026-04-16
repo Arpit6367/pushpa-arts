@@ -110,10 +110,10 @@ export default function AdminFileManagerPage() {
   return (
     <>
       <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
-        <h1 className="text-3xl font-heading text-[#1d1d1f]">Media Assets</h1>
+        <h1 className="text-3xl font-heading text-[#1d1d1f]">Studio Gallery</h1>
         <div className="flex gap-3">
           <button className="bg-[#0071e3] text-white px-6 py-2.5 rounded-[12px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-all shadow-lg shadow-[#0071e3]/20 cursor-pointer disabled:opacity-50" onClick={() => fileInputRef.current?.click()}>
-            {uploading ? 'Uploading...' : '+ Upload Media'}
+            {uploading ? 'Uploading...' : '+ Add Imagery'}
           </button>
         </div>
         <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleUpload} className="hidden" />
@@ -131,7 +131,7 @@ export default function AdminFileManagerPage() {
             <input
               type="text"
               className="w-full bg-[#f5f5f7] border border-transparent px-5 py-3 rounded-2xl text-sm transition-all focus:bg-white focus:border-[#0071e3] outline-none"
-              placeholder="Find asset by name..."
+              placeholder="Search the gallery..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -175,8 +175,8 @@ export default function AdminFileManagerPage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-40 text-center">
             <div className="text-6xl mb-6 text-[#d2d2d7]">🖼️</div>
-            <h3 className="text-2xl font-heading text-[#1d1d1f] mb-2">No media assets found</h3>
-            <p className="text-[#86868b]">Try a different search or upload new images using the button above.</p>
+            <h3 className="text-2xl font-heading text-[#1d1d1f] mb-2">No imagery found</h3>
+            <p className="text-[#86868b]">Try a different search or add new images using the button above.</p>
           </div>
         )}
       </div>
