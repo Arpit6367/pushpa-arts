@@ -4,8 +4,10 @@ import Link from 'next/link';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState({ category_id: '', featured: '', active: '' });
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
   const [toast, setToast] = useState(null);
@@ -17,10 +19,21 @@ export default function AdminProductsPage() {
 
   const [showImportModal, setShowImportModal] = useState(false);
 
+  const fetchCategories = () => {
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setCategories(data);
+      }).catch(() => {});
+  };
+
   const fetchProducts = () => {
     setLoading(true);
     const params = new URLSearchParams({ page, limit: 20 });
     if (search) params.set('search', search);
+    if (filters.category_id) params.set('category_id', filters.category_id);
+    if (filters.featured) params.set('featured', filters.featured);
+    if (filters.active) params.set('active', filters.active);
 
     fetch(`/api/products?${params}`)
       .then(res => res.json())
@@ -33,12 +46,21 @@ export default function AdminProductsPage() {
       }).catch(() => setLoading(false));
   };
 
-  useEffect(() => { fetchProducts(); }, [page]);
+  useEffect(() => { 
+    fetchCategories();
+  }, []);
+
+  useEffect(() => { fetchProducts(); }, [page, filters]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
     fetchProducts();
+  };
+
+  const handleFilterChange = (name, value) => {
+    setFilters(prev => ({ ...prev, [name]: value }));
+    setPage(1);
   };
 
   const handleDelete = async (id) => {
@@ -78,6 +100,7 @@ export default function AdminProductsPage() {
     }
   };
 
+
   return (
     <>
       <div className="admin-header">
@@ -92,53 +115,104 @@ export default function AdminProductsPage() {
         {toast && <div className={`toast ${toast.type}`}>{toast.message}</div>}
 
         <div className="admin-table-wrapper">
-          <div className="admin-table-header">
-            <h3>All Products {pagination && `(${pagination.total})`}</h3>
-            <form onSubmit={handleSearch} className="admin-table-actions">
-              <input
-                type="text"
-                className="admin-search"
-                placeholder="Search products..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
-              <button type="submit" className="btn btn-outline btn-sm">Search</button>
-            </form>
+          <div className="admin-table-header" style={{ padding: '1.5rem 2.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ margin: 0 }}>Catalog {pagination && `(${pagination.total})`}</h3>
+                <form onSubmit={handleSearch} className="admin-table-actions">
+                  <input
+                    type="text"
+                    className="admin-search"
+                    placeholder="Quick search..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                  />
+                  <button type="submit" className="btn btn-outline btn-sm">Search</button>
+                </form>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', paddingTop: '1rem', borderTop: '1px solid var(--admin-border)' }}>
+                <div className="filter-group">
+                  <select 
+                    className="admin-search" 
+                    style={{ width: '200px' }}
+                    value={filters.category_id}
+                    onChange={e => handleFilterChange('category_id', e.target.value)}
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.parent_id ? '　↳ ' : ''}{cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="filter-group">
+                  <select 
+                    className="admin-search" 
+                    style={{ width: '150px' }}
+                    value={filters.featured}
+                    onChange={e => handleFilterChange('featured', e.target.value)}
+                  >
+                    <option value="">Status: All</option>
+                    <option value="true">⭐ Featured</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
 
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Status</th>
+                <th>Preview</th>
+                <th>Product Info</th>
+                <th>Primary Category</th>
+                <th>Visibility</th>
                 <th>Featured</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}><div className="spinner" style={{ margin: '0 auto' }}></div></td></tr>
+                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '4rem' }}><div className="spinner" style={{ margin: '0 auto' }}></div></td></tr>
               ) : products.length > 0 ? products.map(p => (
                 <tr key={p.id}>
                   <td>
                     {(p.primary_image || p.first_image) ? (
                       <img src={p.primary_image || p.first_image} className="thumb" alt={p.name} />
                     ) : (
-                      <div className="thumb" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: '#666' }}>📷</div>
+                      <div className="thumb" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: '#666', background: '#f5f5f7' }}>📷</div>
                     )}
                   </td>
-                  <td style={{ color: '#111', fontWeight: '500' }}>{p.name}</td>
-                  <td>{p.category_name || '-'}</td>
                   <td>
-                    <button className={`status-badge ${p.is_active ? 'active' : 'inactive'}`} onClick={() => toggleStatus(p)} style={{ cursor: 'pointer', border: 'none' }}>
-                      {p.is_active ? 'Active' : 'Inactive'}
+                    <div style={{ fontWeight: '600', color: '#111' }}>{p.name}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>SKU: {p.sku || 'N/A'}</div>
+                  </td>
+                  <td>
+                    <span style={{ fontSize: '0.85rem', color: '#555' }}>{p.category_name || '-'}</span>
+                    {p.categories?.length > 1 && (
+                      <div style={{ fontSize: '0.7rem', color: '#aaa' }}>+{p.categories.length - 1} more</div>
+                    )}
+                  </td>
+                  <td>
+                    <button 
+                      className={`status-badge ${p.is_active ? 'active' : 'inactive'}`} 
+                      onClick={() => toggleStatus(p)} 
+                      style={{ cursor: 'pointer', border: 'none' }}
+                      title="Click to toggle visibility"
+                    >
+                      {p.is_active ? 'Active' : 'Hidden'}
                     </button>
                   </td>
                   <td>
-                    <button onClick={() => toggleFeatured(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>
-                      {p.is_featured ? '⭐' : '☆'}
+                    <button 
+                      onClick={() => toggleFeatured(p)} 
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', opacity: p.is_featured ? 1 : 0.2 }}
+                      title="Toggle featured status"
+                    >
+                      ⭐
                     </button>
                   </td>
                   <td>
@@ -149,20 +223,25 @@ export default function AdminProductsPage() {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#aaa' }}>No products found</td></tr>
+                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '4rem', color: '#aaa' }}>
+                  <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
+                  No products match your criteria
+                </td></tr>
               )}
             </tbody>
           </table>
         </div>
 
         {pagination && pagination.pages > 1 && (
-          <div className="pagination" style={{ marginTop: '1.5rem' }}>
+          <div className="pagination" style={{ marginTop: '2rem' }}>
             {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(p => (
-              <button key={p} className={p === page ? 'active' : ''} onClick={() => setPage(p)}>{p}</button>
+              <button key={p} className={p === page ? 'active' : ''} onClick={() => setPage(p)}>{p}
+              </button>
             ))}
           </div>
         )}
       </div>
+
 
       {showImportModal && (
         <BulkImportModal 

@@ -73,10 +73,11 @@ export default function Header() {
           <Link href="/product-category" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Collections</Link>
           <div className="mobile-sub-nav">
             {parentCategories.map(cat => (
-              <Link key={cat.id} href={`/product-category/${cat.slug}`} onClick={() => setMobileOpen(false)}>
+              <Link key={cat.id} href={`/product-category/${cat.slug_path}`} onClick={() => setMobileOpen(false)}>
                 {cat.name}
               </Link>
             ))}
+
           </div>
           <Link href="/about" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Our Story</Link>
           <Link href="/contact" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Contact Us</Link>

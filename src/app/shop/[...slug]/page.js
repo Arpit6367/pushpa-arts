@@ -1,29 +1,36 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 
-export default function ProductDetailPage() {
+export default function ShopProductDetailPage() {
   const params = useParams();
-  const { product_slug: slug } = params; // Map the new param name to 'slug'
+  const router = useRouter();
+  const slugArray = params.slug || [];
+  const productSlug = slugArray[slugArray.length - 1];
 
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!slug) return;
-    fetch(`/api/products/${slug}`)
+    if (!productSlug) return;
+    
+    fetch(`/api/products/${productSlug}`)
       .then(res => res.json())
       .then(data => {
         if (data.id) {
           setProduct(data);
+          
+          // Optional: Canonical Redirect
+          // If the current path doesn't match the canonical category path, we could redirect.
+          // For now, we'll just render to ensure functionality.
         }
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [slug]);
+  }, [productSlug]);
 
   if (loading) {
     return (
@@ -47,6 +54,41 @@ export default function ProductDetailPage() {
 
   const images = product.images || [];
   const currentImage = images[activeImage]?.file_path;
+
+  // Render breadcrumbs based on the product's primary category path
+  const renderBreadcrumbs = () => {
+    const breadcrumbs = [];
+    
+    // Use the category_slug_path returned by our updated API
+    if (product.category_slug_path) {
+      const parts = product.category_slug_path.split('/');
+      let currentPath = '/product-category';
+      
+      parts.forEach((part, index) => {
+        currentPath += `/${part}`;
+        // We don't have the category name for all parts here, 
+        // but we can fallback to the slug or find a way to get names if needed.
+        // For a simple premium feel, let's just use the slugs or the primary category name at the end.
+        const name = (index === parts.length - 1) ? product.category_name : part.replace(/-/g, ' ');
+        
+        breadcrumbs.push(
+          <span key={part}>
+             <span style={{ opacity: 0.3 }}> / </span>
+            <Link href={currentPath} style={{ opacity: 0.6 }}>{name}</Link>
+          </span>
+        );
+      });
+    }
+
+    return (
+      <div className="breadcrumb">
+        <Link href="/" style={{ opacity: 0.6 }}>Home</Link>
+        {breadcrumbs}
+        <span style={{ opacity: 0.3 }}> / </span>
+        <span>{product.name}</span>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -80,16 +122,7 @@ export default function ProductDetailPage() {
 
             {/* Info */}
             <div className="product-info">
-              <div className="breadcrumb">
-                <Link href="/">Home</Link> <span>/</span>
-                {product.category_name && (
-                  <>
-                    <Link href={`/product-category/${product.category_slug}`}>{product.category_name}</Link>
-                    <span>/</span>
-                  </>
-                )}
-                <span>{product.name}</span>
-              </div>
+              {renderBreadcrumbs()}
 
               <h1 className="reveal">{product.name}</h1>
 

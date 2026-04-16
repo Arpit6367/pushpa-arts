@@ -22,7 +22,8 @@ export default function Footer() {
               <li><Link href="/product-category/silver-furniture">Silver Legacy</Link></li>
               <li><Link href="/product-category/bone-inlay-furniture">Bone Inlay Masters</Link></li>
               <li><Link href="/product-category/mop-inlay-furniture">Mother of Pearl</Link></li>
-              <li><Link href="/product-category/marble-furniture">Marble Masterpieces</Link></li>
+              <li><Link href="/product-category/marble-stone-furniture">Marble Masterpieces</Link></li>
+
             </ul>
           </div>
 

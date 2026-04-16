@@ -4,7 +4,8 @@ export default function ProductCard({ product }) {
   const imageUrl = product.primary_image || product.first_image;
 
   return (
-    <Link href={`/product-category/${product.category_slug || 'uncategorized'}/${product.slug}`} className="product-card reveal" id={`product-${product.id}`}>
+    <Link href={`/shop/${product.category_slug_path || 'uncategorized'}/${product.slug}`} className="product-card reveal" id={`product-${product.id}`}>
+
       <div className="product-card-image">
         {imageUrl ? (
           <img src={imageUrl} alt={product.name} loading="lazy" />

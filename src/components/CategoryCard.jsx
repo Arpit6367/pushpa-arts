@@ -2,7 +2,8 @@ import Link from 'next/link';
 
 export default function CategoryCard({ category }) {
   return (
-    <Link href={`/product-category/${category.slug}`} className="category-card reveal" id={`category-${category.id}`}>
+    <Link href={`/product-category/${category.slug_path || category.slug}`} className="category-card reveal" id={`category-${category.id}`}>
+
       <div 
         className="category-card-image" 
         style={{ 

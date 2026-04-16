@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { getAdminFromCookies } from '@/lib/auth';
 import slugify from 'slugify';
+import { getAllCategoriesWithPaths } from '@/lib/categories';
 
 export async function GET(request) {
   try {
@@ -13,6 +14,10 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = (page - 1) * limit;
+
+    const allCategories = await getAllCategoriesWithPaths();
+    const categoryMap = new Map();
+    allCategories.forEach(c => categoryMap.set(c.id, c));
 
     let sql = `SELECT p.*, c.name as category_name, c.slug as category_slug,
       (SELECT file_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image,
@@ -31,7 +36,12 @@ export async function GET(request) {
     }
 
     if (category_slug) {
-      conditions.push('c.slug = ?');
+      // Find all products that belong to this category (including many-to-many)
+      conditions.push(`EXISTS (
+        SELECT 1 FROM product_categories pc 
+        JOIN categories cat ON pc.category_id = cat.id 
+        WHERE pc.product_id = p.id AND cat.slug = ?
+      )`);
       params.push(category_slug);
     }
 
@@ -59,7 +69,36 @@ export async function GET(request) {
     sql += ' ORDER BY p.sort_order ASC, p.created_at DESC';
     sql += ` LIMIT ${limit} OFFSET ${offset}`;
 
-    const products = await query(sql, params);
+    const productsResult = await query(sql, params);
+
+    // Add slug_path and categories list to products
+    const products = await Promise.all(productsResult.map(async (p) => {
+      const productCategories = await query(
+        'SELECT c.id, c.name, c.slug FROM categories c JOIN product_categories pc ON c.id = pc.category_id WHERE pc.product_id = ?',
+        [p.id]
+      );
+      
+      const categoriesWithPaths = productCategories.map(c => ({
+        ...c,
+        slug_path: categoryMap.get(c.id)?.slug_path || c.slug
+      }));
+
+      // Find the category with the longest path (deepest nesting)
+      const winningCat = categoriesWithPaths.reduce((prev, curr) => {
+        const prevDepth = prev.slug_path.split('/').length;
+        const currDepth = curr.slug_path.split('/').length;
+        return currDepth > prevDepth ? curr : prev;
+      }, categoriesWithPaths[0] || null);
+
+      return {
+        ...p,
+        category_name: winningCat ? winningCat.name : p.category_name,
+        category_slug: winningCat ? winningCat.slug : p.category_slug,
+        category_slug_path: winningCat ? winningCat.slug_path : (p.category_slug || 'uncategorized'),
+        categories: categoriesWithPaths
+      };
+    }));
+
     const countResult = await query(countSql, params);
     const total = countResult[0]?.total || 0;
 
@@ -72,6 +111,7 @@ export async function GET(request) {
         pages: Math.ceil(total / limit),
       },
     });
+
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
@@ -86,7 +126,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { name, short_description, description, sku, category_id, is_featured, is_active, sort_order, meta_title, meta_description, images } = body;
+    const { name, short_description, description, sku, category_id, category_ids, is_featured, is_active, sort_order, meta_title, meta_description, images } = body;
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -94,15 +134,28 @@ export async function POST(request) {
 
     const slug = slugify(name, { lower: true, strict: true });
 
+    // Use primary category_id or first from category_ids
+    const primaryCategoryId = category_id || (category_ids && category_ids.length > 0 ? category_ids[0] : null);
+
     const result = await query(
       `INSERT INTO products (name, slug, short_description, description, sku, category_id, is_featured, is_active, sort_order, meta_title, meta_description)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, slug, short_description || null, description || null, sku || null, category_id || null, is_featured || false, is_active !== false, sort_order || 0, meta_title || null, meta_description || null]
+      [name, slug, short_description || null, description || null, sku || null, primaryCategoryId, is_featured || false, is_active !== false, sort_order || 0, meta_title || null, meta_description || null]
     );
 
     const productId = result.insertId;
 
+    // Insert categories into product_categories join table
+    const finalCategoryIds = category_ids && category_ids.length > 0 ? category_ids : (primaryCategoryId ? [primaryCategoryId] : []);
+    for (const catId of finalCategoryIds) {
+      await query(
+        'INSERT IGNORE INTO product_categories (product_id, category_id) VALUES (?, ?)',
+        [productId, catId]
+      );
+    }
+
     // Insert images if provided
+
     if (images && images.length > 0) {
       for (let i = 0; i < images.length; i++) {
         const img = images[i];

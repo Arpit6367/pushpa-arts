@@ -84,15 +84,15 @@ export default function AdminLayout({ children }) {
           ☰
         </button>
         <div className="brand-logo">
-          <img src="/images/Pushpa-Exports.svg" alt="Logo" style={{ height: '30px' }} />
+          <img src="/images/Pushpa-Exports.svg" alt="Logo" style={{ height: '24px', filter: 'brightness(0)' }} />
         </div>
-        <div style={{ width: '40px' }}></div> {/* Spacer */}
+        <div style={{ width: '40px' }}></div>
       </div>
 
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="admin-sidebar-brand">
-          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" style={{ height: '90px', width: 'auto' }} />
-          <p>Administration</p>
+          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" style={{ height: '50px !important', filter: 'brightness(0)' }} />
+          <p>Artisanal Management</p>
         </div>
         <nav className="admin-nav">
           {navItems.map(item => {
@@ -113,16 +113,28 @@ export default function AdminLayout({ children }) {
           })}
         </nav>
         <div className="admin-sidebar-footer">
-          <Link href="/" style={{ display: 'block', textAlign: 'center', color: '#999', fontSize: '0.8rem', marginBottom: '0.5rem', fontWeight: '500' }}>
-            ← View Website
+          <Link href="/" className="btn btn-outline" style={{ display: 'block', textAlign: 'center', fontSize: '0.8rem', fontWeight: '600' }}>
+            View Gallery
           </Link>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} className="btn-logout">Sign Out</button>
         </div>
       </aside>
 
       <div className={`admin-sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
 
       <div className="admin-main">
+        {/* Dashboard-level Breadcrumb Navigation */}
+        <div className="admin-breadcrumbs">
+          <Link href="/admin">Admin</Link>
+          {pathname !== '/admin' && (
+            <>
+              <span className="separator">/</span>
+              <span className="current">
+                {pathname.split('/').slice(2).map(p => p.replace(/-/g, ' ')).join(' / ')}
+              </span>
+            </>
+          )}
+        </div>
         {children}
       </div>
     </div>

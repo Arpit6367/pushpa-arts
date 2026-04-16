@@ -2,34 +2,30 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { getAdminFromCookies } from '@/lib/auth';
 import slugify from 'slugify';
+import { getAllCategoriesWithPaths } from '@/lib/categories';
 
 export async function GET(request) {
   try {
+    const categoriesWithPath = await getAllCategoriesWithPaths();
+    
+    // Filtering logic if needed (e.g., parent_id, active_only)
     const { searchParams } = new URL(request.url);
     const parent_id = searchParams.get('parent_id');
     const active_only = searchParams.get('active_only');
-
-    let sql = 'SELECT c.*, p.name as parent_name FROM categories c LEFT JOIN categories p ON c.parent_id = p.id';
-    const params = [];
-    const conditions = [];
-
-    if (parent_id) {
-      conditions.push('c.parent_id = ?');
-      params.push(parent_id);
-    }
-
+    
+    let filtered = categoriesWithPath;
+    
     if (active_only === 'true') {
-      conditions.push('c.is_active = TRUE');
+      filtered = filtered.filter(c => c.is_active);
+    }
+    
+    if (parent_id) {
+      filtered = filtered.filter(c => String(c.parent_id) === String(parent_id));
     }
 
-    if (conditions.length > 0) {
-      sql += ' WHERE ' + conditions.join(' AND ');
-    }
+    return NextResponse.json(filtered);
 
-    sql += ' ORDER BY c.sort_order ASC, c.name ASC';
 
-    const categories = await query(sql, params);
-    return NextResponse.json(categories);
   } catch (error) {
     console.error('Error fetching categories:', error);
     return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });

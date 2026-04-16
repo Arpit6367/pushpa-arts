@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
 
 /* ===== CSS RESET & BASE ===== */
 *,
@@ -39,34 +41,21 @@
   --font-body: 'Montserrat', sans-serif;
 
   /* Spacing */
-  --space-xs: clamp(0.25rem, 1vw, 0.35rem);
-  --space-sm: clamp(0.5rem, 2vw, 0.75rem);
-  --space-md: clamp(1rem, 3vw, 1.25rem);
-  --space-lg: clamp(1.5rem, 4vw, 2rem);
-  --space-xl: clamp(2rem, 5vw, 3rem);
-  --space-2xl: clamp(3.5rem, 6vw, 4.5rem);
-  --space-3xl: clamp(5rem, 8vw, 7rem);
-  --space-4xl: clamp(7rem, 12vw, 10rem);
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 8rem;
+  --space-4xl: 12rem;
 
-  /* Border Radius - Very subtle for luxury */
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 4px;
-
-  /* Transitions */
-  --transition-fast: 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-slow: 0.75s cubic-bezier(0.19, 1, 0.22, 1);
-  --transition-editorial: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Shadows - Minimalist */
-  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.08);
-
-  /* Container */
-  --container-max: 1440px;
-  --container-padding: clamp(1.5rem, 5vw, 4rem);
+  /* Specific Layout Spacing */
+  --section-padding: clamp(5rem, 10vw, 9rem);
+  --container-padding: clamp(1.2rem, 5vw, 6rem);
+  --container-max: 1600px;
 }
+
 
 html {
   scroll-behavior: smooth;
@@ -114,8 +103,9 @@ img {
 }
 
 .section {
-  padding: var(--space-3xl) 0;
+  padding: var(--section-padding) 0;
 }
+
 
 .title-display {
   font-size: clamp(3rem, 10vw, 6rem);
@@ -235,31 +225,32 @@ img {
   background: rgba(255, 255, 252, 0.98);
   backdrop-filter: blur(20px);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-  transform: translateY(-40px);
+  transform: translateY(0); /* Removed jump */
 }
 
 .header-announcement {
   background: var(--color-bg-dark);
   color: var(--color-text-on-dark);
   text-align: center;
-  padding: 10px 0;
-  font-size: 0.6rem;
-  letter-spacing: 0.25em;
+  padding: 12px 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .header-main-desktop {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 25px 0;
-  transition: padding var(--transition-base);
+  padding: 35px 0;
+  transition: all 0.5s var(--transition-editorial);
 }
 
 .header-scrolled .header-main-desktop {
-  padding: 15px 0;
+  padding: 18px 0;
 }
+
 
 .header-nav-left {
   display: flex;
@@ -1202,9 +1193,9 @@ img {
 .about-section {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 6rem;
+  gap: 8rem;
   align-items: center;
-  padding: 5rem 0;
+  padding: var(--space-xl) 0;
 }
 
 .about-section:nth-child(even) {
@@ -1221,17 +1212,17 @@ img {
   .about-section:nth-child(even) {
     grid-template-columns: 1fr;
     direction: ltr;
-    gap: 3rem;
+    gap: 4rem;
   }
 }
 
 .about-image {
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   overflow: hidden;
   aspect-ratio: 4/5;
-  background: #f9f9f9;
-  border: 1px solid #eee;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  background: #fdfdfd;
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-md);
 }
 
 .about-image img {
@@ -1242,17 +1233,17 @@ img {
 
 .about-content h2 {
   font-family: var(--font-heading);
-  font-size: 3rem;
-  color: #111;
-  margin-bottom: 2rem;
+  font-size: 3.5rem;
+  color: var(--color-text-primary);
+  margin-bottom: 2.5rem;
   line-height: 1.1;
 }
 
 .about-content p {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  line-height: 2;
+  margin-bottom: 2rem;
   font-weight: 300;
 }
 
@@ -1281,17 +1272,14 @@ img {
 
 /* Page Specific Overrides */
 .admin-login {
-  background: #f5f5f5 !important;
+  background: #fbfbfd !important;
 }
 
 .admin-login-card {
   background: #fff !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
-  border: none !important;
-}
-
-.admin-login-card .logo {
-  color: #111 !important;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: 30px !important;
 }
 
 
@@ -1300,57 +1288,58 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--space-4xl);
+  padding: 10rem 0;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-border);
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(0,0,0,0.05);
   border-top-color: var(--color-gold);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 .empty-state {
   text-align: center;
-  padding: var(--space-4xl);
+  padding: 10rem 0;
   color: var(--color-text-muted);
 }
 
 .empty-state h3 {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
-  margin-bottom: var(--space-sm);
-  color: var(--color-text-secondary);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
 }
 
 /* ===== PAGINATION ===== */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-3xl);
+  gap: 1rem;
+  margin-top: 6rem;
 }
 
 .pagination button,
 .pagination a {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--color-bg-card);
+  padding: 0.8rem 1.4rem;
+  background: #fff;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-secondary);
+  border-radius: 8px;
+  color: var(--color-text-primary);
   font-size: 0.9rem;
-  transition: all var(--transition-fast);
+  font-weight: 600;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .pagination button:hover,
 .pagination a:hover,
 .pagination .active {
-  background: var(--color-gold);
-  color: var(--color-bg-primary);
-  border-color: var(--color-gold);
+  background: var(--color-text-primary);
+  color: #fff;
+  border-color: var(--color-text-primary);
 }
 
 /* ===== NO-IMAGE PLACEHOLDER ===== */
@@ -1360,7 +1349,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-elevated);
-  color: var(--color-text-muted);
+  background: #f9f9f9;
+  color: #ccc;
   font-size: 0.8rem;
 }
