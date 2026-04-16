@@ -36,7 +36,6 @@ export default function HomePage() {
   const [categories, setCategories] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     fetch('/api/categories?active_only=true')
@@ -77,22 +76,22 @@ export default function HomePage() {
   return (
     <main>
       {/* ===== HERO SECTION ===== */}
-      <section className="hero-editorial">
-        <div className="hero-bg-wrapper">
+      <section className="relative h-[100svh] min-h-[750px] flex items-center bg-black overflow-hidden">
+        <div className="absolute inset-0 z-[1]">
           {heroSlides.map((s, i) => (
             <div
               key={i}
-              className={`hero-bg-img ${i === currentSlide ? 'active' : ''}`}
+              className={`absolute inset-0 bg-cover bg-center transition-all duration-[2000ms] ${i === currentSlide ? 'opacity-55 scale-100 z-10' : 'opacity-0 scale-110 z-0'}`}
               style={{ backgroundImage: `url(${s.image})` }}
             />
           ))}
-          <div className="hero-overlay-soft" />
+          <div className="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_60%,rgba(0,0,0,0.8)_100%),linear-gradient(90deg,rgba(0,0,0,0.7)_0%,transparent_40%,transparent_60%,rgba(0,0,0,0.7)_100%)]" />
         </div>
 
-        <div className="container hero-content-container">
-          <div className="hero-text-area" key={currentSlide}>
-            <span className="hero-badge-minimal">{slide.badge}</span>
-            <h1 className="title-display">
+        <div className="relative z-10 w-full max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="max-w-[900px] text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)]" key={currentSlide}>
+            <span className="inline-block text-[0.7rem] tracking-[0.4em] uppercase text-[#D4AF37] mb-10 font-medium">{slide.badge}</span>
+            <h1 className="text-[clamp(3rem,10vw,6rem)] text-white font-light leading-[0.95] mb-10 drop-shadow-[0_5px_15px_rgba(0,0,0,0.2)]">
               {slide.title.split('\n').map((line, i) => (
                 <span key={i} className="block-reveal">
                   {line}
@@ -100,19 +99,19 @@ export default function HomePage() {
                 </span>
               ))}
             </h1>
-            <p className="hero-para-refined">{slide.subtitle}</p>
-            <div className="hero-btn-row">
-              <Link href="/product-category" className="btn-premium">Explore Collection</Link>
-              <Link href="/about" className="btn-link-elegant">Our Craftsmanship →</Link>
+            <p className="text-[1.15rem] text-white/90 max-w-[550px] leading-[1.8] mb-16 font-light">{slide.subtitle}</p>
+            <div className="flex items-center gap-10">
+              <Link href="/product-category" className="px-12 py-5 bg-[#B8860B] text-white text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all shadow-[0_10px_30px_rgba(184,134,11,0.2)] hover:bg-white hover:text-[#1F1F1F] hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(184,134,11,0.4)]">Explore Collection</Link>
+              <Link href="/about" className="text-[0.7rem] uppercase tracking-[0.15em] font-semibold border-b border-white/30 pb-1 text-white hover:border-white transition-all">Our Craftsmanship →</Link>
             </div>
           </div>
         </div>
 
-        <div className="hero-controls-refined">
+        <div className="absolute bottom-16 right-[var(--spacing-container)] flex flex-col gap-6 z-[100]">
           {heroSlides.map((_, i) => (
             <button
               key={i}
-              className={`hero-dot-line ${i === currentSlide ? 'active' : ''}`}
+              className={`h-[2px] cursor-pointer transition-all border-none ${i === currentSlide ? 'bg-[#B8860B] w-16' : 'bg-white/20 w-10'}`}
               onClick={() => setCurrentSlide(i)}
             />
           ))}
@@ -120,21 +119,21 @@ export default function HomePage() {
       </section>
 
       {/* ===== SHOP BY MATERIAL ===== */}
-      <section className="section bg-latte section-material">
-        <div className="container">
-          <div className="section-header-left reveal">
-            <h2 className="section-title" style={{ textAlign: 'left' }}>The Elements of Artistry</h2>
-            <p className="section-subtitle" style={{ textAlign: 'left', marginLeft: 0 }}>Discover pieces categorized by their core materials.</p>
+      <section className="py-[var(--spacing-section)] bg-[#F5F1EE] border-b border-[#E5E0DA]">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="text-left reveal">
+            <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading mb-6">The Elements of Artistry</h2>
+            <p className="text-[clamp(0.85rem,2vw,0.95rem)] text-[#4A4A4A] uppercase tracking-[0.2em] font-normal leading-relaxed max-w-[650px]">Discover pieces categorized by their core materials.</p>
           </div>
 
-          <div className="material-grid">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
             {materials.map((m, i) => (
-              <div key={i} className={`material-card reveal stagger-${i + 1}`}>
-                <div className="material-img-box">
-                  <img src={m.image} alt={m.name} />
-                  <div className="material-overlay">
-                    <h3>{m.name}</h3>
-                    <p>{m.desc}</p>
+              <div key={i} className={`relative aspect-[0.8] overflow-hidden group reveal stagger-${i + 1}`}>
+                <div className="w-full h-full relative">
+                  <img src={m.image} alt={m.name} className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110" />
+                  <div className="absolute inset-0 p-10 flex flex-col justify-end bg-gradient-to-t from-black/70 to-transparent text-white">
+                    <h3 className="text-[1.8rem] mb-2 font-heading">{m.name}</h3>
+                    <p className="text-[0.6rem] uppercase tracking-[0.2em] opacity-80">{m.desc}</p>
                   </div>
                 </div>
               </div>
@@ -144,21 +143,21 @@ export default function HomePage() {
       </section>
 
       {/* ===== CATEGORIES EDITORIAL GRID ===== */}
-      <section className="section reveal">
-        <div className="container">
-          <div className="editorial-grid">
-            <div className="editorial-text-col">
-              <span className="gold-accent uppercase ls-2">Curation</span>
-              <h2 className="section-title" style={{ textAlign: 'left', marginTop: '1rem' }}>Celestial Rooms</h2>
-              <p className="editorial-p">From grand Rajasthani palaces to contemporary minimal lofts, our pieces bring a soul to every space they inhabit.</p>
-              <Link href="/product-category" className="btn-premium-outline" style={{ marginTop: '2rem' }}>View All Categories</Link>
+      <section className="py-[var(--spacing-section)] reveal">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.5fr_1fr] gap-16 items-center">
+            <div className="lg:pr-8">
+              <span className="text-[#B8860B] uppercase tracking-[0.2em]">Curation</span>
+              <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading mt-4 mb-6">Celestial Rooms</h2>
+              <p className="text-[#4A4A4A] text-base leading-[1.9] font-light">From grand Rajasthani palaces to contemporary minimal lofts, our pieces bring a soul to every space they inhabit.</p>
+              <Link href="/product-category" className="inline-block px-10 py-4 mt-8 border border-[#1F1F1F] text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all hover:bg-[#1F1F1F] hover:text-white">View All Categories</Link>
             </div>
 
-            <div className="editorial-main-item">
+            <div>
               {categories[0] && <CategoryCard category={categories[0]} variant="large" />}
             </div>
 
-            <div className="editorial-sub-items">
+            <div className="flex flex-col gap-6">
               {categories.slice(1, 4).map((cat, i) => (
                 <CategoryCard key={cat.id} category={cat} variant="compact" />
               ))}
@@ -168,17 +167,17 @@ export default function HomePage() {
       </section>
 
       {/* ===== THE ARTISAN'S PROCESS ===== */}
-      <section className="section-story reveal">
-        <div className="story-parallax-bg" style={{ backgroundImage: 'url(/images/workshop-ambient.png)' }}>
-          <div className="story-overlay" />
-          <div className="container story-content">
-            <div className="story-box reveal">
-              <span className="uppercase ls-3 gold-accent">The Process</span>
-              <h2 className="title-display" style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}>Slow Made, <br />Forever Loved</h2>
-              <p>A single bone inlay dresser takes over 4 weeks of hand-carving and precision placement. This is not manufacturing; this is a slow conversation between wood, bone, and artist.</p>
-              <div className="story-stats-premium">
-                <div className="stat"><strong>300+</strong> <span>Hours/Piece</span></div>
-                <div className="stat"><strong>100%</strong> <span>Handmade</span></div>
+      <section className="relative h-[100svh] min-h-[800px] overflow-hidden reveal">
+        <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: 'url(/images/workshop-ambient.png)' }}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative h-full flex items-center max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+            <div className="bg-[#FCFAF8] p-[clamp(3rem,10vw,6rem)] max-w-[750px] relative z-10 shadow-2xl reveal">
+              <span className="uppercase tracking-[0.3em] text-[#B8860B]">The Process</span>
+              <h2 className="text-[#1F1F1F] font-heading text-[clamp(2.5rem,6vw,4rem)] font-light leading-[0.95] my-6">Slow Made, <br />Forever Loved</h2>
+              <p className="my-10 text-[1.1rem] font-light leading-loose text-[#1F1F1F]">A single bone inlay dresser takes over 4 weeks of hand-carving and precision placement. This is not manufacturing; this is a slow conversation between wood, bone, and artist.</p>
+              <div className="flex flex-wrap gap-20 mt-16 border-t border-[#E5E0DA] pt-10">
+                <div><strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">300+</strong> <span className="text-[0.65rem] uppercase tracking-[0.2em] text-[#8C8C8C] font-semibold">Hours/Piece</span></div>
+                <div><strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">100%</strong> <span className="text-[0.65rem] uppercase tracking-[0.2em] text-[#8C8C8C] font-semibold">Handmade</span></div>
               </div>
             </div>
           </div>
@@ -186,35 +185,27 @@ export default function HomePage() {
       </section>
 
       {/* ===== BESPOKE SERVICES ===== */}
-      <section className="section bg-latte reveal">
-        <div className="container">
-          <div className="editorial-grid" style={{ gridTemplateColumns: '1fr 1fr', alignItems: 'center', gap: '8rem' }}>
+      <section className="py-[var(--spacing-section)] bg-[#F5F1EE] reveal">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 lg:gap-32">
             <div className="reveal">
-              <span className="gold-accent uppercase ls-2">Bespoke</span>
-              <h2 className="title-display" style={{ marginTop: '1.5rem', fontSize: '3.5rem' }}>Commission a <br />Masterpiece</h2>
-              <p className="editorial-p" style={{ maxWidth: '500px', margin: '2rem 0' }}>
+              <span className="text-[#B8860B] uppercase tracking-[0.2em]">Bespoke</span>
+              <h2 className="text-[#1F1F1F] font-heading text-[3.5rem] mt-6 leading-none">Commission a <br />Masterpiece</h2>
+              <p className="text-[1rem] text-[#4A4A4A] leading-[1.9] font-light max-w-[500px] my-8">
                 Your vision, our heritage. We offer complete customization for our entire collection, allowing you to select specific motifs, materials, and dimensions to suit your unique space.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '2rem 0', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
-                  <span style={{ color: 'var(--color-gold)' }}>●</span> Custom Dimensions & Layouts
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
-                  <span style={{ color: 'var(--color-gold)' }}>●</span> Choice of Silver, Bone, or MOP
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
-                  <span style={{ color: 'var(--color-gold)' }}>●</span> Direct Consultation with Master Artisans
-                </li>
+              <ul className="flex flex-col gap-5 my-8">
+                <li className="flex items-center gap-4 text-[0.9rem] text-[#4A4A4A]"><span className="text-[#B8860B] text-xs">●</span> Custom Dimensions & Layouts</li>
+                <li className="flex items-center gap-4 text-[0.9rem] text-[#4A4A4A]"><span className="text-[#B8860B] text-xs">●</span> Choice of Silver, Bone, or MOP</li>
+                <li className="flex items-center gap-4 text-[0.9rem] text-[#4A4A4A]"><span className="text-[#B8860B] text-xs">●</span> Direct Consultation with Master Artisans</li>
               </ul>
-              <Link href="/contact" className="btn-premium" style={{ display: 'inline-block' }}>Inquire for Customization</Link>
+              <Link href="/contact" className="inline-block px-12 py-5 bg-[#B8860B] text-white text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all shadow-xl hover:bg-white hover:text-[#1F1F1F]">Inquire for Customization</Link>
             </div>
-            <div className="reveal delay-200">
-              <div className="about-image" style={{ aspectRatio: '1', position: 'relative' }}>
-                <img src="/images/hero-luxury-1.png" alt="Custom Silver Throne" style={{ objectPosition: 'center 20%' }} />
-                <div style={{ position: 'absolute', bottom: '-40px', left: '-40px', background: '#fff', padding: '2.5rem', boxShadow: 'var(--shadow-lg)', maxWidth: '300px' }}>
-                  <p style={{ fontStyle: 'italic', margin: 0, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>"The attention to detail in our custom bone inlay dresser was remarkable. A true heirloom."</p>
-                  <p style={{ marginTop: '1rem', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700 }}>— Private Collector, London</p>
-                </div>
+            <div className="reveal delay-200 aspect-square relative mt-16 md:mt-0">
+              <img src="/images/hero-luxury-1.png" alt="Custom Silver Throne" className="w-full h-full object-cover object-[center_20%]" />
+              <div className="absolute -bottom-10 -left-10 md:left-auto md:-right-10 bg-white p-10 shadow-2xl max-w-[300px] z-10 w-[80%]">
+                <p className="italic text-[0.95rem] text-[#1F1F1F] leading-relaxed">"The attention to detail in our custom bone inlay dresser was remarkable. A true heirloom."</p>
+                <p className="mt-4 text-[0.7rem] uppercase tracking-[0.15em] font-bold text-[#4A4A4A]">— Private Collector, London</p>
               </div>
             </div>
           </div>
@@ -222,17 +213,17 @@ export default function HomePage() {
       </section>
 
       {/* ===== TRENDING MASTERPIECES ===== */}
-      <section className="section reveal" style={{ background: '#fff' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+      <section className="py-[var(--spacing-section)] bg-white reveal">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
             <div>
-              <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Trending Now</h2>
-              <p className="editorial-p" style={{ margin: 0 }}>The most coveted pieces of the season.</p>
+              <h2 className="text-[clamp(2.2rem,5vw,3.8rem)] text-[#1F1F1F] font-heading m-0">Trending Now</h2>
+              <p className="text-[1rem] text-[#4A4A4A] leading-[1.9] font-light m-0 mt-2">The most coveted pieces of the season.</p>
             </div>
-            <Link href="/product-category" className="btn-link-elegant">View Gallery →</Link>
+            <Link href="/product-category" className="text-[0.7rem] uppercase tracking-[0.15em] font-semibold border-b border-[#1F1F1F]/30 pb-1 text-[#1F1F1F] hover:border-[#1F1F1F] transition-all">View Gallery →</Link>
           </div>
 
-          <div className="featured-carousel-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts.map((p, i) => (
               <div key={p.id} className={`reveal stagger-${i % 3 + 1}`}>
                 <ProductCard product={p} />
@@ -243,13 +234,13 @@ export default function HomePage() {
       </section>
 
       {/* ===== FINAL CTA / NEWSLETTER ===== */}
-      <section className="section bg-dark reveal" style={{ padding: '8rem 0' }}>
-        <div className="container text-center">
-          <h2 className="title-display" style={{ color: '#fff' }}>Bring Royalty Home</h2>
-          <p style={{ color: 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto 3rem' }}>Join our inner circle for exclusive previews of new artisan drops and custom interior inspiration.</p>
-          <div className="newsletter-premium">
-            <input type="email" placeholder="YOUR EMAIL ADDRESS" />
-            <button>Subscribe</button>
+      <section className="py-32 bg-[#1F1F1F] reveal">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)] text-center">
+          <h2 className="text-[clamp(3rem,10vw,6rem)] text-white font-heading mb-6">Bring Royalty Home</h2>
+          <p className="text-white/60 max-w-[600px] mx-auto mb-12 text-lg font-light leading-relaxed">Join our inner circle for exclusive previews of new artisan drops and custom interior inspiration.</p>
+          <div className="flex max-w-[500px] w-full mx-auto relative group">
+            <input type="email" placeholder="YOUR EMAIL ADDRESS" className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[#B8860B] transition-colors" />
+            <button className="bg-transparent border-b border-[#B8860B] text-[#B8860B] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 transition-colors hover:text-white hover:border-white">Subscribe</button>
           </div>
         </div>
       </section>

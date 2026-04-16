@@ -24,7 +24,7 @@ export default function AdminProductsPage() {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setCategories(data);
-      }).catch(() => {});
+      }).catch(() => { });
   };
 
   const fetchProducts = () => {
@@ -46,7 +46,7 @@ export default function AdminProductsPage() {
       }).catch(() => setLoading(false));
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchCategories();
   }, []);
 
@@ -103,39 +103,38 @@ export default function AdminProductsPage() {
 
   return (
     <>
-      <div className="admin-header">
-        <h1>Products</h1>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button onClick={() => setShowImportModal(true)} className="btn btn-outline btn-sm">Bulk Import</button>
-          <Link href="/admin/products/new" className="btn btn-primary btn-sm">+ Add Product</Link>
+      <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
+        <h1 className="text-3xl font-heading text-[#1d1d1f]">Products</h1>
+        <div className="flex gap-3">
+          <button onClick={() => setShowImportModal(true)} className="bg-white border border-black/10 text-[#1d1d1f] px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap">Bulk Import</button>
+          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm cursor-pointer whitespace-nowrap">+ Add Product</Link>
         </div>
       </div>
 
-      <div className="admin-content">
-        {toast && <div className={`toast ${toast.type}`}>{toast.message}</div>}
+      <div className="px-12 pb-20">
+        {toast && <div className={`fixed bottom-8 right-8 px-6 py-4 rounded-xl text-[0.9rem] font-medium z-[3000] shadow-xl transition-all ${toast.type === 'error' ? 'bg-[#ff3b30] text-white' : 'bg-[#34c759] text-white'}`}>{toast.message}</div>}
 
-        <div className="admin-table-wrapper">
-          <div className="admin-table-header" style={{ padding: '1.5rem 2.5rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ margin: 0 }}>Catalog {pagination && `(${pagination.total})`}</h3>
-                <form onSubmit={handleSearch} className="admin-table-actions">
+        <div className="bg-white border border-black/10 rounded-2xl overflow-hidden shadow-sm">
+          <div className="p-6 md:p-10 border-b border-black/10">
+            <div className="flex flex-col gap-4 w-full">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h3 className="m-0 text-lg font-bold text-[#1d1d1f]">Catalog {pagination && `(${pagination.total})`}</h3>
+                <form onSubmit={handleSearch} className="flex gap-3 w-full sm:w-auto">
                   <input
                     type="text"
-                    className="admin-search"
+                    className="flex-1 sm:w-64 bg-[#f5f5f7] border border-transparent px-4 py-2.5 rounded-xl text-sm transition-all focus:bg-white focus:border-[#0071e3] outline-none"
                     placeholder="Quick search..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                   />
-                  <button type="submit" className="btn btn-outline btn-sm">Search</button>
+                  <button type="submit" className="bg-white border border-black/10 text-[#1d1d1f] px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap">Search</button>
                 </form>
               </div>
-              
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', paddingTop: '1rem', borderTop: '1px solid var(--admin-border)' }}>
-                <div className="filter-group">
-                  <select 
-                    className="admin-search" 
-                    style={{ width: '200px' }}
+
+              <div className="flex gap-4 flex-wrap pt-4 border-t border-black/10">
+                <div className="w-full sm:w-auto">
+                  <select
+                    className="w-full sm:w-64 bg-[#f5f5f7] border border-transparent px-4 py-2.5 rounded-xl text-sm transition-all focus:bg-white focus:border-[#0071e3] outline-none"
                     value={filters.category_id}
                     onChange={e => handleFilterChange('category_id', e.target.value)}
                   >
@@ -148,10 +147,9 @@ export default function AdminProductsPage() {
                   </select>
                 </div>
 
-                <div className="filter-group">
-                  <select 
-                    className="admin-search" 
-                    style={{ width: '150px' }}
+                <div className="w-full sm:w-auto">
+                  <select
+                    className="w-full sm:w-48 bg-[#f5f5f7] border border-transparent px-4 py-2.5 rounded-xl text-sm transition-all focus:bg-white focus:border-[#0071e3] outline-none"
                     value={filters.featured}
                     onChange={e => handleFilterChange('featured', e.target.value)}
                   >
@@ -163,96 +161,119 @@ export default function AdminProductsPage() {
             </div>
           </div>
 
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Preview</th>
-                <th>Product Info</th>
-                <th>Primary Category</th>
-                <th>Visibility</th>
-                <th>Featured</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '4rem' }}><div className="spinner" style={{ margin: '0 auto' }}></div></td></tr>
-              ) : products.length > 0 ? products.map(p => (
-                <tr key={p.id}>
-                  <td>
-                    {(p.primary_image || p.first_image) ? (
-                      <img src={p.primary_image || p.first_image} className="thumb" alt={p.name} />
-                    ) : (
-                      <div className="thumb" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: '#666', background: '#f5f5f7' }}>📷</div>
-                    )}
-                  </td>
-                  <td>
-                    <div style={{ fontWeight: '600', color: '#111' }}>{p.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>SKU: {p.sku || 'N/A'}</div>
-                  </td>
-                  <td>
-                    <span style={{ fontSize: '0.85rem', color: '#555' }}>{p.category_name || '-'}</span>
-                    {p.categories?.length > 1 && (
-                      <div style={{ fontSize: '0.7rem', color: '#aaa' }}>+{p.categories.length - 1} more</div>
-                    )}
-                  </td>
-                  <td>
-                    <button 
-                      className={`status-badge ${p.is_active ? 'active' : 'inactive'}`} 
-                      onClick={() => toggleStatus(p)} 
-                      style={{ cursor: 'pointer', border: 'none' }}
-                      title="Click to toggle visibility"
-                    >
-                      {p.is_active ? 'Active' : 'Hidden'}
-                    </button>
-                  </td>
-                  <td>
-                    <button 
-                      onClick={() => toggleFeatured(p)} 
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', opacity: p.is_featured ? 1 : 0.2 }}
-                      title="Toggle featured status"
-                    >
-                      ⭐
-                    </button>
-                  </td>
-                  <td>
-                    <div className="action-btns">
-                      <Link href={`/admin/products/${p.id}/edit`} className="action-btn edit">Edit</Link>
-                      <button className="action-btn delete" onClick={() => handleDelete(p.id)}>Delete</button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-[#fafafa]">
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold">Preview</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold">Product Info</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold">Primary Category</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold">Visibility</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold">Featured</th>
+                  <th className="text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold text-right">Actions</th>
                 </tr>
-              )) : (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '4rem', color: '#aaa' }}>
-                  <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
-                  No products match your criteria
-                </td></tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="6" className="text-center py-20">
+                      <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin mx-auto"></div>
+                    </td>
+                  </tr>
+                ) : products.length > 0 ? products.map(p => (
+                  <tr key={p.id} className="hover:bg-[#fbfbfd] transition-colors border-b border-black/10 last:border-b-0">
+                    <td className="py-5 px-10">
+                      {(p.primary_image || p.first_image) ? (
+                        <img src={p.primary_image || p.first_image} className="w-12 h-12 rounded-[10px] object-cover border border-black/10" alt={p.name} />
+                      ) : (
+                        <div className="w-12 h-12 rounded-[10px] bg-[#f5f5f7] border border-black/10 flex items-center justify-center text-[0.7rem] color-[#86868b]">📷</div>
+                      )}
+                    </td>
+                    <td className="py-5 px-10">
+                      <div className="font-semibold text-[#1d1d1f]">{p.name}</div>
+                      <div className="text-[0.75rem] text-[#86868b] mt-0.5">SKU: {p.sku || 'N/A'}</div>
+                    </td>
+                    <td className="py-5 px-10">
+                      <span className="text-[0.85rem] text-[#424245]">{p.category_name || '-'}</span>
+                      {p.categories?.length > 1 && (
+                        <div className="text-[0.7rem] text-[#86868b] mt-0.5">+{p.categories.length - 1} more</div>
+                      )}
+                    </td>
+                    <td className="py-5 px-10">
+                      <button
+                        className={`px-3 py-1 rounded-[6px] text-[0.65rem] font-bold uppercase tracking-wider cursor-pointer border-none transition-all ${p.is_active ? 'bg-[#34c759]/10 text-[#34c759]' : 'bg-[#ff3b30]/10 text-[#ff3b30]'}`}
+                        onClick={() => toggleStatus(p)}
+                        title="Click to toggle visibility"
+                      >
+                        {p.is_active ? 'Active' : 'Hidden'}
+                      </button>
+                    </td>
+                    <td className="py-5 px-10 text-center">
+                      <button
+                        onClick={() => toggleFeatured(p)}
+                        className={`bg-none border-none cursor-pointer text-xl transition-all ${p.is_featured ? 'opacity-100 scale-110' : 'opacity-20 hover:opacity-100 scale-100'}`}
+                        title="Toggle featured status"
+                      >
+                        ⭐
+                      </button>
+                    </td>
+                    <td className="py-5 px-10">
+                      <div className="flex gap-2 justify-end">
+                        <Link href={`/admin/products/${p.id}/edit`} className="px-4 py-2 rounded-lg text-[0.85rem] font-medium border border-black/10 bg-white text-[#0071e3] hover:bg-[#0071e3]/5 hover:border-[#0071e3] transition-all no-underline">Edit</Link>
+                        <button className="px-4 py-2 rounded-lg text-[0.85rem] font-medium border border-black/10 bg-white text-[#ff3b30] hover:bg-[#ff3b30]/5 hover:border-[#ff3b30] transition-all cursor-pointer" onClick={() => handleDelete(p.id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-20 text-[#86868b]">
+                      <div className="text-4xl mb-4 text-[#d2d2d7]">🔍</div>
+                      <p className="text-lg">No products match your criteria</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {pagination && pagination.pages > 1 && (
-          <div className="pagination" style={{ marginTop: '2rem' }}>
+          <div className="flex gap-2 justify-center mt-10">
             {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(p => (
-              <button key={p} className={p === page ? 'active' : ''} onClick={() => setPage(p)}>{p}
+              <button
+                key={p}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-all cursor-pointer border ${p === page ? 'bg-[#0071e3] text-white border-[#0071e3]' : 'bg-white text-[#1d1d1f] border-black/10 hover:border-[#0071e3]'}`}
+                onClick={() => setPage(p)}
+              >
+                {p}
               </button>
             ))}
           </div>
         )}
       </div>
 
-
       {showImportModal && (
-        <BulkImportModal 
+        <BulkImportModal
           onClose={() => {
             setShowImportModal(false);
             fetchProducts();
-          }} 
+          }}
         />
       )}
     </>
   );
+
+
+  {
+    showImportModal && (
+      <BulkImportModal
+        onClose={() => {
+          setShowImportModal(false);
+          fetchProducts();
+        }}
+      />
+    )
+  }
 }
 
 function BulkImportModal({ onClose }) {
@@ -314,7 +335,7 @@ function BulkImportModal({ onClose }) {
           <span>📥</span> Download Sample CSV
         </a>
 
-        <div 
+        <div
           className={`import-area ${importing ? 'loading' : ''}`}
           onClick={() => !importing && document.getElementById('csv-upload').click()}
         >
@@ -322,12 +343,12 @@ function BulkImportModal({ onClose }) {
           <p style={{ margin: 0, fontWeight: '500', color: file ? '#111' : '#888' }}>
             {file ? file.name : 'Click to select CSV file'}
           </p>
-          <input 
-            id="csv-upload" 
-            type="file" 
-            accept=".csv" 
-            onChange={handleFileChange} 
-            style={{ display: 'none' }} 
+          <input
+            id="csv-upload"
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
           />
         </div>
 
@@ -355,10 +376,10 @@ function BulkImportModal({ onClose }) {
             {results ? 'Close' : 'Cancel'}
           </button>
           {!results && (
-            <button 
-              className="btn btn-primary btn-sm" 
-              style={{ flex: 1 }} 
-              onClick={handleImport} 
+            <button
+              className="btn btn-primary btn-sm"
+              style={{ flex: 1 }}
+              onClick={handleImport}
               disabled={!file || importing}
             >
               {importing ? 'Processing...' : 'Start Import'}

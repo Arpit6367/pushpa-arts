@@ -20,28 +20,36 @@ export default function CategoriesPage() {
 
     return (
         <>
-            <div className="page-banner">
-                <h1>Our <span className="gold-accent">Collections</span></h1>
-                <div className="gold-line"></div>
-                <div className="breadcrumb">
-                    <a href="/">Home</a> <span>/</span> <span>Categories</span>
+            <div className="bg-[#F5F1EE] pt-32 pb-16 border-b border-[#E5E0DA]">
+                <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
+                  <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
+                    Our <span className="text-[#B8860B]">Collections</span>
+                  </h1>
+                  <div className="w-16 h-[2px] bg-[#B8860B] my-8"></div>
+                  <div className="flex flex-wrap items-center gap-2 text-[0.8rem] tracking-[0.2em] uppercase text-[#1F1F1F]">
+                      <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a> 
+                      <span className="opacity-30">/</span> 
+                      <span className="font-semibold">Categories</span>
+                  </div>
                 </div>
             </div>
 
-            <section className="section">
-                <div className="container">
+            <section className="py-[clamp(5rem,10vw,9rem)] min-h-[50vh]">
+                <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
                     {loading ? (
-                        <div className="loading"><div className="spinner"></div></div>
+                        <div className="flex justify-center py-20">
+                          <div className="w-8 h-8 rounded-full border-4 border-[#B8860B]/20 border-t-[#B8860B] animate-spin"></div>
+                        </div>
                     ) : categories.length > 0 ? (
-                        <div className="categories-grid">
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] md:grid-cols-2 lg:grid-cols-3 gap-10">
                             {categories.map(cat => (
                                 <CategoryCard key={cat.id} category={cat} />
                             ))}
                         </div>
                     ) : (
-                        <div className="empty-state">
-                            <h3>No categories available</h3>
-                            <p>Please add categories from the admin panel.</p>
+                        <div className="text-center py-24">
+                            <h3 className="text-2xl font-heading mb-4 text-[#1F1F1F]">No categories available</h3>
+                            <p className="text-[#8C8C8C]">Please add categories from the admin panel.</p>
                         </div>
                     )}
                 </div>

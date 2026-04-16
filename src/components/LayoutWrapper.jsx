@@ -25,7 +25,7 @@ export default function LayoutWrapper({ children }) {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    
+
     // Function to observe all reveal elements
     const observeElements = () => {
       const elements = document.querySelectorAll('.reveal:not(.active)');
@@ -57,7 +57,7 @@ export default function LayoutWrapper({ children }) {
 
   return (
     <>
-      <Header />
+      <Header className='mb-20' />
       <main>{children}</main>
       <Footer />
     </>

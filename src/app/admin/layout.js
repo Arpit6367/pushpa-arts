@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import './admin.css';
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -11,14 +10,12 @@ export default function AdminLayout({ children }) {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    // Skip auth check on login page
     if (pathname === '/admin/login') {
       setChecking(false);
       setIsAuthenticated(true);
       return;
     }
 
-    // Check if we have the admin cookie by trying an authenticated endpoint
     fetch('/api/files')
       .then(res => {
         if (res.ok) {
@@ -26,11 +23,7 @@ export default function AdminLayout({ children }) {
         } else if (res.status === 401) {
           router.push('/admin/login');
         } else {
-          // If it's a 500 or other error but NOT 401, we might still be authenticated
-          // but the endpoint is broken. However, for safety, let's treat as unauthenticated
-          // or just proceed if it's not a clear auth failure.
-          // Actually, if we are on login page we're fine.
-          setIsAuthenticated(true); // Fallback to allowing access if it's just a server error
+          setIsAuthenticated(true);
         }
         setChecking(false);
       })
@@ -48,20 +41,18 @@ export default function AdminLayout({ children }) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Close sidebar on navigation (mobile)
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
 
-  // Login page renders without sidebar
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
   if (checking) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f5f5f7' }}>
-        <div className="spinner"></div>
+      <div className="flex items-center justify-center min-h-screen bg-[#f5f5f7]">
+        <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
       </div>
     );
   }
@@ -77,24 +68,23 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className={`admin-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
-      {/* Mobile Header */}
-      <div className="admin-mobile-header">
-        <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+    <div className="flex min-h-screen bg-[#fbfbfd] font-admin text-[#1d1d1f] antialiased lg:flex-row">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-[60px] bg-white/75 backdrop-blur-xl border-b border-black/10 z-[1500] flex items-center justify-between px-5">
+        <button className="text-2xl bg-none border-none text-[#111] cursor-pointer p-2 flex items-center justify-center" onClick={() => setSidebarOpen(!sidebarOpen)}>
           ☰
         </button>
         <div className="brand-logo">
-          <img src="/images/Pushpa-Exports.svg" alt="Logo" style={{ height: '24px', filter: 'brightness(0)' }} />
+          <img src="/images/Pushpa-Exports.svg" alt="Logo" className="h-6 brightness-0" />
         </div>
-        <div style={{ width: '40px' }}></div>
+        <div className="w-10"></div>
       </div>
 
-      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="admin-sidebar-brand">
-          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" style={{ height: '50px !important', filter: 'brightness(0)' }} />
-          <p>Artisanal Management</p>
+      <aside className={`w-[260px] bg-white/75 backdrop-blur-xl border-r border-black/10 p-0 fixed top-0 left-0 bottom-0 flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0 shadow-[10px_0_40px_rgba(0,0,0,0.15)] z-[1200]' : '-translate-x-full z-[1050]'} lg:z-[1000]`}>
+        <div className="px-8 py-12 flex flex-col gap-2">
+          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className="h-[50px] w-auto self-start brightness-0 invert-0 saturate-100" />
+          <p className="text-[0.65rem] text-[#86868b] uppercase tracking-[0.2rem] font-semibold">Artisanal Management</p>
         </div>
-        <nav className="admin-nav">
+        <nav className="flex-1 py-4 px-3 overflow-y-auto">
           {navItems.map(item => {
             const isActive = item.href === '/admin' 
               ? pathname === '/admin' 
@@ -104,32 +94,31 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={isActive ? 'active' : ''}
+                className={`flex items-center gap-4 px-5 py-3 text-[0.95rem] transition-all duration-200 rounded-[10px] mb-1 ${isActive ? 'bg-[#0071e3] text-white font-medium' : 'text-[#1d1d1f] font-normal hover:bg-black/5'}`}
               >
-                <span className="admin-nav-icon">{item.icon}</span>
+                <span className="text-[1.2rem]">{item.icon}</span>
                 {item.label}
               </Link>
             );
           })}
         </nav>
-        <div className="admin-sidebar-footer">
-          <Link href="/" className="btn btn-outline" style={{ display: 'block', textAlign: 'center', fontSize: '0.8rem', fontWeight: '600' }}>
+        <div className="px-5 py-6 border-t border-black/10 flex flex-col gap-3">
+          <Link href="/" className="w-full p-3 bg-black/5 border border-black/10 text-[#1d1d1f] rounded-[10px] text-[0.9rem] font-semibold text-center mt-2 transition-all hover:bg-[#ff3b30]/10 hover:border-[#ff3b30]/20 hover:text-[#ff3b30]">
             View Gallery
           </Link>
-          <button onClick={handleLogout} className="btn-logout">Sign Out</button>
+          <button onClick={handleLogout} className="w-full p-3 bg-black/5 border border-black/10 text-[#1d1d1f] rounded-[10px] text-[0.9rem] font-medium cursor-pointer transition-all hover:bg-[#ff3b30]/10 hover:border-[#ff3b30]/20 hover:text-[#ff3b30]">Sign Out</button>
         </div>
       </aside>
 
-      <div className={`admin-sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
+      <div className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-[900] transition-all duration-300 lg:hidden ${sidebarOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`} onClick={() => setSidebarOpen(false)} />
 
-      <div className="admin-main">
-        {/* Dashboard-level Breadcrumb Navigation */}
-        <div className="admin-breadcrumbs">
-          <Link href="/admin">Admin</Link>
+      <div className="flex-1 bg-[#fbfbfd] min-h-screen transition-all duration-300 lg:ml-[260px] ml-0 pt-[60px] lg:pt-0">
+        <div className="px-12 lg:pt-10 pt-6 text-[0.85rem] font-medium text-[#86868b] flex items-center gap-2">
+          <Link href="/admin" className="hover:text-[#1d1d1f] transition-colors">Admin</Link>
           {pathname !== '/admin' && (
             <>
-              <span className="separator">/</span>
-              <span className="current">
+              <span className="mx-1">/</span>
+              <span className="text-[#1d1d1f] capitalize">
                 {pathname.split('/').slice(2).map(p => p.replace(/-/g, ' ')).join(' / ')}
               </span>
             </>

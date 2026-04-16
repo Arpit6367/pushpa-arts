@@ -109,63 +109,62 @@ export default function AdminFileManagerPage() {
 
   return (
     <>
-      <div className="admin-header">
-        <h1>Media Assets</h1>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-primary btn-sm" onClick={() => fileInputRef.current?.click()}>
+      <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
+        <h1 className="text-3xl font-heading text-[#1d1d1f]">Media Assets</h1>
+        <div className="flex gap-3">
+          <button className="bg-[#0071e3] text-white px-6 py-2.5 rounded-[12px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-all shadow-lg shadow-[#0071e3]/20 cursor-pointer disabled:opacity-50" onClick={() => fileInputRef.current?.click()}>
             {uploading ? 'Uploading...' : '+ Upload Media'}
           </button>
         </div>
-        <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleUpload} style={{ display: 'none' }} />
+        <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleUpload} className="hidden" />
       </div>
 
-      <div className="admin-content">
-        {toast && <div className={`toast ${toast.type}`}>{toast.message}</div>}
+      <div className="px-12 pb-20">
+        {toast && <div className={`fixed bottom-8 right-8 px-6 py-4 rounded-xl text-[0.9rem] font-medium z-[3000] shadow-xl transition-all ${toast.type === 'error' ? 'bg-[#ff3b30] text-white' : 'bg-[#34c759] text-white'}`}>{toast.message}</div>}
 
-        <div className="admin-table-header" style={{ background: '#fff', borderRadius: '15px', padding: '1.5rem', marginBottom: '2rem', border: '1px solid var(--admin-border)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <div>
-              <p style={{ margin: 0, fontWeight: '600' }}>Directory: <code style={{ color: 'var(--color-gold)' }}>/public/uploads/products/</code></p>
-              <p style={{ margin: '5px 0 0 0', fontSize: '0.75rem', color: '#888' }}>Total: {files.length} assets | Filtered: {filteredFiles.length} items</p>
-            </div>
-            <div style={{ width: '300px' }}>
-              <input 
-                type="text" 
-                className="admin-search" 
-                placeholder="Find asset by name..." 
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                style={{ margin: 0 }}
-              />
-            </div>
+        <div className="bg-white border border-black/10 rounded-3xl p-6 md:p-8 mb-10 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="w-full md:w-auto">
+            <p className="m-0 font-bold text-[#1d1d1f]">Directory: <code className="text-[#B8860B] font-mono bg-[#f5f5f7] px-2 py-1 rounded">/public/uploads/products/</code></p>
+            <p className="m-1 text-[0.75rem] text-[#86868b]">Total: {files.length} assets | Filtered: {filteredFiles.length} items</p>
+          </div>
+          <div className="w-full md:w-[400px]">
+            <input
+              type="text"
+              className="w-full bg-[#f5f5f7] border border-transparent px-5 py-3 rounded-2xl text-sm transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+              placeholder="Find asset by name..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </div>
 
         {loading ? (
-          <div className="loading"><div className="spinner"></div></div>
+          <div className="flex items-center justify-center min-h-[40vh]">
+            <div className="w-10 h-10 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
+          </div>
         ) : filteredFiles.length > 0 ? (
-          <div className="file-grid">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-8">
             {filteredFiles.map(file => (
-              <div key={file.name} className="file-card">
-                <div className="file-card-image">
-                  <img src={file.path} alt={file.name} loading="lazy" />
+              <div key={file.name} className="group bg-white border border-black/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+                <div className="aspect-square bg-[#fbfbfd] flex items-center justify-center overflow-hidden border-b border-black/5 relative">
+                  <img src={file.path} alt={file.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
                 </div>
-                <div className="file-card-info">
-                  <p title={file.name} style={{ fontWeight: '600', color: '#111' }}>{file.name}</p>
-                  <p style={{ color: '#888', fontSize: '0.75rem' }}>{formatSize(file.size)}</p>
+                <div className="p-5">
+                  <p title={file.name} className="font-semibold text-[#1d1d1f] truncate text-sm">{file.name}</p>
+                  <p className="text-[#86868b] text-[0.7rem] mt-1 uppercase font-bold tracking-wider">{formatSize(file.size)}</p>
                 </div>
-                <div className="file-card-actions" style={{ padding: '0.75rem', gap: '0.5rem' }}>
-                  <button 
-                    className={`btn btn-sm ${copiedPath === file.path ? 'btn-primary' : 'btn-outline'}`} 
+                <div className="px-5 pb-5 flex gap-2 pt-1">
+                  <button
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-[0.7rem] font-bold uppercase tracking-wider transition-all border outline-none cursor-pointer ${copiedPath === file.path ? 'bg-[#34c759] text-white border-[#34c759]' : 'bg-white text-[#0071e3] border-[#0071e3]/20 hover:bg-[#0071e3]/5 hover:border-[#0071e3]'}`}
                     onClick={() => copyPath(file.path)}
-                    style={{ flex: 1, fontSize: '0.65rem' }}
                   >
                     {copiedPath === file.path ? '✅ Copied' : '📋 URL'}
                   </button>
-                  <button 
-                    className="btn btn-outline btn-sm" 
+                  <button
+                    className="w-10 h-10 flex items-center justify-center rounded-xl text-lg hover:bg-[#ff3b30]/10 text-[#ff3b30] border border-black/5 transition-colors cursor-pointer outline-none"
                     onClick={() => handleDelete(file.name)}
-                    style={{ padding: '0.5rem', color: '#dc2626', borderColor: 'transparent' }}
+                    title="Delete Asset"
                   >
                     🗑️
                   </button>
@@ -174,10 +173,10 @@ export default function AdminFileManagerPage() {
             ))}
           </div>
         ) : (
-          <div className="empty-state">
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🖼️</div>
-            <h3>No media assets found</h3>
-            <p>Try a different search or upload new images using the button above.</p>
+          <div className="flex flex-col items-center justify-center py-40 text-center">
+            <div className="text-6xl mb-6 text-[#d2d2d7]">🖼️</div>
+            <h3 className="text-2xl font-heading text-[#1d1d1f] mb-2">No media assets found</h3>
+            <p className="text-[#86868b]">Try a different search or upload new images using the button above.</p>
           </div>
         )}
       </div>

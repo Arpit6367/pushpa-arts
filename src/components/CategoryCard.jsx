@@ -2,20 +2,34 @@ import Link from 'next/link';
 
 export default function CategoryCard({ category }) {
   return (
-    <Link href={`/product-category/${category.slug_path || category.slug}`} className="category-card reveal" id={`category-${category.id}`}>
-
+    <Link 
+      href={`/product-category/${category.slug_path || category.slug}`} 
+      className="block relative aspect-[0.75] overflow-hidden group reveal rounded-[2px] border border-black/5" 
+      id={`category-${category.id}`}
+    >
       <div 
-        className="category-card-image" 
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] group-hover:scale-110" 
         style={{ 
-          backgroundImage: category.image ? `url(${category.image})` : 'none'
+          backgroundImage: category.image ? `url(${category.image})` : 'none',
+          backgroundColor: '#f5f5f7'
         }}
       >
-        {!category.image && <div className="no-image">Artistic Texture</div>}
+        {!category.image && (
+          <div className="flex w-full h-full items-center justify-center font-heading italic opacity-20 text-sm tracking-widest uppercase">
+            Artisan Texture
+          </div>
+        )}
       </div>
-      <div className="category-card-overlay">
-        <p className="category-card-count">Discovery Collection</p>
-        <h3>{category.name}</h3>
-        <span className="category-card-link">Shop Collection</span>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-12 md:p-14 flex flex-col justify-end text-white transition-all duration-500 group-hover:via-black/40">
+        <p className="text-[0.6rem] tracking-[0.3em] uppercase opacity-70 mb-3 font-bold translate-y-2 transition-all duration-700 group-hover:translate-y-0">
+          Discovery Collection
+        </p>
+        <h3 className="font-heading text-4xl md:text-5xl mb-6 leading-tight translate-y-2 transition-all duration-700 group-hover:translate-y-0 delay-100">
+          {category.name}
+        </h3>
+        <span className="text-[0.6rem] uppercase tracking-[0.3em] font-bold border-b border-[#B8860B] pb-1.5 inline-block w-fit opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 text-[#B8860B] delay-200">
+          Shop Collection
+        </span>
       </div>
     </Link>
   );

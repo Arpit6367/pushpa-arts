@@ -24,7 +24,7 @@ export default function AdminDashboard() {
         if (prodData.products) {
           setRecentProducts(prodData.products);
           const total = prodData.pagination?.total || prodData.products.length;
-          const active = prodData.products.filter(p => p.is_active).length; // Estimation logic or add to API
+          const active = prodData.products.filter(p => p.is_active).length;
           setStats(s => ({ 
             ...s, 
             products: total,
@@ -46,114 +46,114 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <div className="admin-header">
+      <div className="px-12 py-10 flex justify-between items-center sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--admin-text-secondary)', marginBottom: '0.5rem', fontWeight: '500' }}>Admin Control Center</p>
-          <h1 className="text-admin-accent font-bold">Overview</h1>
+          <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Admin Control Center</p>
+          <h1 className="text-[#0071e3] text-3xl font-bold tracking-tight">Overview</h1>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <Link href="/admin/products/new" className="btn btn-primary btn-sm">+ Launch New Product</Link>
+        <div className="flex gap-3">
+          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">+ Launch New Product</Link>
         </div>
       </div>
 
-      <div className="admin-content">
-        <div className="bento-grid">
+      <div className="px-12 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {/* Main Stat: Stock Health */}
-          <div className="bento-item large">
-            <div className="bento-header">
-              <h3>Inventory Health</h3>
-              <span style={{ fontSize: '1.5rem' }}>🪴</span>
+          <div className="col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold text-[#1d1d1f]">Inventory Health</h3>
+              <span className="text-2xl">🪴</span>
             </div>
-            <div style={{ marginTop: '2.5rem' }}>
-              <div className="health-stat">
-                <div className="health-label">
+            <div className="mt-10">
+              <div className="mb-8">
+                <div className="flex justify-between text-[0.8rem] text-[#86868b] mb-3">
                   <span>Collection Visibility</span>
-                  <span style={{ color: 'var(--admin-text-primary)', fontWeight: '600' }}>{Math.round((stats.activeProds / (stats.products || 1)) * 100)}% Live</span>
+                  <span className="text-[#1d1d1f] font-semibold">{Math.round((stats.activeProds / (stats.products || 1)) * 100)}% Live</span>
                 </div>
-                <div className="health-bar">
-                  <div className="health-fill primary" style={{ width: `${(stats.activeProds / (stats.products || 1)) * 100}%` }}></div>
+                <div className="h-2.5 bg-[#f0f0f0] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#0071e3] transition-all duration-1000 rounded-full" style={{ width: `${(stats.activeProds / (stats.products || 1)) * 100}%` }}></div>
                 </div>
               </div>
 
-              <div className="health-stat" style={{ marginTop: '2rem' }}>
-                <div className="health-label">
+              <div>
+                <div className="flex justify-between text-[0.8rem] text-[#86868b] mb-3">
                   <span>Categories Utilized</span>
-                  <span style={{ color: 'var(--admin-text-primary)', fontWeight: '600' }}>{stats.categories} Sections</span>
+                  <span className="text-[#1d1d1f] font-semibold">{stats.categories} Sections</span>
                 </div>
-                <div className="health-bar">
-                  <div className="health-fill gold" style={{ width: '65%' }}></div>
+                <div className="h-2.5 bg-[#f0f0f0] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#bf9140] transition-all duration-1000 rounded-full" style={{ width: '65%' }}></div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="bento-item wide">
-            <div className="bento-header">
-              <h3>Quick Actions</h3>
+          <div className="col-span-1 md:col-span-2 lg:col-span-1 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-[#1d1d1f]">Quick Actions</h3>
             </div>
-            <div className="quick-action-grid" style={{ marginTop: '1rem' }}>
-              <Link href="/admin/products/new" className="quick-action-btn">
-                <span className="icon">📦</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>New Product</span>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4 mt-2">
+              <Link href="/admin/products/new" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
+                <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">📦</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">New Product</span>
               </Link>
-              <Link href="/admin/categories" className="quick-action-btn">
-                <span className="icon">📁</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>Manage Cat</span>
+              <Link href="/admin/categories" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
+                <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">📁</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Manage Cat</span>
               </Link>
-              <Link href="/admin/file-manager" className="quick-action-btn">
-                <span className="icon">🖼️</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>Media Center</span>
+              <Link href="/admin/file-manager" className="flex flex-col items-center gap-3 p-5 bg-[#fbfbfd] border border-black/10 rounded-[16px] cursor-pointer transition-all hover:bg-white hover:border-[#0071e3] hover:-translate-y-1 hover:shadow-md text-center text-[#1d1d1f]">
+                <span className="text-[1.5rem] p-3 mx-auto bg-white rounded-xl shadow-sm block">🖼️</span>
+                <span className="text-[0.75rem] font-semibold leading-tight mt-1">Media Center</span>
               </Link>
             </div>
           </div>
 
           {/* Featured Highlights */}
-          <div className="bento-item">
-            <div className="bento-header">
-              <h3>Featured</h3>
+          <div className="bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-[#1d1d1f]">Featured</h3>
             </div>
-            <h3 style={{ fontSize: '2.5rem', margin: '0.5rem 0', fontWeight: '700' }}>{stats.featured}</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--admin-text-secondary)' }}>Showcased on main gallery</p>
+            <h3 className="text-[2.5rem] my-2 font-bold tracking-tight text-[#1d1d1f]">{stats.featured}</h3>
+            <p className="text-[0.85rem] text-[#86868b] font-medium">Showcased on main gallery</p>
           </div>
 
           {/* Media Count */}
-          <div className="bento-item">
-            <div className="bento-header">
-              <h3>Total Assets</h3>
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-[#1d1d1f]">Total Assets</h3>
             </div>
-            <h3 style={{ fontSize: '2.5rem', margin: '0.5rem 0', fontWeight: '700' }}>{stats.files}</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--admin-text-secondary)' }}>Artisanal media files</p>
+            <h3 className="text-[2.5rem] my-2 font-bold tracking-tight text-[#1d1d1f]">{stats.files}</h3>
+            <p className="text-[0.85rem] text-[#86868b] font-medium">Artisanal media files</p>
           </div>
         </div>
 
         {/* Recent Products Grid */}
-        <div className="admin-card-modern" style={{ padding: '2.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-            <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Latest Additions</h3>
-            <Link href="/admin/products" style={{ fontSize: '0.85rem', color: 'var(--admin-accent)', fontWeight: '600', textDecoration: 'none' }}>View Full Catalog →</Link>
+        <div className="bg-white rounded-[20px] p-10 shadow-sm border border-black/10">
+          <div className="flex justify-between items-center mb-10">
+            <h3 className="m-0 text-xl font-bold text-[#1d1d1f]">Latest Additions</h3>
+            <Link href="/admin/products" className="text-[0.85rem] text-[#0071e3] font-semibold hover:underline">View Full Catalog →</Link>
           </div>
 
-          <div className="dashboard-prod-grid">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {recentProducts.length > 0 ? recentProducts.map(p => (
-              <div key={p.id} className="mini-prod-card">
-                <div className="mini-prod-image">
+              <div key={p.id} className="flex flex-col gap-3 group">
+                <div className="aspect-square rounded-xl overflow-hidden bg-[#f5f5f7] border border-black/5 relative">
                   {(p.primary_image || p.first_image) ? (
-                    <img src={p.primary_image || p.first_image} alt={p.name} />
+                    <img src={p.primary_image || p.first_image} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccc' }}>📷</div>
+                    <div className="w-full h-full flex items-center justify-center text-[#ccc] text-2xl">📷</div>
                   )}
                 </div>
-                <div className="mini-prod-info">
-                  <h4>{p.name}</h4>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.25rem' }}>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--admin-text-secondary)' }}>{p.category_name || 'Uncategorized'}</span>
-                    <span className={`status-badge ${p.is_active ? 'active' : 'inactive'}`} style={{ fontSize: '0.6rem' }}>{p.is_active ? 'Live' : 'Hidden'}</span>
+                <div>
+                  <h4 className="text-[0.95rem] font-semibold text-[#1d1d1f] truncate leading-snug">{p.name}</h4>
+                  <div className="flex justify-between items-center mt-1.5">
+                    <span className="text-[0.75rem] text-[#86868b] font-medium truncate">{p.category_name || 'Uncategorized'}</span>
+                    <span className={`px-2 py-1 rounded-[6px] text-[0.65rem] font-bold uppercase tracking-wider ${p.is_active ? 'bg-[#34c759]/10 text-[#34c759]' : 'bg-[#ff3b30]/10 text-[#ff3b30]'}`}>{p.is_active ? 'Live' : 'Hidden'}</span>
                   </div>
                 </div>
               </div>
             )) : (
-              <p style={{ gridColumn: '1/-1', textAlign: 'center', color: '#aaa', padding: '2rem' }}>No recent updates</p>
+              <p className="col-span-full text-center text-[#aaa] py-8">No recent updates</p>
             )}
           </div>
         </div>
