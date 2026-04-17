@@ -1,5 +1,6 @@
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import { getAllCategoriesWithPaths } from '@/lib/categories';
 
 export const metadata = {
   title: 'Pushpa Arts | Luxury Silver, Bone Inlay & Marble Furniture Exporters',
@@ -32,11 +33,14 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const categories = await getAllCategoriesWithPaths();
+  const settings = await getSiteSettings();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <LayoutWrapper initialCategories={categories} settings={settings}>{children}</LayoutWrapper>
       </body>
     </html>
   );

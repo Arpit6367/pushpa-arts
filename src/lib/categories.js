@@ -1,7 +1,7 @@
-
+import { cache } from 'react';
 import { query } from './db';
 
-export async function getAllCategoriesWithPaths() {
+export const getAllCategoriesWithPaths = cache(async function getAllCategoriesWithPaths() {
   const sql = `
     SELECT c.*, p.name as parent_name,
     (SELECT COUNT(*) FROM product_categories pc WHERE pc.category_id = c.id) as product_count
@@ -30,4 +30,4 @@ export async function getAllCategoriesWithPaths() {
     ...cat,
     slug_path: getSlugPath(cat)
   }));
-}
+});

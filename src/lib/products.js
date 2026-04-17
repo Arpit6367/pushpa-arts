@@ -1,7 +1,8 @@
+import { cache } from 'react';
 import { query } from './db';
 import { getAllCategoriesWithPaths } from './categories';
 
-export async function getProductBySlug(slug) {
+export const getProductBySlug = cache(async function getProductBySlug(slug) {
   try {
     const allCategories = await getAllCategoriesWithPaths();
     const categoryMap = new Map();
@@ -62,11 +63,29 @@ export async function getProductBySlug(slug) {
     console.error('Error in getProductBySlug:', error);
     return null;
   }
-}
+});
 
-export async function getProductsByCategory(categorySlug, page = 1, limit = 12) {
+export const getProductsByCategory = cache(async function getProductsByCategory(categorySlug, page = 1, limit = 12) {
   try {
     const offset = (page - 1) * limit;
+
+    // Get all categories to find children
+    const allCategories = await getAllCategoriesWithPaths();
+    const category = allCategories.find(c => c.slug === categorySlug);
+    
+    if (!category) return { products: [], pagination: { page: 1, limit, total: 0, pages: 0 } };
+
+    // Recursively find all child category IDs
+    const getChildIds = (parentId) => {
+      const children = allCategories.filter(c => c.parent_id === parentId);
+      let ids = [parentId];
+      children.forEach(child => {
+        ids = [...ids, ...getChildIds(child.id)];
+      });
+      return ids;
+    };
+
+    const categoryIds = getChildIds(category.id);
 
     const sql = `
       SELECT p.*,
@@ -75,26 +94,24 @@ export async function getProductsByCategory(categorySlug, page = 1, limit = 12) 
       FROM products p
       WHERE EXISTS (
         SELECT 1 FROM product_categories pc 
-        JOIN categories cat ON pc.category_id = cat.id 
-        WHERE pc.product_id = p.id AND cat.slug = ?
+        WHERE pc.product_id = p.id AND pc.category_id IN (${categoryIds.join(',')})
       )
       AND p.is_active = TRUE
       ORDER BY p.sort_order ASC, p.created_at DESC
       LIMIT ? OFFSET ?
     `;
 
-    const products = await query(sql, [categorySlug, limit, offset]);
+    const products = await query(sql, [limit, offset]);
 
     const countSql = `
       SELECT COUNT(*) as total FROM products p
       WHERE EXISTS (
         SELECT 1 FROM product_categories pc 
-        JOIN categories cat ON pc.category_id = cat.id 
-        WHERE pc.product_id = p.id AND cat.slug = ?
+        WHERE pc.product_id = p.id AND pc.category_id IN (${categoryIds.join(',')})
       )
       AND p.is_active = TRUE
     `;
-    const countResult = await query(countSql, [categorySlug]);
+    const countResult = await query(countSql);
     const total = countResult[0]?.total || 0;
 
     return {
@@ -110,4 +127,34 @@ export async function getProductsByCategory(categorySlug, page = 1, limit = 12) 
     console.error('Error in getProductsByCategory:', error);
     return { products: [], pagination: { page: 1, limit, total: 0, pages: 0 } };
   }
-}
+});
+
+export const getFeaturedMasterpieces = cache(async function getFeaturedMasterpieces(limit = 6) {
+  try {
+    const sql = `
+      SELECT p.*,
+      (SELECT file_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image,
+      (SELECT file_path FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order ASC LIMIT 1) as first_image,
+      c.name as category_name, c.slug as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.is_featured = TRUE AND p.is_active = TRUE
+      ORDER BY p.sort_order ASC, p.created_at DESC
+      LIMIT ?
+    `;
+    const products = await query(sql, [limit]);
+
+    // For each product, we need its full category path for routing
+    const allCategories = await getAllCategoriesWithPaths();
+    const categoryMap = new Map();
+    allCategories.forEach(cat => categoryMap.set(cat.id, cat));
+
+    return products.map(p => ({
+      ...p,
+      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+    }));
+  } catch (error) {
+    console.error('Error in getFeaturedMasterpieces:', error);
+    return [];
+  }
+});

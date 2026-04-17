@@ -4,30 +4,30 @@ import { usePathname } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function LayoutWrapper({ children }) {
+export default function LayoutWrapper({ children, initialCategories = [] }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
   const isHome = pathname === '/';
 
+  // Global Reveal Observer
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.1,
     };
 
     const handleIntersect = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          observer.unobserve(entry.target);
+          // observer.unobserve(entry.target); // Keep observing for re-animation if desired
         }
       });
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
-    // Function to observe all reveal elements
     const observeElements = () => {
       const elements = document.querySelectorAll('.reveal:not(.active)');
       elements.forEach((el) => observer.observe(el));
@@ -35,14 +35,9 @@ export default function LayoutWrapper({ children }) {
 
     observeElements();
 
-    const mutationObserver = new MutationObserver(() => {
-      observeElements();
-    });
-
-    mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    // Watch for new elements being added to the DOM (for category pages/infinite scroll)
+    const mutationObserver = new MutationObserver(() => observeElements());
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       observer.disconnect();
@@ -56,7 +51,7 @@ export default function LayoutWrapper({ children }) {
 
   return (
     <>
-      <Header />
+      <Header initialCategories={initialCategories} />
       <main className={!isHome ? 'pt-[160px]' : ''}>{children}</main>
       <Footer />
     </>

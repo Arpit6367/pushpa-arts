@@ -5,7 +5,7 @@ export default function CategoryCard({ category }) {
   return (
     <Link
       href={`/product-category/${category.slug_path || category.slug}`}
-      className="block relative aspect-[0.75] overflow-hidden group reveal rounded-[2px] border border-black/5"
+      className="block relative aspect-[0.75] overflow-hidden group rounded-[2px] border border-black/5"
       id={`category-${category.id}`}
     >
       <div className="absolute inset-0 transition-transform duration-[2s] group-hover:scale-110 bg-[#f5f5f7]">

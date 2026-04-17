@@ -9,7 +9,7 @@ export default function ProductCard({ product }) {
   return (
     <Link
       href={`/shop/${catSlug}/${product.slug}`}
-      className="block bg-white transition-all duration-500 reveal group relative border border-black/5 hover:border-black/10 hover:shadow-2xl hover:shadow-[#1F1F1F]/5 overflow-hidden rounded-[2px]"
+      className="block bg-white transition-all duration-500 group relative border border-black/5 hover:border-black/10 hover:shadow-2xl hover:shadow-[#1F1F1F]/5 overflow-hidden rounded-[2px]"
       id={`product-${product.id}`}
     >
       <div className="relative aspect-square bg-[#fdfdfd] overflow-hidden">

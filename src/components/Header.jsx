@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-export default function Header() {
-  const [categories, setCategories] = useState([]);
+export default function Header({ initialCategories = [] }) {
+  const [categories, setCategories] = useState(initialCategories);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -20,15 +20,19 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/categories?active_only=true')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setCategories(data);
-        }
-      })
-      .catch(() => { });
-  }, []);
+    if (initialCategories.length === 0) {
+      fetch('/api/categories?active_only=true')
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setCategories(data);
+          }
+        })
+        .catch(() => { });
+    } else {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
 
   const parentCategories = categories.filter(c => !c.parent_id);
 
