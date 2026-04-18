@@ -1,6 +1,7 @@
 import './globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import { getAllCategoriesWithPaths } from '@/lib/categories';
+import { getSiteSettings } from '@/lib/settings';
 
 export const metadata = {
   title: 'Pushpa Arts | Luxury Silver, Bone Inlay & Marble Furniture Exporters',

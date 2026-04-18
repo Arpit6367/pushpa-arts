@@ -65,25 +65,51 @@ export default function CollectionPageClient({
 
   return (
     <>
-      <div className="bg-[#F5F1EE] border-b border-[#E5E0DA] reveal">
-        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)] py-16">
-          <span className="text-[#B8860B] uppercase tracking-[0.2em] text-[0.7rem] font-bold">Collection</span>
-          <h1 className="mt-4 text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
-            {category?.name || "Collection"}
-          </h1>
-          <div className="w-16 h-[2px] bg-[#B8860B] my-8"></div>
-          {renderBreadcrumbs()}
+      <div className="relative min-h-[450px] flex items-center bg-[#F5F1EE] overflow-hidden border-b border-[#E5E0DA] reveal">
+        {/* Background Image with Overlay */}
+        {category?.image && (
+          <div className="absolute inset-0 z-0">
+            <div 
+              className="absolute inset-0 bg-cover bg-center" 
+              style={{ backgroundImage: `url(${category.image})` }}
+            />
+            <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px]" />
+          </div>
+        )}
+        
+        <div className="relative z-10 max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)] py-16 w-full">
+          <div className="max-w-[800px]">
+            <span className="text-[#B8860B] uppercase tracking-[0.2em] text-[0.7rem] font-bold">Collection</span>
+            <h1 className="mt-4 text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
+              {category?.name || "Collection"}
+            </h1>
+            <div className="w-16 h-[2px] bg-[#B8860B] my-8"></div>
+            {renderBreadcrumbs()}
+            
+            {category?.description && (
+              <p className="mt-8 text-[1.1rem] text-[#4A4A4A] leading-[1.8] font-light max-w-[700px]">
+                {category.description}
+              </p>
+            )}
+          </div>
         </div>
+
+        {/* Floating Category Image */}
+        {category?.image && (
+          <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/3 z-10">
+            <div className="h-full w-full relative overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] hover:scale-110"
+                style={{ backgroundImage: `url(${category.image})` }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#F5F1EE] via-transparent to-transparent" />
+            </div>
+          </div>
+        )}
       </div>
 
       <section className="py-[clamp(5rem,10vw,9rem)] bg-[#FCFAF8]">
         <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
-          {category?.description && (
-            <p className="text-[1.1rem] text-[#4A4A4A] leading-[1.9] mb-24 max-w-[800px] font-light">
-              {category.description}
-            </p>
-          )}
-
           {/* Sub-categories section */}
           {subCategories.length > 0 && (
             <div className="mb-32">
@@ -91,22 +117,37 @@ export default function CollectionPageClient({
                 <h2 className="text-[2rem] m-0 text-[#1F1F1F] font-heading">Explore <span className="text-[#B8860B]">Sub-Collections</span></h2>
                 <div className="flex-1 h-[1px] bg-[#F0EDE6]"></div>
               </div>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-10">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-12">
                 {subCategories.map(subCat => (
-                  <div key={subCat.id} className="reveal group">
-                    <Link href={`/product-category/${subCat.slug_path}`} className="block relative h-[350px] overflow-hidden">
+                  <div key={subCat.id} className="reveal group flex flex-col">
+                    <Link href={`/product-category/${subCat.slug_path}`} className="block relative h-[300px] overflow-hidden rounded-[2px] shadow-sm">
                       <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" 
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" 
                         style={{ backgroundImage: subCat.image ? `url(${subCat.image})` : 'none' }}
                       >
-                        {!subCat.image && <div className="absolute inset-0 flex items-center justify-center bg-[#F5F1EE] text-[#8C8C8C] uppercase tracking-widest text-xs">Studio Aesthetic</div>}
+                        {!subCat.image && <div className="absolute inset-0 flex items-center justify-center bg-[#F5F1EE] text-[#8C8C8C] uppercase tracking-widest text-xs italic">Studio Aesthetic</div>}
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-8 text-white">
-                        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#D4AF37] mb-2">Explore Sub-Collection</p>
-                        <h3 className="text-2xl font-heading mb-4 transform transition-transform duration-500 group-hover:-translate-y-2">{subCat.name}</h3>
-                        <span className="text-[0.7rem] uppercase tracking-[0.2em] border-b border-white/30 pb-1 inline-block w-max opacity-0 transform translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 group-hover:border-white">Explore Collection</span>
-                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80" />
                     </Link>
+                    <div className="mt-8">
+                      <div className="flex items-center gap-4 mb-3">
+                        <div className="w-8 h-[1px] bg-[#B8860B]"></div>
+                        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#B8860B] font-bold">Sub-Collection</p>
+                      </div>
+                      <h3 className="text-3xl font-heading mb-4 text-[#1F1F1F] group-hover:text-[#B8860B] transition-colors">{subCat.name}</h3>
+                      {subCat.description && (
+                        <p className="text-[#666] text-[0.95rem] leading-relaxed line-clamp-2 mb-6 font-light">
+                          {subCat.description}
+                        </p>
+                      )}
+                      <Link 
+                        href={`/product-category/${subCat.slug_path}`} 
+                        className="text-[0.7rem] uppercase tracking-[0.2em] font-bold inline-flex items-center gap-2 group/btn"
+                      >
+                        View Collection 
+                        <span className="transition-transform duration-300 group-hover/btn:translate-x-2">→</span>
+                      </Link>
+                    </div>
                   </div>
                 ))}
               </div>

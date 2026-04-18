@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function LayoutWrapper({ children, initialCategories = [] }) {
+export default function LayoutWrapper({ children, initialCategories = [], settings = {} }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
   const isHome = pathname === '/';
@@ -51,9 +51,9 @@ export default function LayoutWrapper({ children, initialCategories = [] }) {
 
   return (
     <>
-      <Header initialCategories={initialCategories} />
+      <Header initialCategories={initialCategories} settings={settings} />
       <main className={!isHome ? 'pt-[160px]' : ''}>{children}</main>
-      <Footer />
+      <Footer settings={settings} />
     </>
   );
 }

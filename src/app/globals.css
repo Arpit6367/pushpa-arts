@@ -233,6 +233,28 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-in {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
 }
 
 @keyframes blockRevealAnim {

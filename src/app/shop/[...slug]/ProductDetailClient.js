@@ -1,11 +1,40 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
 
 export default function ProductDetailClient({ product }) {
   const [activeImage, setActiveImage] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const [isZooming, setIsZooming] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.pageX - left - window.scrollX) / width) * 100;
+    const y = ((e.pageY - top - window.scrollY) / height) * 100;
+    setZoomPos({ x, y });
+  };
+
+  // Handle ESC key to close lightbox
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') setIsLightboxOpen(false);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
+  // Lock scroll when lightbox is open
+  useEffect(() => {
+    if (isLightboxOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isLightboxOpen]);
 
   if (!product) {
     return (
@@ -54,27 +83,100 @@ export default function ProductDetailClient({ product }) {
 
   return (
     <div className="bg-[#FCFAF8]">
+      {/* Lightbox Modal */}
+      {isLightboxOpen && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-4 md:p-10 animate-in fade-in duration-300 cursor-pointer"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLightboxOpen(false);
+            }}
+            className="absolute top-6 right-6 md:top-10 md:right-10 text-white/70 hover:text-[#B8860B] transition-all z-[110] flex flex-col items-center gap-2 group"
+          >
+            <span className="text-4xl md:text-5xl font-thin group-hover:rotate-90 transition-transform duration-500">×</span>
+            <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold hidden md:block">Close View</span>
+          </button>
+          
+          <div 
+            className="relative w-full h-full max-w-5xl max-h-[70vh] md:max-h-[80vh] flex items-center justify-center cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+             <Image 
+                src={currentImage} 
+                alt={product.name} 
+                fill
+                className="object-contain" 
+                sizes="100vw"
+                priority
+              />
+          </div>
+
+          <div 
+            className="mt-10 flex gap-4 overflow-x-auto pb-4 max-w-full px-4 scrollbar-hide cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {images.map((img, index) => (
+              <button
+                key={img.id}
+                className={`relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 bg-white/10 rounded-[2px] overflow-hidden border-2 transition-all ${index === activeImage ? 'border-[#B8860B]' : 'border-transparent opacity-50'}`}
+                onClick={() => setActiveImage(index)}
+              >
+                <Image 
+                  src={img.file_path} 
+                  alt={img.alt_text || product.name} 
+                  fill
+                  className="object-cover" 
+                  sizes="80px"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <section className="pt-40 pb-24 md:pt-48 md:pb-32">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
             {/* Gallery Section */}
-            <div className="flex flex-col gap-6 reveal sticky top-32">
-              <div className="relative aspect-square bg-white overflow-hidden rounded-[2px] border border-black/5 shadow-2xl shadow-[#1F1F1F]/5 relative group">
+            <div className="flex flex-col gap-8 reveal lg:sticky lg:top-32 z-10">
+              <div 
+                className="relative aspect-square lg:aspect-[4/5] bg-white overflow-hidden rounded-[2px] border border-black/5 shadow-2xl shadow-[#1F1F1F]/5 cursor-zoom-in group"
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsZooming(true)}
+                onMouseLeave={() => setIsZooming(false)}
+                onClick={() => setIsLightboxOpen(true)}
+              >
                 {currentImage ? (
-                  <Image 
-                    src={currentImage} 
-                    alt={product.name} 
-                    fill
-                    className="object-contain p-12 transition-transform duration-[1.5s] group-hover:scale-105" 
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                  />
+                  <div 
+                    className="w-full h-full relative transition-transform duration-300 ease-out"
+                    style={isZooming ? { 
+                      transform: 'scale(1.5)',
+                      transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`
+                    } : {}}
+                  >
+                    <Image 
+                      src={currentImage} 
+                      alt={product.name} 
+                      fill
+                      className="object-contain p-8 md:p-16" 
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                    />
+                  </div>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center text-[#8C8C8C] bg-[#F5F1EE]">
                     <span className="text-4xl mb-4 opacity-20">🖼️</span>
                     <span className="text-[0.6rem] tracking-[0.2em] uppercase font-bold opacity-40">Studio Imagery Curating</span>
                   </div>
                 )}
+                
+                <div className="absolute bottom-6 right-6 bg-white/80 backdrop-blur-sm text-[#1F1F1F] text-[0.6rem] font-bold uppercase tracking-[0.2em] px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Click to Expand
+                </div>
+
                 {product.is_featured && (
                   <div className="absolute top-8 left-8 bg-[#B8860B] text-white text-[0.6rem] font-bold uppercase tracking-[0.2em] px-4 py-2 shadow-lg">
                     Featured Masterpiece
@@ -82,23 +184,35 @@ export default function ProductDetailClient({ product }) {
                 )}
               </div>
 
+              {/* Slider for Thumbnails */}
               {images.length > 1 && (
-                <div className="grid grid-cols-5 gap-4">
-                  {images.map((img, index) => (
-                    <button
-                      key={img.id}
-                      className={`relative aspect-square bg-white cursor-pointer rounded-[2px] overflow-hidden border transition-all duration-500 ${index === activeImage ? 'border-[#B8860B] ring-1 ring-[#B8860B] shadow-lg' : 'border-black/5 opacity-60 hover:opacity-100'}`}
-                      onClick={() => setActiveImage(index)}
-                    >
-                      <Image 
-                        src={img.file_path} 
-                        alt={img.alt_text || product.name} 
-                        fill
-                        className="object-cover p-2" 
-                        sizes="100px"
+                <div className="relative">
+                  <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+                    {images.map((img, index) => (
+                      <button
+                        key={img.id}
+                        className={`relative aspect-square w-24 md:w-32 flex-shrink-0 bg-white cursor-pointer rounded-[2px] overflow-hidden border transition-all duration-500 snap-start ${index === activeImage ? 'border-[#B8860B] ring-1 ring-[#B8860B] shadow-lg scale-95' : 'border-black/5 opacity-60 hover:opacity-100'}`}
+                        onClick={() => setActiveImage(index)}
+                      >
+                        <Image 
+                          src={img.file_path} 
+                          alt={img.alt_text || product.name} 
+                          fill
+                          className="object-cover p-2" 
+                          sizes="150px"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  {/* Subtle indicators for many images */}
+                  {images.length > 4 && (
+                    <div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-[#E5E0DA]">
+                      <div 
+                        className="h-full bg-[#B8860B] transition-all duration-500" 
+                        style={{ width: `${((activeImage + 1) / images.length) * 100}%` }}
                       />
-                    </button>
-                  ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

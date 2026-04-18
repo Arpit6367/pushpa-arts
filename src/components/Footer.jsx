@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ settings = {} }) {
   return (
     <footer className="pt-24 bg-[#1F1F1F] text-white">
       <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
@@ -39,9 +39,9 @@ export default function Footer() {
           <div className="reveal delay-300">
             <h4 className="font-semibold uppercase tracking-[0.1em] text-[#B8860B] mb-8 text-xs">Connect</h4>
             <ul className="flex flex-col gap-1 text-[#8C8C8C] text-[0.95rem]">
-              <li className="py-1.5">Udaipur, Rajasthan, India</li>
-              <li className="py-1.5">Contact@pushpaarts.com</li>
-              <li className="py-1.5">+91 94141 62629</li>
+              <li className="py-1.5">{settings.contact_address || 'Udaipur, Rajasthan, India'}</li>
+              <li className="py-1.5">{settings.contact_email || 'info@pushpaexport.com'}</li>
+              <li className="py-1.5">{settings.contact_phone || '+91 94141 62629'}</li>
             </ul>
           </div>
         </div>
