@@ -67,14 +67,14 @@ export default async function HomePage() {
 
       <Hero />
       <FeatureBar />
-      <CategorySection categories={parentCategories} />
+      {/* <CategorySection categories={parentCategories} /> */}
       <BentoGallery />
-      <StudioGallery />
-      <ParallaxSection />
       <ProductTabs products={featuredProducts} />
-      <BlogSnippet />
-      <CategoryGrid categories={parentCategories} />
       <MaterialShowcase />
+      <StudioGallery />
+      <CategoryGrid categories={parentCategories} />
+      <ParallaxSection />
+      <BlogSnippet />
       <InfoSection />
       <Testimonials />
 

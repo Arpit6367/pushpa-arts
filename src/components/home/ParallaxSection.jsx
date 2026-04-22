@@ -19,23 +19,23 @@ export default function ParallaxSection() {
   return (
     <section ref={sectionRef} className="relative h-[80svh] md:h-[120svh] min-h-[500px] md:min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
       {/* Dynamic Background Image */}
-      <div 
+      <div
         className="absolute inset-0 z-0 transition-transform duration-300 ease-out"
-        style={{ 
+        style={{
           backgroundImage: "url('/images/parallax_bg.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           transform: `scale(${1 + scrollY * 0.0002}) translateY(${scrollY * 0.1}px)`
         }}
       />
-      
+
       {/* Layered Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40 z-[1]" />
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] z-[2]" />
 
       {/* Floating Content */}
       <div className="relative z-10 text-center text-white px-[var(--spacing-container)] w-full">
-        <div 
+        <div
           className="transition-transform duration-500 ease-out"
           style={{ transform: `translateY(${-scrollY * 0.05}px)` }}
         >
@@ -44,8 +44,8 @@ export default function ParallaxSection() {
             Legacy <br /> <span className="italic font-light opacity-80">Redefined</span>
           </h2>
         </div>
-        
-        <div 
+
+        <div
           className="max-w-[600px] mx-auto transition-transform duration-700 ease-out"
           style={{ transform: `translateY(${-scrollY * 0.02}px)` }}
         >

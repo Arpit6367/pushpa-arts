@@ -72,14 +72,15 @@ export default function ContactPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
         <div className="container relative z-10 text-white text-center">
-          <div className="max-w-[800px] mx-auto reveal">
-            <h1 className="text-[clamp(3rem,7vw,5rem)] font-heading leading-tight mb-6">
+          <div className="max-w-[800px] mx-auto">
+            <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6 reveal stagger-1">Get In Touch</p>
+            <h1 className="text-[clamp(2.8rem,7vw,5rem)] font-heading leading-tight mb-6 reveal stagger-2">
               Connect With <span className="text-[#B8860B] italic">Artisans</span>
             </h1>
-            <div className="w-24 h-[2px] bg-[#B8860B] mx-auto mb-8"></div>
-            <p className="text-[1.1rem] md:text-[1.3rem] font-light leading-relaxed opacity-80 uppercase tracking-[0.2em]">
+            <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent mx-auto mb-8 reveal stagger-3"></div>
+            <p className="text-[1rem] md:text-[1.2rem] font-light leading-relaxed opacity-70 uppercase tracking-[0.15em] reveal stagger-4">
               Udaipur • India • Worldwide
             </p>
           </div>

@@ -51,10 +51,10 @@ export default function Testimonials() {
     <section className="py-[var(--spacing-section)] bg-white overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
         <div className="flex flex-col items-center text-center relative">
-          
+
           <div className="relative w-full max-w-[1000px] bg-[var(--color-bg-mint)] p-12 md:p-20 shadow-sm border border-black/5 min-h-[400px] flex flex-col justify-center">
             <Quote className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 text-[var(--color-accent)] bg-white p-3 rounded-full shadow-md" />
-            
+
             <div className={`transition-all duration-700 ease-in-out ${isAnimating ? 'opacity-0 scale-98' : 'opacity-100 scale-100'}`}>
               <p className="text-[clamp(1.1rem,2.5vw,1.6rem)] font-heading leading-relaxed text-[var(--color-text-primary)] mb-12 italic font-light">
                 "{testimonials[current].text}"

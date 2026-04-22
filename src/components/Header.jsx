@@ -26,7 +26,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -49,11 +49,11 @@ export default function Header({ initialCategories = [], settings = {} }) {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-transparent'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm py-3' : 'bg-transparent py-6 md:py-10'}`}>
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
-          {/* Mobile View: Logo Left, Large Menu Right */}
-          <div className="flex lg:hidden items-center justify-between py-6">
-            <Link href="/">
+          {/* Mobile View */}
+          <div className="flex lg:hidden items-center justify-between">
+            <Link href="/" className="transition-transform duration-500 hover:scale-105 active:scale-95">
               <img
                 src="/images/Pushpa-Exports.svg"
                 alt="Pushpa Arts"
@@ -61,96 +61,159 @@ export default function Header({ initialCategories = [], settings = {} }) {
               />
             </Link>
             <button
-              className="relative z-[2001] flex flex-col justify-center items-end gap-2.5 w-10 h-10 bg-transparent border-none cursor-pointer"
+              className="relative z-[3001] flex flex-col justify-center items-end gap-2.5 w-10 h-10 bg-transparent border-none cursor-pointer group"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
             >
-              <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'w-full rotate-45 translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
-              <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'opacity-0' : `w-[75%] ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
-              <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'w-full -rotate-45 -translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+              <span className={`h-[2px] transition-all duration-500 ${mobileOpen ? 'w-full rotate-45 translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+              <span className={`h-[2px] transition-all duration-500 ${mobileOpen ? 'opacity-0' : `w-[75%] group-hover:w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+              <span className={`h-[2px] transition-all duration-500 ${mobileOpen ? 'w-full -rotate-45 -translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
             </button>
           </div>
 
-          {/* Desktop View: Grid 3 Cols, Logo Center (Unchanged) */}
-          <div className={`hidden lg:grid grid-cols-3 items-center transition-all duration-500 ${scrolled ? 'py-4' : 'py-6 md:py-8'}`}>
-            <nav className="flex items-center gap-10">
-              <Link href="/" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Home</Link>
-              <div className="relative group">
-                <Link href="/product-category" className={`flex items-center gap-1 text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname?.startsWith('/product-category') ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>
-                  Collections <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+          {/* Desktop View */}
+          <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center">
+            <nav className="flex items-center gap-12">
+              <Link href="/" className={`group relative text-[0.65rem] font-bold uppercase tracking-[0.3em] transition-all ${pathname === '/' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-black')}`}>
+                Home
+                <span className={`absolute bottom-[-8px] left-0 h-[1.5px] bg-[var(--color-accent)] transition-all duration-500 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+              </Link>
+
+              <div className="relative group/dropdown">
+                <Link href="/product-category" className={`group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.3em] transition-all ${pathname?.startsWith('/product-category') ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-black')}`}>
+                  Collections
+                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-500 group-hover/dropdown:rotate-180" />
+                  <span className={`absolute bottom-[-8px] left-0 h-[1.5px] bg-[var(--color-accent)] transition-all duration-500 ${pathname?.startsWith('/product-category') ? 'w-full' : 'w-0 group-hover/dropdown:w-full'}`}></span>
                 </Link>
-                <div className="absolute top-full left-0 pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                  <div className="bg-white shadow-2xl p-8 grid grid-cols-2 gap-x-12 gap-y-4 min-w-[500px] border border-black/5">
+
+                <div className="absolute top-full left-[-20px] pt-8 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-500 translate-y-4 group-hover/dropdown:translate-y-0 pointer-events-none group-hover/dropdown:pointer-events-auto">
+                  <div className="bg-white shadow-[0_30px_100px_rgba(0,0,0,0.1)] p-10 grid grid-cols-2 gap-x-12 gap-y-5 min-w-[550px] border border-black/5 rounded-sm">
                     {parentCategories.map(cat => (
-                      <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="text-[0.65rem] uppercase tracking-[0.15em] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors py-1">
+                      <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="group/item flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.2em] font-bold text-black/40 hover:text-[var(--color-accent)] transition-all py-1">
+                        <span className="w-0 h-[1px] bg-[var(--color-accent)] transition-all duration-500 group-hover/item:w-4"></span>
                         {cat.name}
                       </Link>
                     ))}
-                    <Link href="/product-category" className="col-span-2 text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] pt-4 border-t border-black/5">View All Series →</Link>
+                    <div className="col-span-2 mt-4 pt-6 border-t border-black/[0.03]">
+                      <Link href="/product-category" className="flex items-center gap-4 text-[0.6rem] uppercase tracking-[0.3em] font-bold text-[var(--color-accent)] group/all">
+                        <span>Explore All Series</span>
+                        <span className="w-8 h-[1px] bg-[var(--color-accent)] transition-all duration-500 group-hover/all:w-16"></span>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </nav>
 
-            <Link href="/" className="flex justify-center">
+            <Link href="/" className="px-12 transition-all duration-700 hover:scale-105 active:scale-95">
               <img
                 src="/images/Pushpa-Exports.svg"
                 alt="Pushpa Arts"
-                className={`w-auto transition-all duration-500 ${isDarkHeader ? 'brightness-0 invert' : 'brightness-0'} ${scrolled ? 'h-8 md:h-10' : 'h-10 md:h-16'}`}
+                className={`transition-all duration-700 ${isDarkHeader ? 'brightness-0 invert' : ''} ${scrolled ? 'h-12' : 'h-16 md:h-20'}`}
               />
             </Link>
 
-            <div className="flex items-center justify-end gap-10">
-              <nav className="flex items-center gap-10">
-                <Link href="/about" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/about' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Our Story</Link>
-                <Link href="/contact" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/contact' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Contact</Link>
+            <div className="flex items-center justify-end gap-12">
+              <nav className="flex items-center gap-12">
+                <Link href="/about" className={`group relative text-[0.65rem] font-bold uppercase tracking-[0.3em] transition-all ${pathname === '/about' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-black')}`}>
+                  Our Story
+                  <span className={`absolute bottom-[-8px] left-0 h-[1.5px] bg-[var(--color-accent)] transition-all duration-500 ${pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                </Link>
+                <Link href="/contact" className={`group relative text-[0.65rem] font-bold uppercase tracking-[0.3em] transition-all ${pathname === '/contact' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-black')}`}>
+                  Contact
+                  <span className={`absolute bottom-[-8px] left-0 h-[1.5px] bg-[var(--color-accent)] transition-all duration-500 ${pathname === '/contact' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                </Link>
               </nav>
+
               <a
                 href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`}
-                className={`hidden md:flex items-center gap-2 text-[0.7rem] font-bold border px-6 py-3 uppercase tracking-[0.1em] transition-all ${isDarkHeader ? 'text-white border-white/30 hover:bg-white hover:text-[var(--color-text-primary)]' : 'text-[var(--color-accent)] border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
+                className={`group relative flex items-center gap-3 text-[0.65rem] font-bold border px-8 py-4 uppercase tracking-[0.2em] transition-all overflow-hidden ${isDarkHeader ? 'text-white border-white/20' : 'text-[var(--color-accent)] border-[var(--color-accent)]/30'}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageSquare className="w-4 h-4" /> Concierge
+                <span className="relative z-10 flex items-center gap-3">
+                  <MessageSquare className="w-4 h-4" /> Concierge
+                </span>
+                <div className={`absolute inset-0 transition-transform duration-500 translate-y-full group-hover:translate-y-0 ${isDarkHeader ? 'bg-white text-black' : 'bg-[var(--color-accent)]'}`}></div>
+                {/* Special text color handling for the button background fill */}
+                <style jsx>{`
+                  a:hover span { color: ${isDarkHeader ? 'black' : 'white'}; }
+                `}</style>
               </a>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay — OUTSIDE header to avoid backdrop-blur containing block */}
-      <div className={`fixed inset-0 bg-white z-[3000] flex flex-col transition-all duration-700 ease-in-out lg:hidden ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="flex-1 flex flex-col p-10 pt-24 overflow-y-auto">
-          <div className="flex flex-col gap-10">
-            <Link href="/" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 bg-[#FDFCFB] z-[3000] flex flex-col transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) lg:hidden ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+        <div className="flex-1 flex flex-col p-12 pt-32 overflow-y-auto no-scrollbar">
+          <div className="flex flex-col gap-14">
+            <Link
+              href="/"
+              className={`font-heading text-5xl transition-all duration-500 ${mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+              style={{ transitionDelay: '100ms' }}
+              onClick={() => setMobileOpen(false)}
+            >
+              Home
+            </Link>
 
-            <div className="flex flex-col gap-4">
-              <h4 className="text-[0.6rem] uppercase tracking-[0.3em] font-bold text-[var(--color-accent)] mb-2">Collections</h4>
-              <div className="grid grid-cols-1 gap-4 pl-4 border-l border-[var(--color-bg-mint)]">
-                {parentCategories.map(cat => (
-                  <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="text-xl font-heading text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>
+            <div className={`flex flex-col gap-6 transition-all duration-500 ${mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '200ms' }}>
+              <p className="text-[0.6rem] uppercase tracking-[0.5em] font-bold text-[var(--color-accent)]">Collections</p>
+              <div className="flex flex-col gap-6 pl-4 border-l border-black/5">
+                {parentCategories.map((cat, i) => (
+                  <Link
+                    key={cat.id}
+                    href={`/product-category/${cat.slug_path}`}
+                    className="text-2xl font-heading text-black/60 hover:text-[var(--color-accent)] transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                    style={{ transitionDelay: `${250 + (i * 50)}ms` }}
+                  >
                     {cat.name}
                   </Link>
                 ))}
               </div>
             </div>
 
-            <Link href="/about" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Our Story</Link>
-            <Link href="/contact" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
+            <Link
+              href="/about"
+              className={`font-heading text-5xl transition-all duration-500 ${mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+              style={{ transitionDelay: '400ms' }}
+              onClick={() => setMobileOpen(false)}
+            >
+              Our Story
+            </Link>
+
+            <Link
+              href="/contact"
+              className={`font-heading text-5xl transition-all duration-500 ${mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+              style={{ transitionDelay: '500ms' }}
+              onClick={() => setMobileOpen(false)}
+            >
+              Contact
+            </Link>
           </div>
 
-          <div className="mt-auto pt-10">
+          <div className={`mt-24 pt-10 border-t border-black/5 transition-all duration-700 ${mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`} style={{ transitionDelay: '600ms' }}>
             <a
               href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-[var(--color-secondary)] text-white text-[0.7rem] uppercase tracking-[0.2em] font-bold shadow-xl"
+              className="w-full flex items-center justify-center gap-4 py-6 bg-black text-white text-[0.7rem] uppercase tracking-[0.4em] font-bold shadow-2xl"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MessageSquare className="w-4 h-4" /> Message on WhatsApp
+              <MessageSquare className="w-5 h-5" /> Concierge Service
             </a>
+            <div className="text-center mt-8 text-[0.55rem] uppercase tracking-[0.3em] font-bold text-black/20 italic">
+              Crafting Udaipur Excellence Since Generations
+            </div>
           </div>
         </div>
-        <button className="absolute top-8 right-8 text-[var(--color-text-primary)] p-4" onClick={() => setMobileOpen(false)}>
+
+        <button
+          className="absolute top-10 right-10 w-16 h-16 rounded-full bg-black/5 flex items-center justify-center transition-all hover:bg-black hover:text-white"
+          onClick={() => setMobileOpen(false)}
+          aria-label="Close Menu"
+        >
           <X className="w-8 h-8" />
         </button>
       </div>

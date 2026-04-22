@@ -29,14 +29,15 @@ export default function AboutPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20"></div>
         <div className="container relative z-10 text-white">
           <div className="max-w-[800px] reveal">
-            <h1 className="text-[clamp(3rem,8vw,5.5rem)] font-heading leading-tight mb-8">
+            <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6 reveal stagger-1">Est. Udaipur</p>
+            <h1 className="text-[clamp(2.5rem,8vw,4rem)] font-heading leading-tight mb-6 reveal stagger-2">
               Legacy of <span className="text-[#B8860B] italic">Craft</span>
             </h1>
-            <div className="w-24 h-[2px] bg-[#B8860B] mb-8"></div>
-            <p className="text-[1.2rem] md:text-[1.5rem] font-light leading-relaxed opacity-90">
+            <div className="w-24 h-[2px] bg-gradient-to-r from-[#B8860B] to-transparent mb-8 reveal stagger-3"></div>
+            <p className="text-[1rem] md:text-[1.15rem] font-light leading-relaxed opacity-85 max-w-[600px] reveal stagger-4">
               Preserving the royal heritage of Udaipur through bespoke luxury furniture that transcends generations.
             </p>
           </div>
@@ -74,11 +75,11 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="reveal delay-200">
-              <h2 className="font-heading text-[clamp(2.5rem,5vw,3.8rem)] text-[#1F1F1F] mb-8 leading-[1.1]">
+              <h2 className="font-heading text-[clamp(2.2rem,5vw,3.2rem)] text-[#1F1F1F] mb-6 leading-[1.1]">
                 A Heritage of <br/>
                 <span className="text-[#B8860B] italic">Excellence</span>
               </h2>
-              <div className="space-y-8 text-[#4A4A4A] leading-[2.1] text-[1.1rem] font-light">
+              <div className="space-y-6 text-[#4A4A4A] leading-[1.9] text-[1rem] font-light">
                 <p>
                   Pushpa Arts is a renowned manufacturer and exporter of luxury handcrafted 
                   furniture based in the historic city of Udaipur, Rajasthan. For decades, 
@@ -119,15 +120,18 @@ export default function AboutPage() {
                 Our mission is to bring the soul of Udaipur's artistry into the world's most elegant homes, 
                 ensuring that traditional techniques survive and thrive in a modern world.
               </p>
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <h4 className="text-2xl font-heading text-[#B8860B] mb-2">100%</h4>
-                  <p className="text-[0.65rem] uppercase tracking-[0.2em] opacity-50">Handcrafted</p>
-                </div>
-                <div>
-                  <h4 className="text-2xl font-heading text-[#B8860B] mb-2">25+</h4>
-                  <p className="text-[0.65rem] uppercase tracking-[0.2em] opacity-50">Countries</p>
-                </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
+                {[
+                  { value: '100%', label: 'Handcrafted' },
+                  { value: '25+', label: 'Countries' },
+                  { value: '500+', label: 'Artisans' },
+                  { value: '30+', label: 'Years' },
+                ].map((stat, idx) => (
+                  <div key={idx} className="text-center sm:text-left">
+                    <h4 className="text-3xl sm:text-2xl font-heading text-[#B8860B] mb-2">{stat.value}</h4>
+                    <p className="text-[0.6rem] uppercase tracking-[0.2em] opacity-50">{stat.label}</p>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="reveal delay-200 relative overflow-hidden">
@@ -164,10 +168,11 @@ export default function AboutPage() {
               { title: "Natural Bone", desc: "Ethically sourced bone inlay, meticulously hand-cut and set.", icon: "🦴" },
               { title: "Marble & Stone", desc: "Rare marbles and gemstones from the heart of Rajasthan.", icon: "💎" }
             ].map((item, idx) => (
-              <div key={idx} className="p-12 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all duration-500 group">
-                <div className="text-4xl mb-8 grayscale group-hover:grayscale-0 transition-all">{item.icon}</div>
+              <div key={idx} className="p-12 bg-white border border-[#F0EDE6] hover:border-[#B8860B]/30 transition-all duration-500 group hover:-translate-y-2 hover:shadow-xl hover:shadow-[#B8860B]/5">
+                <div className="text-4xl mb-8 grayscale group-hover:grayscale-0 transition-all duration-500">{item.icon}</div>
                 <h3 className="font-heading text-2xl mb-4 text-[#1F1F1F]">{item.title}</h3>
                 <p className="text-[#8C8C8C] text-[0.95rem] font-light leading-relaxed">{item.desc}</p>
+                <div className="w-0 h-[2px] bg-[#B8860B] mt-8 group-hover:w-16 transition-all duration-500"></div>
               </div>
             ))}
           </div>
@@ -197,20 +202,22 @@ export default function AboutPage() {
       {/* Call to Action */}
       <section className="py-[clamp(5rem,10vw,9rem)] bg-white">
         <div className="container">
-          <div className="bg-[#1F1F1F] p-8 sm:p-12 md:p-24 relative overflow-hidden text-center text-white rounded-[4px]">
+          <div className="bg-gradient-to-br from-[#1F1F1F] to-[#2A2A2A] p-8 sm:p-12 md:p-24 relative overflow-hidden text-center text-white rounded-[4px] reveal">
              <div className="relative z-10">
+                <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6">Commission a Masterpiece</p>
                 <h2 className="font-heading text-[clamp(2rem,5vw,3.5rem)] mb-8 italic">
                   Have a custom <span className="text-[#B8860B]">vision</span>?
                 </h2>
-                <p className="text-[1.1rem] opacity-70 mb-12 max-w-[600px] mx-auto font-light leading-relaxed">
+                <p className="text-[1.05rem] opacity-60 mb-12 max-w-[600px] mx-auto font-light leading-relaxed">
                   Our master designers and artisans are ready to bring your bespoke furniture concepts to life. Let's create something extraordinary together.
                 </p>
-                <a href="/contact" className="inline-block bg-[#B8860B] text-white px-12 py-5 text-[0.75rem] font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-[#1F1F1F] transition-all">
+                <a href="/contact" className="inline-block bg-[#B8860B] text-white px-10 sm:px-12 py-4 sm:py-5 text-[0.7rem] font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-[#1F1F1F] transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
                   Start a Collaboration
                 </a>
              </div>
-             {/* Decorative element */}
+             {/* Decorative elements */}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] border border-white/5 rounded-full pointer-events-none"></div>
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] border border-white/3 rounded-full pointer-events-none"></div>
           </div>
         </div>
       </section>
