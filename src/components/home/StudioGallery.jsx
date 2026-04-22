@@ -22,7 +22,7 @@ export default function StudioGallery() {
           </div>
           <div className="max-w-[450px] reveal delay-200">
             <p className="text-[var(--color-text-secondary)] text-[0.95rem] font-light leading-relaxed mb-6">
-              Every masterpiece at Pushpa Arts is born from patience. We don't just build furniture; we preserve a lineage of royal Rajasthani artistry.
+              Every masterpiece at Pushpa Exports is born from patience. We don't just build furniture; we preserve a lineage of royal Rajasthani artistry.
             </p>
             <div className="w-16 h-[1px] bg-[var(--color-accent)]/40"></div>
           </div>
@@ -31,8 +31,8 @@ export default function StudioGallery() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10">
           {galleryImages.map((img, i) => (
             <div key={i} className={`reveal group relative aspect-[0.75] overflow-hidden bg-gray-50 delay-${(i + 1) * 100}`}>
-              <Image 
-                src={img.src} 
+              <Image
+                src={img.src}
                 alt={img.label}
                 fill
                 className="object-cover transition-transform duration-[2s] cubic-bezier(0.16, 1, 0.3, 1) group-hover:scale-110"
@@ -46,7 +46,7 @@ export default function StudioGallery() {
                 </h4>
                 <div className="w-12 h-[1px] bg-white/30 mt-6 translate-y-6 group-hover:translate-y-0 transition-all duration-700 delay-150"></div>
               </div>
-              
+
               {/* Corner accent decorative line */}
               <div className="absolute top-6 left-6 w-8 h-[1px] bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="absolute top-6 left-6 h-8 w-[1px] bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

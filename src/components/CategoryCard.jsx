@@ -24,7 +24,7 @@ export default function CategoryCard({ category }) {
           </div>
         )}
       </div>
-      
+
       {/* Dynamic Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-10 md:p-12 flex flex-col justify-end text-white transition-all duration-700 group-hover:via-black/50">
         <div className="overflow-hidden">
@@ -32,11 +32,11 @@ export default function CategoryCard({ category }) {
             Artisan Series
           </p>
         </div>
-        
+
         <h3 className="font-heading text-4xl md:text-5xl mb-8 leading-[1.1] translate-y-4 transition-all duration-700 group-hover:translate-y-0">
           {category.name}
         </h3>
-        
+
         <div className="flex items-center gap-4 opacity-0 translate-y-6 transition-all duration-500 delay-100 group-hover:opacity-100 group-hover:translate-y-0">
           <span className="text-[0.65rem] uppercase tracking-[0.3em] font-bold border-b border-white/50 pb-1 hover:border-white transition-all">
             Discover Collection

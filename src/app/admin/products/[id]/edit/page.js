@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, use } from 'react';
 import { useRouter } from 'next/navigation';
 import MediaPicker from '@/components/admin/MediaPicker';
+import SearchableSelect from '@/components/admin/SearchableSelect';
 
 export default function AdminProductEditPage({ params }) {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function AdminProductEditPage({ params }) {
             meta_description: p.meta_description || '',
           });
           setImages(prodData.images || []);
-          setCategoryIds(prodData.categories?.map(c => c.category_id) || (p.category_id ? [p.category_id] : []));
+          setCategoryIds(prodData.categories?.map(c => c.id) || (p.category_id ? [p.category_id] : []));
         }
       } catch (err) { console.error(err); }
       setLoading(false);
@@ -250,21 +251,12 @@ export default function AdminProductEditPage({ params }) {
                     onChange={e => setForm({ ...form, sku: e.target.value })}
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Collections</label>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {categories.map(cat => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => toggleCategory(cat.id)}
-                        className={`px-4 py-2 rounded-full text-[0.7rem] font-bold transition-all border-none cursor-pointer ${categoryIds.includes(cat.id) ? 'bg-[#0071e3] text-white shadow-md' : 'bg-[#f5f5f7] text-[#86868b] hover:bg-[#e8e8ed]'}`}
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <SearchableSelect 
+                  options={categories}
+                  selectedIds={categoryIds}
+                  onToggle={toggleCategory}
+                  placeholder="Select collections..."
+                />
               </div>
             </div>
 

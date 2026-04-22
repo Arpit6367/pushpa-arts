@@ -21,14 +21,13 @@ export default function Hero() {
         {heroSlides.map((s, i) => (
           <div
             key={i}
-            className={`absolute inset-0 transition-all duration-[2500ms] ease-out ${
-              i === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
-            }`}
+            className={`absolute inset-0 transition-all duration-[2500ms] ease-out ${i === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
+              }`}
           >
-            <Image 
-              src={s.image} 
-              alt={s.badge} 
-              fill 
+            <Image
+              src={s.image}
+              alt={s.badge}
+              fill
               priority={i === 0}
               className="object-cover"
               sizes="100vw"
@@ -48,7 +47,7 @@ export default function Hero() {
               {heroSlides[currentSlide].badge}
             </p>
           </div>
-          
+
           <div className="mb-6">
             <h1 className="text-[clamp(2.8rem,8vw,5.5rem)] font-heading leading-[0.95] tracking-tight">
               {heroSlides[currentSlide].title.split('\n').map((line, idx) => (
@@ -68,15 +67,15 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-wrap items-center gap-6 sm:gap-10 animate-fade-in-up" style={{ animationDelay: '800ms' }}>
-            <Link 
-              href="/product-category" 
+            <Link
+              href="/product-category"
               className="group relative px-10 sm:px-16 py-4 sm:py-5 bg-[var(--color-accent)] text-white text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all duration-500 hover:bg-white hover:text-black overflow-hidden shadow-2xl"
             >
               <span className="relative z-10">Shop Collection</span>
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
             </Link>
-            <Link 
-              href="/about" 
+            <Link
+              href="/about"
               className="group flex items-center gap-4 text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all"
             >
               <span className="border-b border-white/30 pb-1 group-hover:border-white transition-all">Our Heritage</span>
@@ -92,9 +91,8 @@ export default function Hero() {
           {heroSlides.map((_, i) => (
             <button
               key={i}
-              className={`h-[2px] cursor-pointer transition-all duration-700 border-none ${
-                i === currentSlide ? 'bg-[var(--color-accent)] w-16' : 'bg-white/20 w-8 hover:bg-white/40'
-              }`}
+              className={`h-[2px] cursor-pointer transition-all duration-700 border-none ${i === currentSlide ? 'bg-[var(--color-accent)] w-16' : 'bg-white/20 w-8 hover:bg-white/40'
+                }`}
               onClick={() => setCurrentSlide(i)}
               aria-label={`Go to slide ${i + 1}`}
               suppressHydrationWarning

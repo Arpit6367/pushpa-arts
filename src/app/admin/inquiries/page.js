@@ -366,7 +366,7 @@ export default function AdminInquiriesPage() {
                       📧 Reply via Email
                     </a>
                     <a
-                      href={`https://wa.me/${selectedInquiry.phone?.replace(/\D/g, '')}?text=Hello ${selectedInquiry.name}, thank you for reaching out to Pushpa Arts regarding "${selectedInquiry.subject}".`}
+                      href={`https://wa.me/${selectedInquiry.phone?.replace(/\D/g, '')}?text=Hello ${selectedInquiry.name}, thank you for reaching out to Pushpa Exports regarding "${selectedInquiry.subject}".`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 text-center px-4 py-2.5 bg-[#25d366] text-white text-[0.75rem] font-semibold rounded-lg hover:bg-[#25d366]/90 transition-colors"

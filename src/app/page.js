@@ -26,9 +26,9 @@ export default async function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Pushpa Arts",
-            "url": "https://pushpaarts.com",
-            "logo": "https://pushpaarts.com/images/Pushpa-Exports.svg",
+            "name": "Pushpa Exports",
+            "url": "https://pushpaexports.com",
+            "logo": "https://pushpaexports.com/images/Pushpa-Exports.svg",
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+91-94141-62629",
@@ -37,8 +37,8 @@ export default async function HomePage() {
               "availableLanguage": ["English", "Hindi"]
             },
             "sameAs": [
-              "https://www.instagram.com/pushpaarts",
-              "https://www.facebook.com/pushpaarts"
+              "https://www.instagram.com/pushpaexports",
+              "https://www.facebook.com/pushpaexports"
             ],
             "address": {
               "@type": "PostalAddress",
@@ -55,10 +55,10 @@ export default async function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            "url": "https://pushpaarts.com",
+            "url": "https://pushpaexports.com",
             "potentialAction": {
               "@type": "SearchAction",
-              "target": "https://pushpaarts.com/product-category?search={search_term_string}",
+              "target": "https://pushpaexports.com/product-category?search={search_term_string}",
               "query-input": "required name=search_term_string"
             }
           })

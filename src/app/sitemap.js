@@ -2,7 +2,7 @@ import { query } from '@/lib/db';
 import { getAllCategoriesWithPaths } from '@/lib/categories';
 
 export default async function sitemap() {
-  const baseUrl = 'https://pushpaarts.com';
+  const baseUrl = 'https://pushpaexports.com';
 
   // 1. Fetch Categories
   let categories = [];

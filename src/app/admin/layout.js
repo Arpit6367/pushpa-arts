@@ -82,7 +82,7 @@ export default function AdminLayout({ children }) {
 
       <aside className={`w-[260px] bg-white/75 backdrop-blur-xl border-r border-black/10 p-0 fixed top-0 left-0 bottom-0 flex flex-col transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0 shadow-[10px_0_40px_rgba(0,0,0,0.15)] z-[1200]' : '-translate-x-full z-[1050]'} lg:z-[1000]`}>
         <div className="px-8 py-12 flex flex-col gap-2">
-          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className="h-[70px] ml-8 w-auto self-start" />
+          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Exports" className="h-[70px] ml-8 w-auto self-start" />
           <p className="text-[0.65rem] text-[#86868b] uppercase tracking-[0.2rem] font-semibold">Studio Management</p>
         </div>
         <nav className="flex-1 py-4 px-3 overflow-y-auto">

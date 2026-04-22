@@ -9,23 +9,23 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            "name": "About Pushpa Arts",
-            "description": "Learn about Pushpa Arts, a renowned manufacturer and exporter of luxury handcrafted furniture based in Udaipur, Rajasthan, India.",
+            "name": "About Pushpa Exports",
+            "description": "Learn about Pushpa Exports, a renowned manufacturer and exporter of luxury handcrafted furniture based in Udaipur, Rajasthan, India.",
             "publisher": {
               "@type": "Organization",
-              "name": "Pushpa Arts",
-              "logo": "https://pushpaarts.com/images/Pushpa-Exports.svg"
+              "name": "Pushpa Exports",
+              "logo": "https://pushpaexports.com/images/Pushpa-Exports.svg"
             }
           })
         }}
       />
-      
+
       {/* Hero Section */}
       <div className="relative h-[70vh] min-h-[600px] flex items-center overflow-hidden">
-        <Image 
-          src="/images/about_hero.png" 
-          alt="Pushpa Arts Luxury Showroom" 
-          fill 
+        <Image
+          src="/images/about_hero.png"
+          alt="Pushpa Exports Luxury Showroom"
+          fill
           className="object-cover"
           priority
         />
@@ -48,8 +48,8 @@ export default function AboutPage() {
       <div className="bg-[#F5F1EE] py-6 border-b border-[#E5E0DA]">
         <div className="container">
           <div className="flex flex-wrap items-center gap-2 text-[0.7rem] tracking-[0.2em] uppercase text-[#1F1F1F]">
-            <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a> 
-            <span className="opacity-30">/</span> 
+            <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a>
+            <span className="opacity-30">/</span>
             <span className="font-semibold text-[#B8860B]">The Atelier</span>
           </div>
         </div>
@@ -61,10 +61,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center mb-32">
             <div className="reveal relative group">
               <div className="aspect-[4/5] relative rounded-[4px] overflow-hidden shadow-2xl">
-                <Image 
-                  src="/images/about_craftsmanship.png" 
-                  alt="Artisanal Craftsmanship" 
-                  fill 
+                <Image
+                  src="/images/about_craftsmanship.png"
+                  alt="Artisanal Craftsmanship"
+                  fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
               </div>
@@ -76,20 +76,20 @@ export default function AboutPage() {
             </div>
             <div className="reveal delay-200">
               <h2 className="font-heading text-[clamp(2.2rem,5vw,3.2rem)] text-[#1F1F1F] mb-6 leading-[1.1]">
-                A Heritage of <br/>
+                A Heritage of <br />
                 <span className="text-[#B8860B] italic">Excellence</span>
               </h2>
               <div className="space-y-6 text-[#4A4A4A] leading-[1.9] text-[1rem] font-light">
                 <p>
-                  Pushpa Arts is a renowned manufacturer and exporter of luxury handcrafted 
-                  furniture based in the historic city of Udaipur, Rajasthan. For decades, 
-                  our family has been dedicated to preserving and promoting the art of traditional 
+                  Pushpa Exports is a renowned manufacturer and exporter of luxury handcrafted
+                  furniture based in the historic city of Udaipur, Rajasthan. For decades,
+                  our family has been dedicated to preserving and promoting the art of traditional
                   Indian craftsmanship, once reserved for the palaces of Rajput royalty.
                 </p>
                 <p>
-                  Our skilled artisans, many of whom come from families with centuries-old woodworking 
-                  and inlay traditions, create furniture that seamlessly blends traditional aesthetics with 
-                  contemporary luxury. Every piece is a testament to the patient dedication that manual 
+                  Our skilled artisans, many of whom come from families with centuries-old woodworking
+                  and inlay traditions, create furniture that seamlessly blends traditional aesthetics with
+                  contemporary luxury. Every piece is a testament to the patient dedication that manual
                   artistry demands.
                 </p>
                 <div className="pt-4">
@@ -116,8 +116,8 @@ export default function AboutPage() {
                 Bridging the gap between <span className="text-[#B8860B]">ancient art</span> and modern luxury.
               </h2>
               <p className="text-[1.1rem] leading-relaxed opacity-70 font-light mb-12">
-                We believe that furniture is not just functional; it is an expression of culture and history. 
-                Our mission is to bring the soul of Udaipur's artistry into the world's most elegant homes, 
+                We believe that furniture is not just functional; it is an expression of culture and history.
+                Our mission is to bring the soul of Udaipur's artistry into the world's most elegant homes,
                 ensuring that traditional techniques survive and thrive in a modern world.
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
@@ -136,10 +136,10 @@ export default function AboutPage() {
             </div>
             <div className="reveal delay-200 relative overflow-hidden">
               <div className="aspect-video relative rounded-[4px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-                <Image 
-                  src="/images/about_mission.png" 
-                  alt="Artisans Working" 
-                  fill 
+                <Image
+                  src="/images/about_mission.png"
+                  alt="Artisans Working"
+                  fill
                   className="object-cover"
                 />
               </div>
@@ -203,21 +203,21 @@ export default function AboutPage() {
       <section className="py-[clamp(5rem,10vw,9rem)] bg-white">
         <div className="container">
           <div className="bg-gradient-to-br from-[#1F1F1F] to-[#2A2A2A] p-8 sm:p-12 md:p-24 relative overflow-hidden text-center text-white rounded-[4px] reveal">
-             <div className="relative z-10">
-                <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6">Commission a Masterpiece</p>
-                <h2 className="font-heading text-[clamp(2rem,5vw,3.5rem)] mb-8 italic">
-                  Have a custom <span className="text-[#B8860B]">vision</span>?
-                </h2>
-                <p className="text-[1.05rem] opacity-60 mb-12 max-w-[600px] mx-auto font-light leading-relaxed">
-                  Our master designers and artisans are ready to bring your bespoke furniture concepts to life. Let's create something extraordinary together.
-                </p>
-                <a href="/contact" className="inline-block bg-[#B8860B] text-white px-10 sm:px-12 py-4 sm:py-5 text-[0.7rem] font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-[#1F1F1F] transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
-                  Start a Collaboration
-                </a>
-             </div>
-             {/* Decorative elements */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] border border-white/5 rounded-full pointer-events-none"></div>
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] border border-white/3 rounded-full pointer-events-none"></div>
+            <div className="relative z-10">
+              <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6">Commission a Masterpiece</p>
+              <h2 className="font-heading text-[clamp(2rem,5vw,3.5rem)] mb-8 italic">
+                Have a custom <span className="text-[#B8860B]">vision</span>?
+              </h2>
+              <p className="text-[1.05rem] opacity-60 mb-12 max-w-[600px] mx-auto font-light leading-relaxed">
+                Our master designers and artisans are ready to bring your bespoke furniture concepts to life. Let's create something extraordinary together.
+              </p>
+              <a href="/contact" className="inline-block bg-[#B8860B] text-white px-10 sm:px-12 py-4 sm:py-5 text-[0.7rem] font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-[#1F1F1F] transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+                Start a Collaboration
+              </a>
+            </div>
+            {/* Decorative elements */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] border border-white/5 rounded-full pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] border border-white/3 rounded-full pointer-events-none"></div>
           </div>
         </div>
       </section>

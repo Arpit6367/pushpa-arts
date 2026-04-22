@@ -8,20 +8,20 @@ export async function generateMetadata({ params }) {
 
   if (!product) {
     return {
-      title: 'Masterpiece Not Found | Pushpa Arts',
+      title: 'Masterpiece Not Found | Pushpa Exports',
     };
   }
 
   return {
-    title: `${product.name} | Handcrafted Luxury ${product.category_name} | Pushpa Arts`,
-    description: product.meta_description || product.short_description || `Exquisite handcrafted ${product.name} from Udaipur. Discover the royal heritage of ${product.category_name} by Pushpa Arts.`,
+    title: `${product.name} | Handcrafted Luxury ${product.category_name} | Pushpa Exports`,
+    description: product.meta_description || product.short_description || `Exquisite handcrafted ${product.name} from Udaipur. Discover the royal heritage of ${product.category_name} by Pushpa Exports.`,
     openGraph: {
-      title: `${product.name} | Pushpa Arts`,
+      title: `${product.name} | Pushpa Exports`,
       description: product.meta_description || product.short_description,
       images: product.images?.[0] ? [{ url: product.images[0].file_path }] : [],
     },
     alternates: {
-      canonical: `https://pushpaarts.com/shop/${product.category_slug_path}/${product.slug}`,
+      canonical: `https://pushpaexports.com/shop/${product.category_slug_path}/${product.slug}`,
     }
   };
 }
@@ -48,16 +48,16 @@ export default async function ShopProductDetailPage({ params }) {
                 "sku": product.sku || '',
                 "brand": {
                   "@type": "Brand",
-                  "name": "Pushpa Arts"
+                  "name": "Pushpa Exports"
                 },
                 "offers": {
                   "@type": "Offer",
-                  "url": `https://pushpaarts.com/shop/${product.category_slug_path}/${product.slug}`,
+                  "url": `https://pushpaexports.com/shop/${product.category_slug_path}/${product.slug}`,
                   "priceCurrency": "INR",
                   "availability": "https://schema.org/InStock",
                   "seller": {
                     "@type": "Organization",
-                    "name": "Pushpa Arts"
+                    "name": "Pushpa Exports"
                   }
                 }
               })
@@ -74,19 +74,19 @@ export default async function ShopProductDetailPage({ params }) {
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Home",
-                    "item": "https://pushpaarts.com"
+                    "item": "https://pushpaexports.com"
                   },
                   ...(product.category_slug_path ? product.category_slug_path.split('/').map((part, index) => ({
                     "@type": "ListItem",
                     "position": index + 2,
                     "name": part.replace(/-/g, ' '),
-                    "item": `https://pushpaarts.com/product-category/${product.category_slug_path.split('/').slice(0, index + 1).join('/')}`
+                    "item": `https://pushpaexports.com/product-category/${product.category_slug_path.split('/').slice(0, index + 1).join('/')}`
                   })) : []),
                   {
                     "@type": "ListItem",
                     "position": (product.category_slug_path?.split('/').length || 0) + 2,
                     "name": product.name,
-                    "item": `https://pushpaarts.com/shop/${product.category_slug_path}/${product.slug}`
+                    "item": `https://pushpaexports.com/shop/${product.category_slug_path}/${product.slug}`
                   }
                 ]
               })

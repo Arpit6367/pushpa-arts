@@ -8,12 +8,12 @@ import { query } from './db';
 export const getSiteSettings = cache(async function getSiteSettings() {
   try {
     const results = await query('SELECT setting_key, setting_value FROM site_settings');
-    
+
     // Transform array of {setting_key, setting_value} into a single object
     const settings = {
-      site_name: 'Pushpa Arts', // Default fallbacks
+      site_name: 'Pushpa Exports', // Default fallbacks
       site_tagline: 'Exquisite Handcrafted Furniture',
-      contact_email: 'info@pushpaarts.com',
+      contact_email: 'info@pushpaexports.com',
       contact_phone: '+91-9414162629',
       contact_address: 'Udaipur, Rajasthan, India',
       whatsapp_number: '+919414162629'
@@ -30,9 +30,9 @@ export const getSiteSettings = cache(async function getSiteSettings() {
     console.error('Error fetching site settings:', error);
     // Return defaults on error
     return {
-      site_name: 'Pushpa Arts',
+      site_name: 'Pushpa Exports',
       site_tagline: 'Exquisite Handcrafted Furniture',
-      contact_email: 'info@pushpaarts.com',
+      contact_email: 'info@pushpaexports.com',
       contact_phone: '+91-9414162629',
       contact_address: 'Udaipur, Rajasthan, India',
       whatsapp_number: '+919414162629'

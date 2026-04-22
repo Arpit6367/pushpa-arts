@@ -261,7 +261,7 @@ export default function AdminCategoriesPage() {
                   multiple={false}
                   onClose={() => setShowMediaPicker(false)}
                   onSelect={(path) => {
-                    setForm({ ...form, image: path });
+                    setForm(prev => ({ ...prev, image: path }));
                     showToast('Image selected');
                   }}
                 />

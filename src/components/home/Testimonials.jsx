@@ -9,7 +9,7 @@ const testimonials = [
     location: "Interior Designer, London"
   },
   {
-    text: "Pushpa Arts brought our villa to life. Their custom marble inlay work is the centerpiece of our home. Seamless shipping and professional service from Udaipur to Dubai.",
+    text: "Pushpa Exports brought our villa to life. Their custom marble inlay work is the centerpiece of our home. Seamless shipping and professional service from Udaipur to Dubai.",
     author: "Zaid Al-Sayed",
     location: "Homeowner, Dubai"
   },

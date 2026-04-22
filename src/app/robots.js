@@ -5,6 +5,6 @@ export default function robots() {
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://pushpaarts.com/sitemap.xml',
+    sitemap: 'https://pushpaexports.com/sitemap.xml',
   };
 }

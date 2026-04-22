@@ -45,13 +45,13 @@ export default function ContactPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Contact Pushpa Arts",
-            "description": "Get in touch with Pushpa Arts for inquiries about our luxury handcrafted furniture from Udaipur, India.",
+            "name": "Contact Pushpa Exports",
+            "description": "Get in touch with Pushpa Exports for inquiries about our luxury handcrafted furniture from Udaipur, India.",
             "mainEntity": {
               "@type": "Organization",
-              "name": "Pushpa Arts",
+              "name": "Pushpa Exports",
               "telephone": "+91-94141-62629",
-              "email": "info@pushpaarts.com",
+              "email": "info@pushpaexports.com",
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Udaipur",
@@ -67,7 +67,7 @@ export default function ContactPage() {
       <div className="relative h-[60vh] md:h-[85vh] min-h-[350px] md:min-h-[400px] flex items-center overflow-hidden">
         <Image
           src="/images/contact_hero.png"
-          alt="Pushpa Arts Studio"
+          alt="Pushpa Exports Studio"
           fill
           className="object-cover"
           priority
@@ -124,7 +124,7 @@ export default function ContactPage() {
                   <div className="flex flex-col gap-4">
                     <h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#B8860B]">Direct Inquiry</h4>
                     <p className="text-[#1F1F1F] text-[0.95rem] font-light">
-                      <a href="mailto:info@pushpaarts.com" className="hover:text-[#B8860B] transition-colors underline underline-offset-4">info@pushpaarts.com</a><br />
+                      <a href="mailto:info@pushpaexports.com" className="hover:text-[#B8860B] transition-colors underline underline-offset-4">info@pushpaarts.com</a><br />
                       <span className="block mt-2">+91 94141 62629</span>
                     </p>
                   </div>
@@ -263,11 +263,17 @@ export default function ContactPage() {
               <p className="text-[#4A4A4A] mb-8 leading-[2.1] text-[1.1rem] font-light">
                 Experience the tactile beauty of our masterpieces in person. Our flagship showroom in the heart of Udaipur showcases our latest collections in a curated architectural setting.
               </p>
-              <div className="aspect-video bg-[#E5E0DA] relative rounded-[4px] overflow-hidden grayscale">
-                {/* Map Placeholder or Static Image */}
-                <div className="absolute inset-0 flex items-center justify-center text-[#8C8C8C] text-[0.7rem] uppercase tracking-[0.2em] font-bold">
-                  Interactive Gallery View Map
-                </div>
+              <div className="aspect-video bg-[#E5E0DA] relative rounded-[4px] overflow-hidden shadow-inner">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50352.31699105845!2d73.65504458739277!3d24.60551920929089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3967e453b1ceaa6b%3A0xac902e77b1ff6ea4!2sPushpa%20Exports!5e0!3m2!1sen!2sin!4v1776865803543!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0"
+                ></iframe>
               </div>
             </div>
             <div className="reveal delay-200">
@@ -290,7 +296,7 @@ export default function ContactPage() {
                         <span className="group-open:rotate-180 transition-transform">↓</span>
                       </summary>
                       <p className="mt-4 text-[#8C8C8C] text-[0.9rem] font-light leading-relaxed">
-                        Absolutely. Bespoke creations are at the heart of Pushpa Arts. We can modify existing designs or create entirely new pieces based on your architectural requirements.
+                        Absolutely. Bespoke creations are at the heart of Pushpa Exports. We can modify existing designs or create entirely new pieces based on your architectural requirements.
                       </p>
                     </details>
                     <details className="group border-b border-[#E5E0DA] pb-4 cursor-pointer">
@@ -317,7 +323,7 @@ export default function ContactPage() {
                         <span className="group-open:rotate-180 transition-transform">↓</span>
                       </summary>
                       <p className="mt-4 text-[#8C8C8C] text-[0.9rem] font-light leading-relaxed">
-                        Absolutely. Bespoke creations are at the heart of Pushpa Arts. We can modify existing designs or create entirely new pieces based on your architectural requirements.
+                        Absolutely. Bespoke creations are at the heart of Pushpa Exports. We can modify existing designs or create entirely new pieces based on your architectural requirements.
                       </p>
                     </details>
                     <details className="group border-b border-[#E5E0DA] pb-4 cursor-pointer">
@@ -326,7 +332,7 @@ export default function ContactPage() {
                         <span className="group-open:rotate-180 transition-transform">↓</span>
                       </summary>
                       <p className="mt-4 text-[#8C8C8C] text-[0.9rem] font-light leading-relaxed">
-                        Absolutely. Bespoke creations are at the heart of Pushpa Arts. We can modify existing designs or create entirely new pieces based on your architectural requirements.
+                        Absolutely. Bespoke creations are at the heart of Pushpa Exports. We can modify existing designs or create entirely new pieces based on your architectural requirements.
                       </p>
                     </details>
                     <details className="group border-b border-[#E5E0DA] pb-4 cursor-pointer">

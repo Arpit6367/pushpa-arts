@@ -10,15 +10,15 @@ export async function generateMetadata({ params }) {
 
   if (!category) {
     return {
-      title: 'Collection Not Found | Pushpa Arts',
+      title: 'Collection Not Found | Pushpa Exports',
     };
   }
 
   return {
-    title: `Premium ${category.name} | Handcrafted Luxury Furniture | Pushpa Arts`,
+    title: `Premium ${category.name} | Handcrafted Luxury Furniture | Pushpa Exports`,
     description: category.description || `Exquisite handcrafted ${category.name} collection from Udaipur. Manufacturers and exporters of bespoke luxury furniture pieces.`,
     alternates: {
-      canonical: `https://pushpaarts.com/product-category/${category.slug_path}`,
+      canonical: `https://pushpaexports.com/product-category/${category.slug_path}`,
     }
   };
 }
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
 export default async function NestedCategoryPage({ params }) {
   const { slug } = await params;
   const currentSlug = slug[slug.length - 1];
-  
+
   const allCategories = await getAllCategoriesWithPaths();
   const category = allCategories.find(c => c.slug === currentSlug);
   const { products, pagination } = await getProductsByCategory(currentSlug, 1, 12);
@@ -44,13 +44,13 @@ export default async function NestedCategoryPage({ params }) {
                 "@type": "CollectionPage",
                 "name": category.name,
                 "description": category.description || "A curated collection of handcrafted luxury furniture masterpieces.",
-                "url": `https://pushpaarts.com/product-category/${category.slug_path}`,
+                "url": `https://pushpaexports.com/product-category/${category.slug_path}`,
                 "mainEntity": {
                   "@type": "ItemList",
                   "itemListElement": products.map((product, index) => ({
                     "@type": "ListItem",
                     "position": index + 1,
-                    "url": `https://pushpaarts.com/shop/${category.slug_path}/${product.slug}`
+                    "url": `https://pushpaexports.com/shop/${category.slug_path}/${product.slug}`
                   }))
                 }
               })
@@ -67,13 +67,13 @@ export default async function NestedCategoryPage({ params }) {
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Home",
-                    "item": "https://pushpaarts.com"
+                    "item": "https://pushpaexports.com"
                   },
                   ...slug.map((s, index) => ({
                     "@type": "ListItem",
                     "position": index + 2,
                     "name": s.replace(/-/g, ' '),
-                    "item": `https://pushpaarts.com/product-category/${slug.slice(0, index + 1).join('/')}`
+                    "item": `https://pushpaexports.com/product-category/${slug.slice(0, index + 1).join('/')}`
                   }))
                 ]
               })
@@ -81,7 +81,7 @@ export default async function NestedCategoryPage({ params }) {
           />
         </>
       )}
-      <CollectionPageClient 
+      <CollectionPageClient
         category={category}
         initialProducts={products}
         initialPagination={pagination}

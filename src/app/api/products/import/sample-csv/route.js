@@ -23,8 +23,8 @@ export async function GET() {
       'This luxury silver chair is handcrafted by skilled artisans using pure silver sheets on solid teak wood.',
       '1',
       '1',
-      'Luxury Silver Chair | Pushpa Arts',
-      'Buy exquisite hand-carved silver chair from Pushpa Arts.',
+      'Luxury Silver Chair | Pushpa Exports',
+      'Buy exquisite hand-carved silver chair from Pushpa Exports.',
       '/uploads/products/tutor-new-removebg-preview-1776086705928.png'
     ].map(val => `"${val.replace(/"/g, '""')}"`).join(','),
     [
@@ -35,7 +35,7 @@ export async function GET() {
       'Beautiful coffee table featuring intricate floral bone inlay work on a sturdy wooden frame.',
       '0',
       '1',
-      'Bone Inlay Coffee Table | Pushpa Arts',
+      'Bone Inlay Coffee Table | Pushpa Exports',
       'Discover our unique collection of bone inlay furniture.',
       '/uploads/products/bone_inlay_table.png'
     ].map(val => `"${val.replace(/"/g, '""')}"`).join(',')
