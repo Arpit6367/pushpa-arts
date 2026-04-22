@@ -38,11 +38,11 @@
   --font-body: 'Montserrat', sans-serif;
   --font-admin: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  --spacing-section: clamp(5rem, 10vw, 8rem);
-  --spacing-container: clamp(1.2rem, 5vw, 6rem);
+  --spacing-section: clamp(4rem, 8vw, 6rem);
+  --spacing-container: clamp(1rem, 5vw, 4rem);
 
   /* Prettier-safe font scales */
-  --font-size-title: clamp(2.4rem, 6vw, 3.8rem);
+  --font-size-title: clamp(2.2rem, 5vw, 3.8rem);
   --grid-admin-quick: repeat(auto-fill, minmax(100px, 1fr));
 }
 
@@ -70,7 +70,7 @@
   }
 
   .btn-outline {
-    @apply bg-white border border-black/10 text-[#1d1d1f] px-6 py-3.5 rounded-[10px] text-[0.7rem] font-bold uppercase tracking-[0.25em] hover:bg-black hover:text-white transition-all duration-500 cursor-pointer whitespace-nowrap inline-block text-center shadow-sm;
+    @apply bg-white border border-black/10 text-[#1d1d1f] px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap inline-block text-center;
   }
 
   .btn-sm {
