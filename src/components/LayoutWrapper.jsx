@@ -51,7 +51,7 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
   return (
     <QuickViewProvider>
       <Header initialCategories={initialCategories} settings={settings} />
-      <main className={!isHome ? 'pt-[160px]' : ''}>{children}</main>
+      <main>{children}</main>
       <Footer settings={settings} />
     </QuickViewProvider>
   );

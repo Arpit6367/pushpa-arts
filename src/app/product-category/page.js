@@ -53,7 +53,7 @@ export default function CategoriesPage() {
                           <div className="w-8 h-8 rounded-full border-4 border-[#B8860B]/20 border-t-[#B8860B] animate-spin"></div>
                         </div>
                     ) : categories.length > 0 ? (
-                        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
                             {categories.map(cat => (
                                 <CategoryCard key={cat.id} category={cat} />
                             ))}

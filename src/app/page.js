@@ -64,7 +64,7 @@ export default async function HomePage() {
           })
         }}
       />
-      
+
       <Hero />
       <FeatureBar />
       <CategorySection categories={parentCategories} />
@@ -79,21 +79,21 @@ export default async function HomePage() {
       <Testimonials />
 
       {/* ===== FINAL CTA / NEWSLETTER ===== */}
-      <section className="py-32 bg-[var(--color-bg-dark)]">
+      <section className="py-16 sm:py-32 bg-[var(--color-bg-dark)]">
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)] text-center">
-          <h2 className="text-[clamp(2.5rem,8vw,5rem)] text-white font-heading mb-6 tracking-tight">Elegance in Every Detail</h2>
-          <p className="text-white/60 max-w-[600px] mx-auto mb-12 text-lg font-light leading-relaxed">
+          <h2 className="text-[clamp(2rem,8vw,5rem)] text-white font-heading mb-6 tracking-tight">Elegance in Every Detail</h2>
+          <p className="text-white/60 max-w-[600px] mx-auto mb-12 text-base sm:text-lg font-light leading-relaxed">
             Stay inspired. Join our circle for exclusive previews of new artisan collections and home decor ideas.
           </p>
-          <div className="flex max-w-[500px] w-full mx-auto relative group">
-            <input 
-              type="email" 
-              placeholder="YOUR EMAIL ADDRESS" 
-              className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] transition-colors" 
+          <div className="flex flex-col sm:flex-row max-w-[500px] w-full mx-auto relative group">
+            <input
+              type="email"
+              placeholder="YOUR EMAIL ADDRESS"
+              className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] transition-colors"
               suppressHydrationWarning
             />
-            <button 
-              className="bg-transparent border-b border-[var(--color-accent)] text-[var(--color-accent)] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 transition-colors hover:text-white hover:border-white"
+            <button
+              className="bg-transparent border-b border-[var(--color-accent)] text-[var(--color-accent)] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 py-4 sm:py-0 transition-colors hover:text-white hover:border-white"
               suppressHydrationWarning
             >
               Subscribe

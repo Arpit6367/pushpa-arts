@@ -15,7 +15,7 @@ export default function StudioGallery() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="max-w-[600px]">
             <span className="text-[var(--color-accent)] uppercase tracking-[0.4em] font-bold text-[0.6rem] mb-4 block">Inside the Studio</span>
-            <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] font-heading text-[var(--color-text-primary)] leading-tight">Crafting the <br /> Extraordinary</h2>
+            <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-heading text-[var(--color-text-primary)] leading-tight">Crafting the <br className="hidden sm:block" /> Extraordinary</h2>
           </div>
           <p className="text-[var(--color-text-muted)] max-w-[400px] text-sm leading-relaxed mb-2">
             Every piece at Pushpa Arts undergoes a meticulous journey of transformation, handled by generational master artisans.

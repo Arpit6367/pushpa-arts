@@ -4,6 +4,7 @@ import { getAllCategoriesWithPaths } from '@/lib/categories';
 import { getSiteSettings } from '@/lib/settings';
 
 export const metadata = {
+  metadataBase: new URL('https://pushpaarts.com'),
   title: 'Pushpa Arts | Luxury Silver, Bone Inlay & Marble Furniture Exporters',
   description: 'Exquisite handcrafted luxury furniture from Udaipur. Manufacturers and exporters of Silver Furniture, Bone Inlay, Mother of Pearl, and Marble masterpieces for distinguished interiors.',
   keywords: 'silver furniture, bone inlay furniture, mother of pearl inlay, luxury furniture exporters, marble furniture, handcrafted furniture Udaipur, pushpa arts',
@@ -39,7 +40,7 @@ export default async function RootLayout({ children }) {
   const settings = await getSiteSettings();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <LayoutWrapper initialCategories={categories} settings={settings}>{children}</LayoutWrapper>
       </body>

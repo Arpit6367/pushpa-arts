@@ -65,7 +65,7 @@ export default function CollectionPageClient({
 
   return (
     <>
-      <div className="relative min-h-[450px] flex items-center bg-[#F5F1EE] overflow-hidden border-b border-[#E5E0DA] reveal">
+      <div className="relative min-h-[350px] md:min-h-[450px] flex items-center bg-[#F5F1EE] overflow-hidden border-b border-[#E5E0DA] reveal">
         {/* Background Image with Overlay */}
         {category?.image && (
           <div className="absolute inset-0 z-0">
@@ -77,7 +77,7 @@ export default function CollectionPageClient({
           </div>
         )}
         
-        <div className="relative z-10 max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)] py-16 w-full">
+        <div className="relative z-10 max-w-[1600px] mx-auto px-[clamp(1rem,5vw,6rem)] py-12 md:py-16 w-full">
           <div className="max-w-[800px]">
             <span className="text-[#B8860B] uppercase tracking-[0.2em] text-[0.7rem] font-bold">Collection</span>
             <h1 className="mt-4 text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
@@ -117,7 +117,7 @@ export default function CollectionPageClient({
                 <h2 className="text-[2rem] m-0 text-[#1F1F1F] font-heading">Explore <span className="text-[#B8860B]">Sub-Collections</span></h2>
                 <div className="flex-1 h-[1px] bg-[#F0EDE6]"></div>
               </div>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-12">
+              <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-8 md:gap-12">
                 {subCategories.map(subCat => (
                   <div key={subCat.id} className="reveal group flex flex-col">
                     <Link href={`/product-category/${subCat.slug_path}`} className="block relative h-[300px] overflow-hidden rounded-[2px] shadow-sm">

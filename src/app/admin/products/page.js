@@ -103,7 +103,7 @@ export default function AdminProductsPage() {
 
   return (
     <>
-      <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-4 sm:px-8 lg:px-12 py-6 lg:py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <h1 className="text-3xl font-heading text-[#1d1d1f]">Masterpieces</h1>
         <div className="flex gap-3">
           <button onClick={() => setShowImportModal(true)} className="bg-white border border-black/10 text-[#1d1d1f] px-4 py-2 rounded-[10px] text-[0.8rem] font-semibold hover:bg-black/5 transition-colors cursor-pointer whitespace-nowrap">Import Collection</button>
@@ -111,7 +111,7 @@ export default function AdminProductsPage() {
         </div>
       </div>
 
-      <div className="px-12 pb-20">
+      <div className="px-4 sm:px-8 lg:px-12 pb-12 lg:pb-20">
         {toast && <div className={`fixed bottom-8 right-8 px-6 py-4 rounded-xl text-[0.9rem] font-medium z-[3000] shadow-xl transition-all ${toast.type === 'error' ? 'bg-[#ff3b30] text-white' : 'bg-[#34c759] text-white'}`}>{toast.message}</div>}
 
         <div className="bg-white border border-black/10 rounded-2xl overflow-hidden shadow-sm">

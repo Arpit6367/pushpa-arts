@@ -68,10 +68,10 @@
   
   /* Admin UI Structure */
   .admin-header {
-    @apply flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md;
+    @apply flex justify-between items-center px-4 sm:px-8 lg:px-12 py-6 lg:py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md;
   }
   .admin-content {
-    @apply px-12 pb-20;
+    @apply px-4 sm:px-8 lg:px-12 pb-12 lg:pb-20;
   }
   .bento-grid {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12;
@@ -109,10 +109,10 @@
     @apply w-full border-collapse;
   }
   .admin-table th {
-    @apply text-left py-4 px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa];
+    @apply text-left py-3 px-4 sm:px-6 lg:px-10 text-[0.75rem] uppercase tracking-wider text-[#86868b] border-b border-black/10 font-semibold bg-[#fafafa];
   }
   .admin-table td {
-    @apply py-5 px-10 text-[0.95rem] text-[#1d1d1f] border-b border-black/10 transition-colors;
+    @apply py-4 px-4 sm:px-6 lg:px-10 text-[0.85rem] sm:text-[0.95rem] text-[#1d1d1f] border-b border-black/10 transition-colors;
   }
   .admin-table tr {
     @apply hover:bg-[#fbfbfd];
@@ -146,7 +146,7 @@
   
   /* Modals */
   .modal-overlay {
-    @apply fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-[2000] p-8;
+    @apply fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-[2000] p-4 sm:p-8;
   }
   .modal {
     @apply bg-white border border-black/10 rounded-[24px] p-10 w-full max-h-[90vh] overflow-y-auto shadow-2xl;

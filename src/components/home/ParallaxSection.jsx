@@ -17,7 +17,7 @@ export default function ParallaxSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[120svh] min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
+    <section ref={sectionRef} className="relative h-[80svh] md:h-[120svh] min-h-[500px] md:min-h-[800px] flex items-center justify-center overflow-hidden bg-black">
       {/* Dynamic Background Image */}
       <div 
         className="absolute inset-0 z-0 transition-transform duration-300 ease-out"

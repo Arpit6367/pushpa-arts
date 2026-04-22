@@ -33,10 +33,10 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Modern Hover Overlay Actions */}
-      <div className="absolute inset-0 z-10 bg-[var(--color-secondary)]/10 backdrop-blur-[1px] flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:backdrop-blur-[2px] pointer-events-none group-hover:pointer-events-auto">
+      <div className="absolute inset-0 z-10 bg-[var(--color-secondary)]/10 backdrop-blur-[1px] flex flex-col items-center justify-center gap-3 sm:gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:backdrop-blur-[2px] pointer-events-none group-hover:pointer-events-auto">
         <Link 
           href={`/shop/${catSlug}/${product.slug}`}
-          className="bg-white text-[var(--color-text-primary)] text-[0.6rem] uppercase tracking-[0.3em] font-bold py-4 px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0 hover:bg-[var(--color-accent)] hover:text-white"
+          className="bg-white text-[var(--color-text-primary)] text-[0.55rem] sm:text-[0.6rem] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold py-3 sm:py-4 px-6 sm:px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0 hover:bg-[var(--color-accent)] hover:text-white"
         >
           View Detail
         </Link>
@@ -46,7 +46,7 @@ export default function ProductCard({ product }) {
             e.stopPropagation();
             openQuickView(product);
           }}
-          className="flex items-center gap-2 bg-[var(--color-secondary)] text-white text-[0.6rem] uppercase tracking-[0.3em] font-bold py-4 px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0 delay-75 hover:bg-[var(--color-accent)]"
+          className="flex items-center gap-2 bg-[var(--color-secondary)] text-white text-[0.55rem] sm:text-[0.6rem] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold py-3 sm:py-4 px-6 sm:px-10 shadow-xl translate-y-4 transition-all duration-500 group-hover:translate-y-0 delay-75 hover:bg-[var(--color-accent)]"
           suppressHydrationWarning
         >
           <Eye className="w-4 h-4" /> Quick View

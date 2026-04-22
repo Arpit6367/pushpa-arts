@@ -124,7 +124,7 @@ export default function AdminCategoriesPage() {
 
   return (
     <>
-      <div className="flex justify-between items-center px-12 py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-4 sm:px-8 lg:px-12 py-6 lg:py-10 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
           <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Collection Hierarchy</p>
           <h1 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">Collections</h1>
@@ -132,11 +132,11 @@ export default function AdminCategoriesPage() {
         <button className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm" onClick={openCreate}>+ New Collection</button>
       </div>
 
-      <div className="px-12 pb-20">
+      <div className="px-4 sm:px-8 lg:px-12 pb-12 lg:pb-20">
         {toast && <div className={`fixed bottom-8 right-8 px-6 py-4 rounded-xl text-[0.9rem] font-medium z-[3000] shadow-xl transition-all ${toast.type === 'error' ? 'bg-[#ff3b30] text-white' : 'bg-[#34c759] text-white'}`}>{toast.message}</div>}
 
         {/* Drill-down Breadcrumbs */}
-        <div className="flex gap-3 items-center mb-10 bg-white px-6 py-4 rounded-xl border border-black/10 shadow-sm text-[0.95rem]">
+        <div className="flex gap-3 items-center mb-8 sm:mb-10 bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-black/10 shadow-sm text-[0.85rem] sm:text-[0.95rem] overflow-x-auto">
           <span
             className={`cursor-pointer transition-colors ${currentParentId === null ? 'font-bold text-[#1d1d1f]' : 'text-[#0071e3] hover:underline'}`}
             onClick={() => setCurrentParentId(null)}
@@ -159,7 +159,7 @@ export default function AdminCategoriesPage() {
         {loading ? (
           <div className="mx-auto my-16 w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
         ) : currentCategories.length > 0 ? (
-          <div className="bg-white border border-black/10 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-black/10 rounded-2xl overflow-x-auto shadow-sm">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -218,8 +218,8 @@ export default function AdminCategoriesPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-[2000] p-8" onClick={() => setShowModal(false)}>
-          <div className="bg-white border border-black/10 rounded-[24px] p-12 w-full max-w-[800px] max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-[2000] p-4 sm:p-8" onClick={() => setShowModal(false)}>
+          <div className="bg-white border border-black/10 rounded-[24px] p-6 sm:p-12 w-full max-w-[800px] max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-[#1d1d1f] mb-8">{editingCategory ? 'Edit Collection' : 'Launch New Collection'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-2 mb-6">
@@ -230,7 +230,7 @@ export default function AdminCategoriesPage() {
                 <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Description</label>
                 <textarea className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none resize-y min-h-[120px]" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} />
               </div>
-              <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div className="flex flex-col gap-2">
                   <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Parent Collection</label>
                   <select className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none appearance-none cursor-pointer" style={{ backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23999\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center', backgroundSize: '16px' }} value={form.parent_id} onChange={e => setForm({ ...form, parent_id: e.target.value })}>

@@ -54,10 +54,10 @@ export default function Hero() {
               {heroSlides[currentSlide].subtitle}
             </p>
           </div>
-          <div className="flex items-center gap-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700">
             <Link 
               href="/product-category" 
-              className="px-14 py-5 bg-[var(--color-accent)] text-white text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all hover:bg-white hover:text-black hover:-translate-y-1 shadow-2xl"
+              className="px-8 sm:px-14 py-4 sm:py-5 bg-[var(--color-accent)] text-white text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold transition-all hover:bg-white hover:text-black hover:-translate-y-1 shadow-2xl"
             >
               Shop Collection
             </Link>

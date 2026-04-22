@@ -9,6 +9,7 @@ export default function ProductDetailClient({ product }) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const [isZooming, setIsZooming] = useState(false);
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
 
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -35,6 +36,36 @@ export default function ProductDetailClient({ product }) {
     }
     return () => { document.body.style.overflow = 'unset'; };
   }, [isLightboxOpen]);
+
+  // Recently Viewed Logic
+  useEffect(() => {
+    if (!product) return;
+
+    const stored = localStorage.getItem('recentlyViewed');
+    let viewed = stored ? JSON.parse(stored) : [];
+    
+    // Add current product if not already first
+    if (viewed[0]?.id !== product.id) {
+      // Remove product if it's already in the list to move it to the front
+      viewed = viewed.filter(p => p.id !== product.id);
+      
+      const productSummary = {
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        category_slug_path: product.category_slug_path,
+        first_image: product.images?.[0]?.file_path
+      };
+      
+      viewed.unshift(productSummary);
+      // Keep only last 10 items
+      viewed = viewed.slice(0, 10);
+      localStorage.setItem('recentlyViewed', JSON.stringify(viewed));
+    }
+    
+    // Filter out current product for display
+    setRecentlyViewed(viewed.filter(p => p.id !== product.id));
+  }, [product]);
 
   if (!product) {
     return (
@@ -137,9 +168,9 @@ export default function ProductDetailClient({ product }) {
         </div>
       )}
 
-      <section className="pt-40 pb-24 md:pt-48 md:pb-32">
+      <section className="pt-28 pb-16 md:pt-48 md:pb-32">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-24 items-start">
             {/* Gallery Section */}
             <div className="flex flex-col gap-8 reveal lg:sticky lg:top-32 z-10">
               <div 
@@ -249,13 +280,13 @@ export default function ProductDetailClient({ product }) {
                     href={`https://wa.me/919414162629?text=Greetings, I am very interested in the ${product.name}. Could you please provide more details?`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-4 px-10 py-6 bg-[#1F1F1F] text-white text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all hover:bg-[#B8860B] hover:shadow-2xl hover:shadow-[#B8860B]/30 group"
+                    className="flex-1 flex items-center justify-center gap-3 sm:gap-4 px-6 sm:px-10 py-4 sm:py-6 bg-[#1F1F1F] text-white text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold transition-all hover:bg-[#B8860B] hover:shadow-2xl hover:shadow-[#B8860B]/30 group"
                   >
                     <span className="transition-transform group-hover:scale-125">💬</span>
                     <span>Artisan Inquiry</span>
                   </a>
 
-                  <Link href="/contact" className="flex-1 text-center inline-block px-10 py-6 border border-[#1F1F1F] text-[0.7rem] uppercase tracking-[0.3em] font-bold transition-all hover:bg-[#1F1F1F] hover:text-white group">
+                  <Link href="/contact" className="flex-1 text-center inline-block px-6 sm:px-10 py-4 sm:py-6 border border-[#1F1F1F] text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold transition-all hover:bg-[#1F1F1F] hover:text-white group">
                     <span className="mr-2 opacity-50 transition-opacity group-hover:opacity-100">✉</span>
                     Contact Request
                   </Link>
@@ -266,7 +297,7 @@ export default function ProductDetailClient({ product }) {
                 </p>
               </div>
 
-              <div className="reveal delay-500 mt-20 p-10 bg-[#F5F1EE] border-l-4 border-[#B8860B]">
+              <div className="reveal delay-500 mt-12 sm:mt-20 p-6 sm:p-10 bg-[#F5F1EE] border-l-4 border-[#B8860B]">
                 <h5 className="text-[#B8860B] uppercase tracking-[0.25em] text-[0.6rem] font-bold mb-4">Heritage Certification</h5>
                 <p className="text-[0.9rem] text-[#4A4A4A] leading-relaxed italic font-light">
                   "Each piece is certified as an authentic Udaipur handcrafted creation, following royal artisan protocols passed down through generations. Our Inlay masters ensure every detail meets the standards once reserved for Rajput palaces."
@@ -277,16 +308,56 @@ export default function ProductDetailClient({ product }) {
 
           {/* Related Creations */}
           {product.related_products && product.related_products.length > 0 && (
-            <div className="mt-48 reveal">
-              <div className="flex items-center justify-between mb-16">
-                <h2 className="text-[clamp(2.2rem,5vw,3.5rem)] text-[#1F1F1F] font-heading m-0">
-                  Related <span className="text-[#B8860B]">Creations</span>
-                </h2>
-                <Link href="/product-category" className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-[#B8860B] border-b border-[#B8860B] pb-1 hover:opacity-70 transition-opacity italic">Explore Collections</Link>
+            <div className="mt-24 sm:mt-48 reveal">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-16 gap-4 sm:gap-6">
+                <div>
+                  <h5 className="text-[#B8860B] uppercase tracking-[0.4em] text-[0.65rem] font-bold mb-4">You May Also Like</h5>
+                  <h2 className="text-[clamp(2.5rem,5vw,3.8rem)] text-[#1F1F1F] font-heading m-0 italic">
+                    Related <span className="text-[#B8860B]">Creations</span>
+                  </h2>
+                </div>
+                <Link href={`/product-category/${product.category_slug_path}`} className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#1F1F1F] border-b-2 border-[#B8860B] pb-2 hover:text-[#B8860B] transition-colors">
+                  View Full Collection
+                </Link>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 {product.related_products.map(rp => (
                   <ProductCard key={rp.id} product={rp} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recently Viewed */}
+          {recentlyViewed.length > 0 && (
+            <div className="mt-24 sm:mt-48 pt-16 sm:pt-24 border-t border-[#F0EDE6] reveal">
+              <div className="mb-16">
+                 <h5 className="text-[#B8860B] uppercase tracking-[0.4em] text-[0.65rem] font-bold mb-4">History</h5>
+                 <h2 className="text-[clamp(2.5rem,5vw,3.8rem)] text-[#1F1F1F] font-heading m-0 italic">
+                   Recently <span className="text-[#B8860B]">Viewed</span>
+                 </h2>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                {recentlyViewed.map(rv => (
+                  <Link 
+                    key={rv.id} 
+                    href={`/shop/${rv.category_slug_path}/${rv.slug}`}
+                    className="group"
+                  >
+                    <div className="aspect-square relative bg-white rounded-[2px] overflow-hidden border border-black/5 mb-4">
+                      {rv.first_image ? (
+                        <Image 
+                          src={rv.first_image} 
+                          alt={rv.name} 
+                          fill 
+                          className="object-contain p-4 transition-transform duration-700 group-hover:scale-110" 
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[#E5E0DA]">🖼️</div>
+                      )}
+                    </div>
+                    <h4 className="text-[0.7rem] uppercase tracking-[0.15em] font-bold text-[#1F1F1F] group-hover:text-[#B8860B] transition-colors line-clamp-1">{rv.name}</h4>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -296,3 +367,4 @@ export default function ProductDetailClient({ product }) {
     </div>
   );
 }
+

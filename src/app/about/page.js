@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function AboutPage() {
   return (
     <>
@@ -17,129 +19,203 @@ export default function AboutPage() {
           })
         }}
       />
-      <div className="bg-[#F5F1EE] pt-32 pb-16 border-b border-[#E5E0DA]">
-        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
-          <h1 className="text-[clamp(2.5rem,5vw,4rem)] font-heading leading-tight text-[#1F1F1F]">
-            About <span className="text-[#B8860B]">Pushpa Arts</span>
-          </h1>
-          <div className="w-16 h-[2px] bg-[#B8860B] my-8"></div>
-          <div className="flex flex-wrap items-center gap-2 text-[0.8rem] tracking-[0.2em] uppercase text-[#1F1F1F]">
-            <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a> 
-            <span className="opacity-30">/</span> 
-            <span className="font-semibold">About Us</span>
+      
+      {/* Hero Section */}
+      <div className="relative h-[70vh] min-h-[600px] flex items-center overflow-hidden">
+        <Image 
+          src="/images/about_hero.png" 
+          alt="Pushpa Arts Luxury Showroom" 
+          fill 
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="container relative z-10 text-white">
+          <div className="max-w-[800px] reveal">
+            <h1 className="text-[clamp(3rem,8vw,5.5rem)] font-heading leading-tight mb-8">
+              Legacy of <span className="text-[#B8860B] italic">Craft</span>
+            </h1>
+            <div className="w-24 h-[2px] bg-[#B8860B] mb-8"></div>
+            <p className="text-[1.2rem] md:text-[1.5rem] font-light leading-relaxed opacity-90">
+              Preserving the royal heritage of Udaipur through bespoke luxury furniture that transcends generations.
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Breadcrumb Bar */}
+      <div className="bg-[#F5F1EE] py-6 border-b border-[#E5E0DA]">
+        <div className="container">
+          <div className="flex flex-wrap items-center gap-2 text-[0.7rem] tracking-[0.2em] uppercase text-[#1F1F1F]">
+            <a href="/" className="opacity-60 hover:opacity-100 transition-opacity">Home</a> 
+            <span className="opacity-30">/</span> 
+            <span className="font-semibold text-[#B8860B]">The Atelier</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Our Story Section */}
       <section className="py-[clamp(5rem,10vw,9rem)] bg-[#FCFAF8]">
-        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center mb-32 reveal">
-            <div className="aspect-[4/3] bg-[#F5F1EE] rounded-2xl flex items-center justify-center text-5xl md:text-6xl border border-[#E5E0DA] shadow-sm overflow-hidden relative group">
-              <div className="absolute inset-0 bg-[#B8860B]/5 group-hover:bg-transparent transition-colors duration-500"></div>
-              <span>🏛️</span>
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center mb-32">
+            <div className="reveal relative group">
+              <div className="aspect-[4/5] relative rounded-[4px] overflow-hidden shadow-2xl">
+                <Image 
+                  src="/images/about_craftsmanship.png" 
+                  alt="Artisanal Craftsmanship" 
+                  fill 
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#B8860B] hidden lg:flex items-center justify-center p-8 text-white text-center">
+                <p className="text-[0.7rem] uppercase tracking-[0.2em] font-bold leading-relaxed">
+                  Generations of Mastery
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-heading text-[clamp(2rem,4vw,3.2rem)] text-[#1F1F1F] mb-6 inline-block relative">
-                Our <span className="text-[#B8860B]">Story</span>
+            <div className="reveal delay-200">
+              <h2 className="font-heading text-[clamp(2.5rem,5vw,3.8rem)] text-[#1F1F1F] mb-8 leading-[1.1]">
+                A Heritage of <br/>
+                <span className="text-[#B8860B] italic">Excellence</span>
               </h2>
-              <div className="space-y-6 text-[#4A4A4A] leading-[1.8] text-[1.05rem] font-light">
+              <div className="space-y-8 text-[#4A4A4A] leading-[2.1] text-[1.1rem] font-light">
                 <p>
                   Pushpa Arts is a renowned manufacturer and exporter of luxury handcrafted 
-                  furniture based in the historic city of Udaipur, Rajasthan, India. For generations, 
+                  furniture based in the historic city of Udaipur, Rajasthan. For decades, 
                   our family has been dedicated to preserving and promoting the art of traditional 
-                  Indian craftsmanship.
+                  Indian craftsmanship, once reserved for the palaces of Rajput royalty.
                 </p>
                 <p>
                   Our skilled artisans, many of whom come from families with centuries-old woodworking 
-                  traditions, create furniture that seamlessly blends traditional aesthetics with 
-                  contemporary functionality.
+                  and inlay traditions, create furniture that seamlessly blends traditional aesthetics with 
+                  contemporary luxury. Every piece is a testament to the patient dedication that manual 
+                  artistry demands.
                 </p>
+                <div className="pt-4">
+                  <div className="flex items-center gap-4 group cursor-pointer">
+                    <div className="w-12 h-12 rounded-full border border-[#B8860B] flex items-center justify-center text-[#B8860B] group-hover:bg-[#B8860B] group-hover:text-white transition-all">
+                      <span className="text-xl">→</span>
+                    </div>
+                    <span className="text-[0.7rem] uppercase tracking-[0.3em] font-bold text-[#1F1F1F]">Discover our process</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center mb-32 reveal">
-            <div className="md:order-2 aspect-[4/3] bg-[#F5F1EE] rounded-2xl flex items-center justify-center text-5xl md:text-6xl border border-[#E5E0DA] shadow-sm overflow-hidden relative group">
-              <div className="absolute inset-0 bg-[#B8860B]/5 group-hover:bg-transparent transition-colors duration-500"></div>
-              <span>✨</span>
-            </div>
-            <div className="md:order-1">
-              <h2 className="font-heading text-[clamp(2rem,4vw,3.2rem)] text-[#1F1F1F] mb-6 inline-block relative">
-                Premium <span className="text-[#B8860B]">Materials</span>
-              </h2>
-              <div className="space-y-6 text-[#4A4A4A] leading-[1.8] text-[1.05rem] font-light">
-                <p>
-                  We work with a diverse range of premium materials including pure silver, 
-                  white metal, natural bone, mother of pearl (MOP), various types of marble 
-                  including White Marble, Pink Sandstone, Red Sandstone, and many other 
-                  exotic stones.
-                </p>
-                <p>
-                  Each material is carefully selected for its quality and aesthetic properties, 
-                  ensuring that every piece of furniture we create is not just functional but 
-                  also a work of art.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center reveal">
-            <div className="aspect-[4/3] bg-[#F5F1EE] rounded-2xl flex items-center justify-center text-5xl md:text-6xl border border-[#E5E0DA] shadow-sm overflow-hidden relative group">
-              <div className="absolute inset-0 bg-[#B8860B]/5 group-hover:bg-transparent transition-colors duration-500"></div>
-              <span>🌍</span>
-            </div>
-            <div>
-              <h2 className="font-heading text-[clamp(2rem,4vw,3.2rem)] text-[#1F1F1F] mb-6 inline-block relative">
-                Global <span className="text-[#B8860B]">Export</span>
-              </h2>
-              <div className="space-y-6 text-[#4A4A4A] leading-[1.8] text-[1.05rem] font-light">
-                <p>
-                  We export our handcrafted furniture to clients worldwide. Whether you need 
-                  a single statement piece or bulk orders for your showroom, we provide 
-                  end-to-end service including custom design, manufacturing, quality packaging, 
-                  and reliable shipping.
-                </p>
-                <p>
-                  Our product range includes Silver Furniture, White Metal Furniture, 
-                  Bone Inlay Furniture, MOP Inlay Furniture, and Marble & Stone products 
-                  — each category featuring dozens of subcategories and hundreds of unique designs.
-                </p>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
-      {/* Features */}
+      {/* Mission Section */}
+      <section className="py-[clamp(5rem,10vw,9rem)] bg-[#1F1F1F] text-white overflow-hidden">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-16 lg:gap-24 items-center">
+            <div className="reveal">
+              <h5 className="text-[#B8860B] uppercase tracking-[0.4em] text-[0.65rem] font-bold mb-6">Our Mission</h5>
+              <h2 className="font-heading text-[clamp(2.2rem,5vw,3.5rem)] mb-10 italic">
+                Bridging the gap between <span className="text-[#B8860B]">ancient art</span> and modern luxury.
+              </h2>
+              <p className="text-[1.1rem] leading-relaxed opacity-70 font-light mb-12">
+                We believe that furniture is not just functional; it is an expression of culture and history. 
+                Our mission is to bring the soul of Udaipur's artistry into the world's most elegant homes, 
+                ensuring that traditional techniques survive and thrive in a modern world.
+              </p>
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-2xl font-heading text-[#B8860B] mb-2">100%</h4>
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] opacity-50">Handcrafted</p>
+                </div>
+                <div>
+                  <h4 className="text-2xl font-heading text-[#B8860B] mb-2">25+</h4>
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] opacity-50">Countries</p>
+                </div>
+              </div>
+            </div>
+            <div className="reveal delay-200 relative overflow-hidden">
+              <div className="aspect-video relative rounded-[4px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+                <Image 
+                  src="/images/about_mission.png" 
+                  alt="Artisans Working" 
+                  fill 
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute -top-8 -left-8 w-32 h-32 border-t-2 border-l-2 border-[#B8860B] hidden md:block"></div>
+              <div className="absolute -bottom-8 -right-8 w-32 h-32 border-b-2 border-r-2 border-[#B8860B] hidden md:block"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Materials & Mastery */}
+      <section className="py-[clamp(5rem,10vw,9rem)] bg-[#FCFAF8]">
+        <div className="container">
+          <div className="text-center max-w-[800px] mx-auto mb-20 reveal">
+            <h2 className="font-heading text-[clamp(2.5rem,5vw,3.8rem)] text-[#1F1F1F] mb-6 italic">
+              Premium <span className="text-[#B8860B]">Materials</span>
+            </h2>
+            <p className="text-[#8C8C8C] leading-relaxed font-light">
+              Each piece begins with the selection of the finest natural materials, sourced responsibly and chosen for their lasting beauty.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
+            {[
+              { title: "Pure Silver", desc: "Ornate silver plating and solid silver accents for a regal finish.", icon: "✨" },
+              { title: "Natural Bone", desc: "Ethically sourced bone inlay, meticulously hand-cut and set.", icon: "🦴" },
+              { title: "Marble & Stone", desc: "Rare marbles and gemstones from the heart of Rajasthan.", icon: "💎" }
+            ].map((item, idx) => (
+              <div key={idx} className="p-12 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all duration-500 group">
+                <div className="text-4xl mb-8 grayscale group-hover:grayscale-0 transition-all">{item.icon}</div>
+                <h3 className="font-heading text-2xl mb-4 text-[#1F1F1F]">{item.title}</h3>
+                <p className="text-[#8C8C8C] text-[0.95rem] font-light leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
       <section className="py-[clamp(5rem,10vw,9rem)] bg-[#F5F1EE] reveal">
-        <div className="max-w-[1600px] mx-auto px-[clamp(1.2rem,5vw,6rem)]">
+        <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">🎨</div>
-              <h3 className="font-heading text-xl text-[#1F1F1F] mb-3">Handcrafted</h3>
-              <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">Every piece made by skilled artisans using traditional techniques.</p>
-            </div>
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">🏆</div>
-              <h3 className="font-heading text-xl text-[#1F1F1F] mb-3">Premium Quality</h3>
-              <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">Only the finest materials sourced from trusted suppliers.</p>
-            </div>
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">📦</div>
-              <h3 className="font-heading text-xl text-[#1F1F1F] mb-3">Safe Delivery</h3>
-              <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">Expert packaging ensuring your furniture arrives in perfect condition.</p>
-            </div>
-            <div className="flex flex-col items-center text-center group">
-              <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">🤝</div>
-              <h3 className="font-heading text-xl text-[#1F1F1F] mb-3">Custom Orders</h3>
-              <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">Made-to-order furniture tailored to your specifications.</p>
-            </div>
+            {[
+              { title: "Artisan Made", desc: "Every piece tells a story of human skill and patience.", icon: "🎨" },
+              { title: "World Export", desc: "Secure specialized transport to any corner of the globe.", icon: "🌍" },
+              { title: "Bespoke Design", desc: "Custom creations tailored to your unique architectural vision.", icon: "📐" },
+              { title: "Lifetime Quality", desc: "Heirloom-grade construction meant to last generations.", icon: "🏆" }
+            ].map((f, i) => (
+              <div key={i} className="flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-3xl mb-8 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">{f.icon}</div>
+                <h3 className="font-heading text-xl text-[#1F1F1F] mb-4">{f.title}</h3>
+                <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-[clamp(5rem,10vw,9rem)] bg-white">
+        <div className="container">
+          <div className="bg-[#1F1F1F] p-8 sm:p-12 md:p-24 relative overflow-hidden text-center text-white rounded-[4px]">
+             <div className="relative z-10">
+                <h2 className="font-heading text-[clamp(2rem,5vw,3.5rem)] mb-8 italic">
+                  Have a custom <span className="text-[#B8860B]">vision</span>?
+                </h2>
+                <p className="text-[1.1rem] opacity-70 mb-12 max-w-[600px] mx-auto font-light leading-relaxed">
+                  Our master designers and artisans are ready to bring your bespoke furniture concepts to life. Let's create something extraordinary together.
+                </p>
+                <a href="/contact" className="inline-block bg-[#B8860B] text-white px-12 py-5 text-[0.75rem] font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-[#1F1F1F] transition-all">
+                  Start a Collaboration
+                </a>
+             </div>
+             {/* Decorative element */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] border border-white/5 rounded-full pointer-events-none"></div>
           </div>
         </div>
       </section>
     </>
   );
 }
+
 

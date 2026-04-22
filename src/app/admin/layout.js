@@ -64,6 +64,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/categories', label: 'Collections', icon: '📁' },
     { href: '/admin/products', label: 'Masterpieces', icon: '📦' },
     { href: '/admin/products/new', label: 'New Masterpiece', icon: '➕' },
+    { href: '/admin/inquiries', label: 'Inquiries', icon: '📩' },
     { href: '/admin/file-manager', label: 'Studio Gallery', icon: '🖼️' },
   ];
 
@@ -113,7 +114,7 @@ export default function AdminLayout({ children }) {
       <div className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-[900] transition-all duration-300 lg:hidden ${sidebarOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`} onClick={() => setSidebarOpen(false)} />
 
       <div className="flex-1 bg-[#fbfbfd] min-h-screen transition-all duration-300 lg:ml-[260px] ml-0 pt-[60px] lg:pt-0">
-        <div className="px-12 lg:pt-10 pt-6 text-[0.85rem] font-medium text-[#86868b] flex items-center gap-2">
+        <div className="px-4 sm:px-8 lg:px-12 lg:pt-10 pt-4 text-[0.85rem] font-medium text-[#86868b] flex items-center gap-2 overflow-x-auto">
           <Link href="/admin" className="hover:text-[#1d1d1f] transition-colors">Studio</Link>
           {pathname !== '/admin' && (
             <>

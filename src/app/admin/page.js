@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ categories: 0, products: 0, files: 0, activeProds: 0, featured: 0 });
+  const [stats, setStats] = useState({ categories: 0, products: 0, files: 0, activeProds: 0, featured: 0, inquiries: 0, newInquiries: 0 });
   const [recentProducts, setRecentProducts] = useState([]);
   const [topCategories, setTopCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +36,12 @@ export default function AdminDashboard() {
         const fileRes = await fetch('/api/files');
         const fileData = await fileRes.json();
         if (fileData.files) setStats(s => ({ ...s, files: fileData.files.length }));
+
+        const inqRes = await fetch('/api/contact');
+        const inqData = await inqRes.json();
+        if (inqData.pagination) {
+          setStats(s => ({ ...s, inquiries: inqData.pagination.total, newInquiries: inqData.statusCounts?.new || 0 }));
+        }
       } catch (err) {
         console.error('Dashboard fetch error:', err);
       }
@@ -46,20 +52,19 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <div className="px-12 py-10 flex justify-between items-center sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
+      <div className="px-4 sm:px-8 lg:px-12 py-6 lg:py-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-50 bg-[#fbfbfd]/90 backdrop-blur-md">
         <div>
           <p className="text-[0.85rem] text-[#86868b] mb-2 font-medium">Studio Control Center</p>
-          <h1 className="text-[#0071e3] text-3xl font-bold tracking-tight">Overview</h1>
+          <h1 className="text-[#0071e3] text-2xl sm:text-3xl font-bold tracking-tight">Overview</h1>
         </div>
         <div className="flex gap-3">
-          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-5 py-2.5 rounded-[10px] text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">+ Launch New Masterpiece</Link>
+          <Link href="/admin/products/new" className="bg-[#0071e3] text-white px-4 sm:px-5 py-2.5 rounded-[10px] text-[0.8rem] sm:text-[0.85rem] font-semibold hover:bg-[#0071e3]/90 transition-colors shadow-sm">+ New Masterpiece</Link>
         </div>
       </div>
 
-      <div className="px-12 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Main Stat: Stock Health */}
-          <div className="col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+      <div className="px-4 sm:px-8 lg:px-12 pb-12 lg:pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+          <div className="col-span-1 sm:col-span-2 bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-bold text-[#1d1d1f]">Collection Status</h3>
               <span className="text-2xl">🪴</span>
@@ -87,8 +92,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-1 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-1 bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-[#1d1d1f]">Quick Actions</h3>
             </div>
@@ -108,8 +112,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Featured Highlights */}
-          <div className="bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+          <div className="bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-[#1d1d1f]">Featured</h3>
             </div>
@@ -117,20 +120,34 @@ export default function AdminDashboard() {
             <p className="text-[0.85rem] text-[#86868b] font-medium">Showcased on main gallery</p>
           </div>
 
-          {/* Media Count */}
-          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-white border border-black/10 rounded-2xl p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+          <div className="col-span-1 sm:col-span-2 bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-[#1d1d1f]">Total Media</h3>
             </div>
             <h3 className="text-[2.5rem] my-2 font-bold tracking-tight text-[#1d1d1f]">{stats.files}</h3>
             <p className="text-[0.85rem] text-[#86868b] font-medium">Artisanal Media</p>
           </div>
+
+          <div className="bg-white border border-black/10 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-[#1d1d1f]">Inquiries</h3>
+              <Link href="/admin/inquiries" className="text-[0.8rem] text-[#0071e3] font-semibold hover:underline">View All →</Link>
+            </div>
+            <h3 className="text-[2.5rem] my-2 font-bold tracking-tight text-[#1d1d1f]">{stats.inquiries}</h3>
+            <p className="text-[0.85rem] text-[#86868b] font-medium">
+              {stats.newInquiries > 0 ? (
+                <span className="text-blue-600 font-semibold">{stats.newInquiries} new — action needed</span>
+              ) : (
+                'All caught up'
+              )}
+            </p>
+          </div>
         </div>
 
         {/* Recent Products Grid */}
-        <div className="bg-white rounded-[20px] p-10 shadow-sm border border-black/10">
+        <div className="bg-white rounded-[20px] p-6 sm:p-10 shadow-sm border border-black/10">
           <div className="flex justify-between items-center mb-10">
-            <h3 className="m-0 text-xl font-bold text-[#1d1d1f]">Latest Additions</h3>
+            <h3 className="m-0 text-lg sm:text-xl font-bold text-[#1d1d1f]">Latest Additions</h3>
             <Link href="/admin/products" className="text-[0.85rem] text-[#0071e3] font-semibold hover:underline">View Full Collection →</Link>
           </div>
 
