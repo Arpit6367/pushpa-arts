@@ -30,8 +30,8 @@ export default function CategoryCard({ category }) {
         <h3 className="font-heading text-4xl md:text-5xl mb-6 leading-tight translate-y-2 transition-all duration-700 group-hover:translate-y-0 delay-100">
           {category.name}
         </h3>
-        <span className="text-[0.6rem] uppercase tracking-[0.3em] font-bold border-b border-[#B8860B] pb-1.5 inline-block w-fit opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 text-[#B8860B] delay-200">
-          Shop Collection
+        <span className="text-[0.6rem] uppercase tracking-[0.3em] font-bold border-b border-[var(--color-accent)] pb-1.5 inline-block w-fit opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 text-[var(--color-accent)] delay-200">
+          Discover More
         </span>
       </div>
     </Link>

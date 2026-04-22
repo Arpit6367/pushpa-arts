@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import MediaPicker from '@/components/admin/MediaPicker';
 
 export default function AdminProductNewPage() {
   const router = useRouter();
@@ -9,6 +10,7 @@ export default function AdminProductNewPage() {
   const [toast, setToast] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [images, setImages] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
   const [form, setForm] = useState({
@@ -139,15 +141,16 @@ export default function AdminProductNewPage() {
 
               <div
                 className="bg-[#fafafa] border-2 border-dashed border-[#d2d2d7] rounded-3xl p-12 text-center cursor-pointer hover:bg-[#f5f5f7] transition-all group"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => setShowMediaPicker(true)}
               >
                 {uploading ? (
                   <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin mx-auto"></div>
                 ) : (
                   <>
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">📷</div>
-                    <p className="text-[#86868b] font-medium">Click or drop high-resolution imagery here</p>
-                    <p className="text-[0.7rem] text-[#b4b4b4] mt-2">Supports JPG, PNG, WEBP</p>
+                    <p className="text-[#1d1d1f] font-bold">Manage Studio Imagery</p>
+                    <p className="text-[#86868b] font-medium mt-1">Upload new or select from your gallery</p>
+                    <p className="text-[0.7rem] text-[#b4b4b4] mt-4 uppercase tracking-widest font-bold">Click to open gallery</p>
                   </>
                 )}
                 <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleUpload} className="hidden" />
@@ -176,6 +179,21 @@ export default function AdminProductNewPage() {
               )}
             </div>
           </div>
+
+          {showMediaPicker && (
+            <MediaPicker
+              multiple={true}
+              onClose={() => setShowMediaPicker(false)}
+              onSelect={(paths) => {
+                const newImages = paths.map(path => ({ file_path: path, alt_text: '' }));
+                // Filter out duplicates
+                const existingPaths = images.map(img => img.file_path);
+                const uniqueNewImages = newImages.filter(img => !existingPaths.includes(img.file_path));
+                setImages([...images, ...uniqueNewImages]);
+                showToast(`${uniqueNewImages.length} images added`);
+              }}
+            />
+          )}
 
           {/* Sidebar Controls */}
           <aside className="space-y-6">

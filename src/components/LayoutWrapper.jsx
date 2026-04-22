@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { QuickViewProvider } from '@/context/QuickViewContext';
 
 export default function LayoutWrapper({ children, initialCategories = [], settings = {} }) {
   const pathname = usePathname();
@@ -21,7 +22,6 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          // observer.unobserve(entry.target); // Keep observing for re-animation if desired
         }
       });
     };
@@ -29,13 +29,12 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
     const observeElements = () => {
-      const elements = document.querySelectorAll('.reveal:not(.active)');
+      const elements = document.querySelectorAll('.reveal:not(.active), .reveal-left:not(.active), .reveal-right:not(.active), .reveal-zoom:not(.active)');
       elements.forEach((el) => observer.observe(el));
     };
 
     observeElements();
 
-    // Watch for new elements being added to the DOM (for category pages/infinite scroll)
     const mutationObserver = new MutationObserver(() => observeElements());
     mutationObserver.observe(document.body, { childList: true, subtree: true });
 
@@ -50,10 +49,10 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
   }
 
   return (
-    <>
+    <QuickViewProvider>
       <Header initialCategories={initialCategories} settings={settings} />
       <main className={!isHome ? 'pt-[160px]' : ''}>{children}</main>
       <Footer settings={settings} />
-    </>
+    </QuickViewProvider>
   );
 }

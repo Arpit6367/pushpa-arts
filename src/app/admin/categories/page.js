@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import React from 'react';
+import MediaPicker from '@/components/admin/MediaPicker';
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState([]);
@@ -10,6 +11,7 @@ export default function AdminCategoriesPage() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [toast, setToast] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
   const fileInputRef = useRef(null);
   const [form, setForm] = useState({ name: '', description: '', parent_id: '', sort_order: 0, is_active: true, image: '' });
 
@@ -245,12 +247,25 @@ export default function AdminCategoriesPage() {
               </div>
               <div className="flex flex-col gap-2 mb-6">
                 <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Image</label>
-                <div className="border-2 border-dashed border-black/10 rounded-xl p-8 text-center cursor-pointer transition-colors hover:border-[#0071e3] bg-black/5 hover:bg-[#0071e3]/5 relative">
-                  <input type="file" onChange={handleImageUpload} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
-                  <p className="text-[#86868b] font-medium">{uploading ? 'Uploading...' : 'Click to select image'}</p>
+                <div 
+                  className="border-2 border-dashed border-black/10 rounded-xl p-8 text-center cursor-pointer transition-colors hover:border-[#0071e3] bg-black/5 hover:bg-[#0071e3]/5 relative"
+                  onClick={() => setShowMediaPicker(true)}
+                >
+                  <p className="text-[#86868b] font-medium">{uploading ? 'Uploading...' : 'Click to select from gallery or upload'}</p>
                 </div>
                 {form.image && <img src={form.image} className="h-24 w-auto rounded-lg mt-4 border border-black/10" />}
               </div>
+
+              {showMediaPicker && (
+                <MediaPicker 
+                  multiple={false}
+                  onClose={() => setShowMediaPicker(false)}
+                  onSelect={(path) => {
+                    setForm({ ...form, image: path });
+                    showToast('Image selected');
+                  }}
+                />
+              )}
               <div className="flex items-center gap-3 mt-4 mb-10">
                 <input type="checkbox" id="is_active" className="w-5 h-5 cursor-pointer" checked={form.is_active} onChange={e => setForm({ ...form, is_active: e.target.checked })} />
                 <label htmlFor="is_active" className="text-[#1d1d1f] font-medium cursor-pointer">Active</label>

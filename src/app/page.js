@@ -1,19 +1,25 @@
 import { getAllCategoriesWithPaths } from '@/lib/categories';
 import { getFeaturedMasterpieces } from '@/lib/products';
 import Hero from '@/components/home/Hero';
-import MaterialGrid from '@/components/home/MaterialGrid';
-import EditorialGrid from '@/components/home/EditorialGrid';
-import ProcessSection from '@/components/home/ProcessSection';
-import CommissionSection from '@/components/home/CommissionSection';
-import TrendingMasterpieces from '@/components/home/TrendingMasterpieces';
+import FeatureBar from '@/components/home/FeatureBar';
+import CategorySection from '@/components/home/CategorySection';
+import BentoGallery from '@/components/home/BentoGallery';
+import StudioGallery from '@/components/home/StudioGallery';
+import ParallaxSection from '@/components/home/ParallaxSection';
+import MaterialShowcase from '@/components/home/MaterialShowcase';
+import ProductTabs from '@/components/home/ProductTabs';
+import BlogSnippet from '@/components/home/BlogSnippet';
+import CategoryGrid from '@/components/home/CategoryGrid';
+import InfoSection from '@/components/home/InfoSection';
+import Testimonials from '@/components/home/Testimonials';
 
 export default async function HomePage() {
   const allCategories = await getAllCategoriesWithPaths();
   const parentCategories = allCategories.filter(c => !c.parent_id);
-  const featuredProducts = await getFeaturedMasterpieces(6);
+  const featuredProducts = await getFeaturedMasterpieces(12);
 
   return (
-    <main>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -60,31 +66,41 @@ export default async function HomePage() {
       />
       
       <Hero />
-      <MaterialGrid />
-      <EditorialGrid categories={parentCategories} />
-      <ProcessSection />
-      <CommissionSection />
-      <TrendingMasterpieces products={featuredProducts} />
+      <FeatureBar />
+      <CategorySection categories={parentCategories} />
+      <BentoGallery />
+      <StudioGallery />
+      <ParallaxSection />
+      <ProductTabs products={featuredProducts} />
+      <BlogSnippet />
+      <CategoryGrid categories={parentCategories} />
+      <MaterialShowcase />
+      <InfoSection />
+      <Testimonials />
 
       {/* ===== FINAL CTA / NEWSLETTER ===== */}
-      <section className="py-32 bg-[#1F1F1F]">
+      <section className="py-32 bg-[var(--color-bg-dark)]">
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)] text-center">
-          <h2 className="text-[clamp(3rem,10vw,6rem)] text-white font-heading mb-6 tracking-tight">Bring Royalty Home</h2>
+          <h2 className="text-[clamp(2.5rem,8vw,5rem)] text-white font-heading mb-6 tracking-tight">Elegance in Every Detail</h2>
           <p className="text-white/60 max-w-[600px] mx-auto mb-12 text-lg font-light leading-relaxed">
-            Join our inner circle for exclusive previews of new artisan drops and custom interior inspiration.
+            Stay inspired. Join our circle for exclusive previews of new artisan collections and home decor ideas.
           </p>
           <div className="flex max-w-[500px] w-full mx-auto relative group">
             <input 
               type="email" 
               placeholder="YOUR EMAIL ADDRESS" 
-              className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[#B8860B] transition-colors" 
+              className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] transition-colors" 
+              suppressHydrationWarning
             />
-            <button className="bg-transparent border-b border-[#B8860B] text-[#B8860B] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 transition-colors hover:text-white hover:border-white">
+            <button 
+              className="bg-transparent border-b border-[var(--color-accent)] text-[var(--color-accent)] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 transition-colors hover:text-white hover:border-white"
+              suppressHydrationWarning
+            >
               Subscribe
             </button>
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

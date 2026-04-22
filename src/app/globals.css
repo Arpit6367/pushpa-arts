@@ -1,24 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Montserrat:wght@200;300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #FCFAF8;
-  --color-bg-secondary: #F5F1EE;
-  --color-bg-card: #ffffff;
-  --color-bg-dark: #1F1F1F;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F9F9F9;
+  --color-bg-mint: #D9E4E0;
+  --color-bg-dark: #2E463E;
 
-  --color-gold: #B8860B;
-  --color-gold-light: #D4AF37;
-  --color-gold-dark: #8B6508;
-  --color-gold-muted: rgba(184, 134, 11, 0.1);
+  --color-accent: #C5A58E;
+  --color-accent-light: #DBC2B4;
+  --color-accent-dark: #A68A75;
+  --color-accent-muted: rgba(197, 165, 142, 0.1);
 
-  --color-text-primary: #1F1F1F;
-  --color-text-secondary: #4A4A4A;
-  --color-text-muted: #8C8C8C;
-  --color-text-on-dark: #FCFAF8;
+  --color-secondary: #2E463E;
+  --color-secondary-light: #415F54;
+  --color-secondary-dark: #1F302A;
 
-  --color-border: #E5E0DA;
-  --color-border-light: #F0EDE6;
+  --color-text-primary: #2E463E;
+  --color-text-secondary: #6E6E6E;
+  --color-text-muted: #9A9A9A;
+  --color-text-on-dark: #FFFFFF;
+
+  --color-border: #E8E8E8;
+  --color-border-light: #F2F2F2;
 
   /* Admin Colors */
   --color-admin-bg: #fbfbfd;
@@ -30,12 +34,12 @@
   --color-admin-text-secondary: #86868b;
   --color-admin-border: rgba(0, 0, 0, 0.08);
 
-  --font-heading: 'Cormorant Garamond', serif;
+  --font-heading: 'Cinzel', serif;
   --font-body: 'Montserrat', sans-serif;
   --font-admin: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  --spacing-section: clamp(5rem, 10vw, 9rem);
-  --spacing-container: clamp(1.2rem, 5vw, 6rem);
+  --spacing-section: clamp(4rem, 8vw, 9rem);
+  --spacing-container: clamp(1rem, 5vw, 6rem);
 }
 
 @layer components {
@@ -204,26 +208,59 @@
     font-family: var(--font-body);
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
-    line-height: var(--line-height-relaxed);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+  }
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+    line-height: 1.2;
   }
 }
 
 @layer utilities {
   .reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(60px);
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.active {
     opacity: 1;
     transform: translateY(0);
   }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-right.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .reveal-zoom {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-zoom.active {
+    opacity: 1;
+    transform: scale(1);
+  }
   .stagger-1 { transition-delay: 0.1s; }
   .stagger-2 { transition-delay: 0.2s; }
   .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
   .delay-100 { transition-delay: 0.1s; }
   .delay-200 { transition-delay: 0.2s; }
   .delay-300 { transition-delay: 0.3s; }

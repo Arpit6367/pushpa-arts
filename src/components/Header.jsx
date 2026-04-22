@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { ChevronDown, MessageSquare, X } from 'lucide-react';
 
 export default function Header({ initialCategories = [], settings = {} }) {
   const [categories, setCategories] = useState(initialCategories);
@@ -46,66 +47,109 @@ export default function Header({ initialCategories = [], settings = {} }) {
   const parentCategories = categories.filter(c => !c.parent_id);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-500 ${scrolled ? 'bg-[#FCFAF8]/95 backdrop-blur-xl shadow-lg' : 'bg-transparent'}`}>
-      <div className={`bg-[#1F1F1F] text-[#FCFAF8] text-center overflow-hidden transition-all duration-500 ${scrolled ? 'h-0 opacity-0' : 'py-3 h-auto opacity-100'}`}>
-        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
-          <p className="text-[0.65rem] tracking-[0.2em] uppercase font-medium">{settings.site_tagline || 'Exquisite Handcrafted Furniture — Shipping Worldwide from Udaipur'}</p>
-        </div>
-      </div>
-
+    <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
-        <div className={`grid grid-cols-[1fr_auto_1fr] items-center transition-all duration-500 lg:grid-cols-[1fr_auto_1fr] ${scrolled ? 'py-3' : 'py-6 md:py-8'}`}>
-          <nav className="hidden lg:flex gap-12 justify-start">
-            <Link href="/" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Home</Link>
-            <Link href="/product-category" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname?.startsWith('/product-category') ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Collections</Link>
+        {/* Mobile View: Logo Left, Large Menu Right */}
+        <div className="flex lg:hidden items-center justify-between py-6">
+          <Link href="/">
+            <img 
+              src="/images/Pushpa-Exports.svg" 
+              alt="Pushpa Arts" 
+              className={`h-10 w-auto transition-all duration-500 ${isDarkHeader ? 'brightness-0 invert' : 'brightness-0'}`} 
+            />
+          </Link>
+          <button 
+            className="flex flex-col justify-center items-end gap-2.5 w-10 h-10 bg-transparent border-none cursor-pointer" 
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Menu"
+          >
+            <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'w-full rotate-45 translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+            <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'opacity-0' : `w-[75%] ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+            <span className={`h-[2px] transition-all duration-300 ${mobileOpen ? 'w-full -rotate-45 -translate-y-[12px] bg-black' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-black'}`}`}></span>
+          </button>
+        </div>
+
+        {/* Desktop View: Grid 3 Cols, Logo Center (Unchanged) */}
+        <div className={`hidden lg:grid grid-cols-3 items-center transition-all duration-500 ${scrolled ? 'py-4' : 'py-6 md:py-8'}`}>
+          <nav className="flex items-center gap-10">
+            <Link href="/" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Home</Link>
+            <div className="relative group">
+              <Link href="/product-category" className={`flex items-center gap-1 text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname?.startsWith('/product-category') ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>
+                Collections <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+              </Link>
+              <div className="absolute top-full left-0 pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                <div className="bg-white shadow-2xl p-8 grid grid-cols-2 gap-x-12 gap-y-4 min-w-[500px] border border-black/5">
+                  {parentCategories.map(cat => (
+                    <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="text-[0.65rem] uppercase tracking-[0.15em] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors py-1">
+                      {cat.name}
+                    </Link>
+                  ))}
+                  <Link href="/product-category" className="col-span-2 text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] pt-4 border-t border-black/5">View All Series →</Link>
+                </div>
+              </div>
+            </div>
           </nav>
 
-          <Link href="/" className="text-center px-0 lg:px-16 col-start-2">
-            <img src="/images/Pushpa-Exports.svg" alt="Pushpa Arts" className={`w-auto transition-all duration-500 mx-auto ${isDarkHeader ? 'brightness-0 invert' : 'brightness-90'} ${scrolled ? 'h-10 md:h-12' : 'h-[clamp(45px,6vw,70px)]'}`} />
+          <Link href="/" className="flex justify-center">
+            <img
+              src="/images/Pushpa-Exports.svg"
+              alt="Pushpa Arts"
+              className={`w-auto transition-all duration-500 ${isDarkHeader ? 'brightness-0 invert' : 'brightness-0'} ${scrolled ? 'h-8 md:h-10' : 'h-10 md:h-16'}`}
+            />
           </Link>
 
-          <nav className="hidden lg:flex gap-12 justify-end items-center col-start-3">
-            <Link href="/about" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/about' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Our Story</Link>
-            <Link href="/contact" className={`text-[0.65rem] font-bold uppercase tracking-[0.25em] relative py-2 transition-all duration-300 hover:opacity-100 hover:text-[#B8860B] ${pathname === '/contact' ? 'opacity-100 text-[#B8860B] border-b-[1.5px] border-[#B8860B]' : `opacity-70 ${isDarkHeader ? 'text-white' : 'text-[#1F1F1F]'}`}`}>Contact</Link>
-            <a href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`} className={`text-[0.65rem] font-bold border px-5 py-2 tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#B8860B] hover:text-white hover:shadow-[0_5px_15px_rgba(184,134,11,0.1)] ${isDarkHeader ? 'text-white border-white/30' : 'text-[#B8860B] border-[#B8860B]'}`} target="_blank" rel="noopener noreferrer">
-              Chat
+          <div className="flex items-center justify-end gap-10">
+            <nav className="flex items-center gap-10">
+              <Link href="/about" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/about' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Our Story</Link>
+              <Link href="/contact" className={`text-[0.7rem] font-semibold uppercase tracking-[0.2em] transition-all hover:text-[var(--color-accent)] ${pathname === '/contact' ? 'text-[var(--color-accent)]' : (isDarkHeader ? 'text-white' : 'text-[var(--color-text-primary)]')}`}>Contact</Link>
+            </nav>
+            <a
+              href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`}
+              className={`hidden md:flex items-center gap-2 text-[0.7rem] font-bold border px-6 py-3 uppercase tracking-[0.1em] transition-all ${isDarkHeader ? 'text-white border-white/30 hover:bg-white hover:text-[var(--color-text-primary)]' : 'text-[var(--color-accent)] border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white'}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageSquare className="w-4 h-4" /> Concierge
             </a>
-          </nav>
-
-          <button className="flex lg:hidden flex-col justify-center items-end gap-1.5 w-[30px] h-[30px] border-none bg-transparent cursor-pointer z-[4000] col-start-3 ml-auto" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
-            <span className={`h-[1.5px] transition-all duration-300 ${mobileOpen ? 'w-full rotate-45 translate-y-[7.5px] bg-[#1F1F1F]' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}`}></span>
-            <span className={`h-[1.5px] transition-all duration-300 ${mobileOpen ? 'opacity-0' : `w-[70%] ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}`}></span>
-            <span className={`h-[1.5px] transition-all duration-300 ${mobileOpen ? 'w-full -rotate-45 -translate-y-[7.5px] bg-[#1F1F1F]' : `w-full ${isDarkHeader ? 'bg-white' : 'bg-[#1F1F1F]'}`}`}></span>
-          </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-[#FCFAF8] z-[3000] flex flex-col transition-all duration-700 ease-in-out ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="flex-1 flex flex-col items-center justify-center text-center p-10 overflow-y-auto">
-          <div className="flex flex-col gap-6 md:gap-8 my-auto">
-            <Link href="/" className="font-heading text-4xl md:text-6xl text-[#1F1F1F] transition-colors hover:text-[#B8860B]" onClick={() => setMobileOpen(false)}>Home</Link>
-            <Link href="/product-category" className="font-heading text-4xl md:text-6xl text-[#1F1F1F] transition-colors hover:text-[#B8860B]" onClick={() => setMobileOpen(false)}>Collections</Link>
+      <div className={`fixed inset-0 bg-white z-[3000] flex flex-col transition-all duration-700 ease-in-out ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+        <div className="flex-1 flex flex-col p-10 pt-24 overflow-y-auto">
+          <div className="flex flex-col gap-10">
+            <Link href="/" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Home</Link>
 
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4 py-6 border-y border-[#E5E0DA]">
-              {parentCategories.slice(0, 6).map(cat => (
-                <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="text-[0.65rem] text-[#8C8C8C] uppercase tracking-[0.2em] font-bold hover:text-[#B8860B]" onClick={() => setMobileOpen(false)}>
-                  {cat.name}
-                </Link>
-              ))}
+            <div className="flex flex-col gap-4">
+              <h4 className="text-[0.6rem] uppercase tracking-[0.3em] font-bold text-[var(--color-accent)] mb-2">Collections</h4>
+              <div className="grid grid-cols-1 gap-4 pl-4 border-l border-[var(--color-bg-mint)]">
+                {parentCategories.map(cat => (
+                  <Link key={cat.id} href={`/product-category/${cat.slug_path}`} className="text-xl font-heading text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
             </div>
 
-            <Link href="/about" className="font-heading text-4xl md:text-6xl text-[#1F1F1F] transition-colors hover:text-[#B8860B]" onClick={() => setMobileOpen(false)}>Our Story</Link>
-            <Link href="/contact" className="font-heading text-4xl md:text-6xl text-[#1F1F1F] transition-colors hover:text-[#B8860B]" onClick={() => setMobileOpen(false)}>Contact</Link>
+            <Link href="/about" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Our Story</Link>
+            <Link href="/contact" className="font-heading text-4xl text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors" onClick={() => setMobileOpen(false)}>Contact</Link>
           </div>
 
-          <div className="mt-auto pt-10 w-full">
-            <p className="text-[0.6rem] uppercase tracking-[0.2em] text-[#B8860B] mb-4">Handcrafted Excellence</p>
-            <div className="flex justify-center gap-6 opacity-60">
-              {/* Social icons could go here */}
-            </div>
+          <div className="mt-auto pt-10">
+            <a
+              href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`}
+              className="w-full flex items-center justify-center gap-2 py-4 bg-[var(--color-secondary)] text-white text-[0.7rem] uppercase tracking-[0.2em] font-bold shadow-xl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageSquare className="w-4 h-4" /> Message on WhatsApp
+            </a>
           </div>
         </div>
+        <button className="absolute top-8 right-8 text-[var(--color-text-primary)] p-4" onClick={() => setMobileOpen(false)}>
+          <X className="w-8 h-8" />
+        </button>
       </div>
     </header>
   );
