@@ -44,8 +44,9 @@ export default function Footer({ settings = {} }) {
               <ul className="flex flex-col gap-1">
                 <li><Link href="/about" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Our Story</Link></li>
                 <li><Link href="/contact" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Contact Us</Link></li>
-                <li><Link href="/product-category" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">All Categories</Link></li>
-                <li><Link href="/admin" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Admin Studio</Link></li>
+                <li><Link href="/privacy" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Terms of Service</Link></li>
+                {/* <li><Link href="/admin" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Admin Studio</Link></li> */}
               </ul>
             </div>
 

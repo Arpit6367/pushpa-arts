@@ -1,5 +1,5 @@
 import { getAllCategoriesWithPaths } from '@/lib/categories';
-import { getFeaturedMasterpieces } from '@/lib/products';
+import { getFeaturedMasterpieces, getNewArrivals, getBestSellers, getHandcraftedProducts } from '@/lib/products';
 import Hero from '@/components/home/Hero';
 import FeatureBar from '@/components/home/FeatureBar';
 import CategorySection from '@/components/home/CategorySection';
@@ -16,7 +16,12 @@ import Testimonials from '@/components/home/Testimonials';
 export default async function HomePage() {
   const allCategories = await getAllCategoriesWithPaths();
   const parentCategories = allCategories.filter(c => !c.parent_id);
-  const featuredProducts = await getFeaturedMasterpieces(12);
+  const [featuredProducts, newArrivals, bestSellers, handcrafted] = await Promise.all([
+    getFeaturedMasterpieces(12),
+    getNewArrivals(8),
+    getBestSellers(8),
+    getHandcraftedProducts(8),
+  ]);
 
   return (
     <>
@@ -69,12 +74,17 @@ export default async function HomePage() {
       <FeatureBar />
       {/* <CategorySection categories={parentCategories} /> */}
       <BentoGallery />
-      <ProductTabs products={featuredProducts} />
+      <ProductTabs
+        products={featuredProducts}
+        newArrivals={newArrivals}
+        bestSellers={bestSellers}
+        handcrafted={handcrafted}
+      />
       <MaterialShowcase />
-      <StudioGallery />
       <CategoryGrid categories={parentCategories} />
       <ParallaxSection />
       <BlogSnippet />
+      <StudioGallery />
       <InfoSection />
       <Testimonials />
 

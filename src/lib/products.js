@@ -158,3 +158,110 @@ export const getFeaturedMasterpieces = cache(async function getFeaturedMasterpie
     return [];
   }
 });
+
+/** New Arrivals — most recently added active products */
+export const getNewArrivals = cache(async function getNewArrivals(limit = 8) {
+  try {
+    const sql = `
+      SELECT p.*,
+      (SELECT file_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image,
+      (SELECT file_path FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order ASC LIMIT 1) as first_image,
+      c.name as category_name, c.slug as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.is_active = TRUE
+      ORDER BY p.created_at DESC
+      LIMIT ?
+    `;
+    const products = await query(sql, [limit]);
+    const allCategories = await getAllCategoriesWithPaths();
+    const categoryMap = new Map();
+    allCategories.forEach(cat => categoryMap.set(cat.id, cat));
+    return products.map(p => ({
+      ...p,
+      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+    }));
+  } catch (error) {
+    console.error('Error in getNewArrivals:', error);
+    return [];
+  }
+});
+
+/** Best Sellers — featured products + products from premium categories (Silver, Marble, White Metal) */
+export const getBestSellers = cache(async function getBestSellers(limit = 8) {
+  try {
+    const premiumSlugs = ['silver-furniture', 'marble-stone-furniture', 'white-metal-furniture'];
+    const placeholders = premiumSlugs.map(() => '?').join(',');
+    const sql = `
+      SELECT DISTINCT p.*,
+      (SELECT file_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image,
+      (SELECT file_path FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order ASC LIMIT 1) as first_image,
+      COALESCE(
+        (SELECT cat.name FROM categories cat JOIN product_categories pc2 ON cat.id = pc2.category_id WHERE pc2.product_id = p.id LIMIT 1),
+        c.name
+      ) as category_name,
+      COALESCE(
+        (SELECT cat.slug FROM categories cat JOIN product_categories pc2 ON cat.id = pc2.category_id WHERE pc2.product_id = p.id LIMIT 1),
+        c.slug
+      ) as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN product_categories pc ON pc.product_id = p.id
+      LEFT JOIN categories c2 ON pc.category_id = c2.id
+      WHERE p.is_active = TRUE
+        AND (p.is_featured = TRUE OR c.slug IN (${placeholders}) OR c2.slug IN (${placeholders}))
+      ORDER BY p.is_featured DESC, p.sort_order ASC, p.created_at DESC
+      LIMIT ?
+    `;
+    const products = await query(sql, [...premiumSlugs, ...premiumSlugs, limit]);
+    const allCategories = await getAllCategoriesWithPaths();
+    const categoryMap = new Map();
+    allCategories.forEach(cat => categoryMap.set(cat.id, cat));
+    return products.map(p => ({
+      ...p,
+      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+    }));
+  } catch (error) {
+    console.error('Error in getBestSellers:', error);
+    return [];
+  }
+});
+
+/** Handcrafted — products from craft-intensive categories (Bone Inlay, MOP, Glass Inlay, Carved) */
+export const getHandcraftedProducts = cache(async function getHandcraftedProducts(limit = 8) {
+  try {
+    const craftSlugs = ['bone-inlay-furniture', 'mop-inlay-furniture', 'glass-inlay-work', 'carved-furniture'];
+    const placeholders = craftSlugs.map(() => '?').join(',');
+    const sql = `
+      SELECT DISTINCT p.*,
+      (SELECT file_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image,
+      (SELECT file_path FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order ASC LIMIT 1) as first_image,
+      COALESCE(
+        (SELECT cat.name FROM categories cat JOIN product_categories pc2 ON cat.id = pc2.category_id WHERE pc2.product_id = p.id LIMIT 1),
+        c.name
+      ) as category_name,
+      COALESCE(
+        (SELECT cat.slug FROM categories cat JOIN product_categories pc2 ON cat.id = pc2.category_id WHERE pc2.product_id = p.id LIMIT 1),
+        c.slug
+      ) as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN product_categories pc ON pc.product_id = p.id
+      LEFT JOIN categories c2 ON pc.category_id = c2.id
+      WHERE p.is_active = TRUE AND (c.slug IN (${placeholders}) OR c2.slug IN (${placeholders}))
+      ORDER BY p.is_featured DESC, p.sort_order ASC, p.created_at DESC
+      LIMIT ?
+    `;
+    const products = await query(sql, [...craftSlugs, ...craftSlugs, limit]);
+    const allCategories = await getAllCategoriesWithPaths();
+    const categoryMap = new Map();
+    allCategories.forEach(cat => categoryMap.set(cat.id, cat));
+    return products.map(p => ({
+      ...p,
+      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+    }));
+  } catch (error) {
+    console.error('Error in getHandcraftedProducts:', error);
+    return [];
+  }
+});
