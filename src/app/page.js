@@ -10,6 +10,7 @@ import MaterialShowcase from '@/components/home/MaterialShowcase';
 import ProductTabs from '@/components/home/ProductTabs';
 import BlogSnippet from '@/components/home/BlogSnippet';
 import CategoryGrid from '@/components/home/CategoryGrid';
+import CategorySubcategoryTabs from '@/components/home/CategorySubcategoryTabs';
 import InfoSection from '@/components/home/InfoSection';
 import Testimonials from '@/components/home/Testimonials';
 
@@ -73,44 +74,22 @@ export default async function HomePage() {
       <Hero />
       <FeatureBar />
       {/* <CategorySection categories={parentCategories} /> */}
-      <BentoGallery />
+      <CategoryGrid categories={parentCategories} />
+      {/* <CategorySubcategoryTabs allCategories={allCategories} /> */}
       <ProductTabs
         products={featuredProducts}
         newArrivals={newArrivals}
         bestSellers={bestSellers}
         handcrafted={handcrafted}
       />
+      <BentoGallery />
       <MaterialShowcase />
-      <CategoryGrid categories={parentCategories} />
       <ParallaxSection />
       <BlogSnippet />
       <StudioGallery />
       <InfoSection />
       <Testimonials />
 
-      {/* ===== FINAL CTA / NEWSLETTER ===== */}
-      <section className="py-16 sm:py-32 bg-[var(--color-bg-dark)]">
-        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)] text-center">
-          <h2 className="text-[clamp(2rem,8vw,5rem)] text-white font-heading mb-6 tracking-tight">Elegance in Every Detail</h2>
-          <p className="text-white/60 max-w-[600px] mx-auto mb-12 text-base sm:text-lg font-light leading-relaxed">
-            Stay inspired. Join our circle for exclusive previews of new artisan collections and home decor ideas.
-          </p>
-          <div className="flex flex-col sm:flex-row max-w-[500px] w-full mx-auto relative group">
-            <input
-              type="email"
-              placeholder="YOUR EMAIL ADDRESS"
-              className="flex-1 bg-transparent border-b border-white/30 text-white text-[0.8rem] px-2 py-4 tracking-[0.1em] placeholder:text-white/40 focus:outline-none focus:border-[var(--color-accent)] transition-colors"
-              suppressHydrationWarning
-            />
-            <button
-              className="bg-transparent border-b border-[var(--color-accent)] text-[var(--color-accent)] text-[0.8rem] uppercase font-bold tracking-[0.2em] px-4 py-4 sm:py-0 transition-colors hover:text-white hover:border-white"
-              suppressHydrationWarning
-            >
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

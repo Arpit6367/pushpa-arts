@@ -1,73 +1,287 @@
 import Link from 'next/link';
+import {
+  Send,
+  MessageSquare,
+  MessageCircle,
+  Hash,
+  Globe,
+  HelpCircle,
+  Truck,
+  BookOpen,
+  Users,
+  Briefcase,
+  Info,
+  Home,
+  ShieldCheck,
+  FileText,
+  Map,
+  Phone,
+  Mail,
+  MapPin
+} from 'lucide-react';
 
-export default function Footer({ settings = {} }) {
+// Custom Brand Icons (since some might be missing in installed lucide-react version)
+const FacebookIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const TwitterIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+  </svg>
+);
+
+const InstagramIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
+const YoutubeIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.42 5.58a2.78 2.78 0 0 0 1.94 2c1.71.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.42-5.58z" />
+    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+  </svg>
+);
+
+const PinterestIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="12" y1="8" x2="12" y2="16" />
+    <line x1="8" y1="12" x2="16" y2="12" />
+    <circle cx="12" cy="12" r="10" />
+  </svg>
+);
+
+const RedditIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="9" cy="10" r="1" />
+    <circle cx="15" cy="10" r="1" />
+    <path d="M8 15s1.5 2 4 2 4-2 4-2" />
+  </svg>
+);
+
+const FlickrIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="7" cy="12" r="3" fill="currentColor" stroke="none" />
+    <circle cx="17" cy="12" r="3" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export default function Footer({ settings = {}, categories = [] }) {
+  const mainCategories = categories.filter(c => !c.parent_id);
+
+  const conciergeLinks = [
+    { name: 'Home', href: '/', icon: Home },
+    { name: 'Our Story', href: '/about', icon: Info },
+    { name: 'Contact Us', href: '/contact', icon: MessageSquare },
+    { name: 'Our Projects', href: '/projects', icon: Briefcase },
+    { name: 'Our Clients', href: '/clients', icon: Users },
+    { name: 'Blogs', href: '/blogs', icon: BookOpen },
+    { name: 'Shipping', href: '/shipping', icon: Truck },
+    { name: 'About Udaipur', href: '/about-udaipur', icon: Map },
+    { name: 'FAQ', href: '/faq', icon: HelpCircle },
+    { name: 'Terms & Conditions', href: '/terms', icon: FileText },
+    { name: 'Privacy Policy', href: '/privacy', icon: ShieldCheck },
+    { name: 'Sitemap', href: '/sitemap', icon: Globe },
+  ];
+
+  const socialPlatforms = [
+    { name: 'Facebook', icon: FacebookIcon, color: 'bg-[#3b5998]', href: 'https://www.facebook.com/PushpaExports/' },
+    { name: 'Twitter', icon: TwitterIcon, color: 'bg-[#1da1f2]', href: 'https://x.com/exportspushpa' },
+    { name: 'Pinterest', icon: PinterestIcon, color: 'bg-[#bd081c]', href: 'https://www.pinterest.com/pushpaexportsindia/' },
+    { name: 'Instagram', icon: InstagramIcon, color: 'bg-[#e1306c]', href: 'https://www.instagram.com/pushpaexports/' },
+    { name: 'Flickr', icon: FlickrIcon, color: 'bg-[#0063dc]', href: 'https://www.flickr.com/photos/pushpaexports/' },
+    { name: 'Reddit', icon: RedditIcon, color: 'bg-[#ff4500]', href: 'https://reddit.com' },
+    { name: 'Youtube', icon: YoutubeIcon, color: 'bg-[#ff0000]', href: 'https://www.youtube.com/@pushpaexports' },
+  ];
+
+  const connectPlatforms = [
+    { name: 'WhatsApp', icon: MessageCircle, color: 'bg-[#25d366]', href: `https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}` },
+    { name: 'Telegram', icon: Send, color: 'bg-[#0088cc]', href: 'https://t.me/PushpaExports' },
+    { name: 'Messenger', icon: MessageSquare, color: 'bg-white', href: 'https://m.me/PushpaExports' },
+  ];
+
+  const memberships = [
+    { name: 'Make In India', logo: '🦁' },
+    { name: 'MSME', logo: '🏢' },
+    { name: 'UCCI', logo: '🏛️' },
+    { name: 'EPCH', logo: '🌍' },
+    { name: 'TradeIndia', logo: '🤝' },
+    { name: 'Indiamart', logo: '💎' },
+    { name: 'GST Certified', logo: '📜' },
+    { name: 'HMA', logo: '🏺' },
+  ];
   return (
     <footer className="relative bg-[#1A2F27] text-white overflow-hidden">
+      {/* Newsletter Section */}
+      <div className="pt-16 pb-12 border-b border-white/5">
+        <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 lg:gap-20">
+            <div className="max-w-[600px] reveal">
+              <h3 className="text-2xl md:text-3xl font-heading mb-4 italic">Join Our Circle</h3>
+              <p className="text-white/50 text-[0.95rem] font-light leading-relaxed">
+                Stay inspired. Be the first to receive exclusive previews of our newest artisan collections and heritage design stories from Udaipur.
+              </p>
+            </div>
+            <div className="flex-1 max-w-[500px] w-full reveal delay-100">
+              <div className="flex flex-col sm:flex-row relative group">
+                <input
+                  type="email"
+                  placeholder="YOUR EMAIL ADDRESS"
+                  className="flex-1 bg-transparent border-b border-white/20 text-white text-[0.85rem] px-0 py-4 tracking-[0.1em] placeholder:text-white/30 focus:outline-none focus:border-[var(--color-accent)] transition-all duration-500"
+                  suppressHydrationWarning
+                />
+                <button
+                  className="bg-transparent border-b border-[var(--color-accent)] text-[var(--color-accent)] text-[0.75rem] uppercase font-bold tracking-[0.25em] px-6 py-4 sm:py-0 transition-all duration-500 hover:text-white hover:border-white whitespace-nowrap"
+                  suppressHydrationWarning
+                >
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Footer Content */}
-      <div className="pt-16 sm:pt-20 pb-8">
+      <div className="py-16 sm:py-20">
         <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
             <div className="reveal">
               <div className="mb-8">
                 <img src="/images/Pushpa-Exports.svg" alt="Pushpa Exports" className="h-14 w-auto brightness-0 invert" />
               </div>
-              <p className="text-[0.9rem] leading-[2] text-white/50 mb-8">
+              <p className="text-[0.9rem] leading-[2] text-white/70 mb-10">
                 Born in the historic city of Udaipur, Pushpa Exports represents generations of refined craftsmanship. We preserve the royal art of Inlay and Carving.
               </p>
-              {/* Social Icons */}
-              <div className="flex items-center gap-4">
-                <a href="https://www.instagram.com/pushpaexports" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/50 hover:text-[var(--color-accent)] hover:border-[var(--color-accent)] transition-all duration-300" aria-label="Instagram">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
-                </a>
-                <a href="https://www.facebook.com/pushpaexports" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/50 hover:text-[var(--color-accent)] hover:border-[var(--color-accent)] transition-all duration-300" aria-label="Facebook">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
-                </a>
-                <a href={`https://wa.me/${(settings.whatsapp_number || '919414162629').replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/50 hover:text-[var(--color-accent)] hover:border-[var(--color-accent)] transition-all duration-300" aria-label="WhatsApp">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-                </a>
+
+              {/* Detailed Contact Section (Image Match) */}
+              <div className="space-y-6 pt-6 border-t border-white/5">
+                <div className="flex items-center gap-4 text-white group">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 group-hover:bg-[var(--color-accent)] transition-all duration-300">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col">
+                    <a href="tel:+919829505921" className="text-[1rem] hover:text-[var(--color-accent)] transition-colors tracking-wide">+91-9829505921</a>
+                    <a href="tel:+919352521265" className="text-[1rem] hover:text-[var(--color-accent)] transition-colors tracking-wide">+91-9352521265</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-white group">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 group-hover:bg-[var(--color-accent)] transition-all duration-300">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <a href="mailto:info@pushpaarts.com" className="text-[1rem] hover:text-[var(--color-accent)] transition-colors tracking-wide">info@pushpaarts.com</a>
+                </div>
+
+                <div className="flex items-start gap-4 text-white group">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 group-hover:bg-[var(--color-accent)] transition-all duration-300 mt-1">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col text-white/80 text-[0.95rem] leading-relaxed">
+                    <p className="font-semibold text-white mb-1">Pushpa Exports,</p>
+                    <p>N.H. - 8, Bhuwana Handicraft</p>
+                    <p>Bazar, Bhuwana, Udaipur,</p>
+                    <p>Rajasthan 313001</p>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <a
+                    href="https://www.google.com/maps/dir//Pushpa+Exports,+N.H.+-+8,+Bhuwana+Handicraft+Bazar,+Bhuwana,+Udaipur,+Rajasthan+313001"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block w-full max-w-[280px] bg-[var(--color-accent)] text-white py-4 px-8 text-center text-[0.75rem] font-bold uppercase tracking-[0.35em] transition-all hover:bg-white hover:text-[var(--color-accent)] shadow-xl"
+                  >
+                    Directions
+                  </a>
+                </div>
               </div>
             </div>
 
             <div className="reveal delay-100">
-              <h4 className="font-semibold uppercase tracking-[0.15em] text-[var(--color-accent)] mb-8 text-[0.65rem]">Collections</h4>
+              <h4 className="font-semibold uppercase tracking-[0.15em] text-[var(--color-accent)] mb-8 text-[1rem] border-b border-[var(--color-accent)]/30 pb-2 inline-block">Collections</h4>
               <ul className="flex flex-col gap-1">
-                <li><Link href="/product-category/silver-furniture" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Silver Furniture</Link></li>
-                <li><Link href="/product-category/bone-inlay-furniture" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Bone Inlay</Link></li>
-                <li><Link href="/product-category/mop-inlay-furniture" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Mother of Pearl</Link></li>
-                <li><Link href="/product-category/white-metal-furniture" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">White Metal</Link></li>
-                <li><Link href="/product-category/marble-stone-furniture" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Marble & Stone</Link></li>
+                {mainCategories.length > 0 ? mainCategories.map(cat => (
+                  <li key={cat.id}><Link href={`/product-category/${cat.slug_path}`} className="text-white hover:text-[var(--color-accent)] block py-2 text-[1rem] transition-all duration-300 hover:translate-x-1.5 hover:pl-1">{cat.name}</Link></li>
+                )) : (
+                  <>
+                    <li><Link href="/product-category/silver-furniture" className="text-white hover:text-[var(--color-accent)] block py-2 text-[1rem] transition-all duration-300 hover:translate-x-1.5 hover:pl-1">Silver Furniture</Link></li>
+                    <li><Link href="/product-category/bone-inlay-furniture" className="text-white hover:text-[var(--color-accent)] block py-2 text-[1rem] transition-all duration-300 hover:translate-x-1.5 hover:pl-1">Bone Inlay</Link></li>
+                    <li><Link href="/product-category/mop-inlay-furniture" className="text-white hover:text-[var(--color-accent)] block py-2 text-[1rem] transition-all duration-300 hover:translate-x-1.5 hover:pl-1">Mother of Pearl</Link></li>
+                    <li><Link href="/product-category/marble-stone-furniture" className="text-white hover:text-[var(--color-accent)] block py-2 text-[1rem] transition-all duration-300 hover:translate-x-1.5 hover:pl-1">Marble & Stone</Link></li>
+                  </>
+                )}
               </ul>
             </div>
 
             <div className="reveal delay-200">
-              <h4 className="font-semibold uppercase tracking-[0.15em] text-[var(--color-accent)] mb-8 text-[0.65rem]">Concierge</h4>
-              <ul className="flex flex-col gap-1">
-                <li><Link href="/about" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Our Story</Link></li>
-                <li><Link href="/contact" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Contact Us</Link></li>
-                <li><Link href="/privacy" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Terms of Service</Link></li>
-                {/* <li><Link href="/admin" className="text-white/50 block py-2 text-[0.9rem] transition-all duration-300 hover:text-white hover:translate-x-1.5 hover:pl-1">Admin Studio</Link></li> */}
+              <h4 className="font-semibold uppercase tracking-[0.15em] text-[var(--color-accent)] mb-8 text-[1rem] border-b border-[var(--color-accent)]/30 pb-2 inline-block">Concierge</h4>
+              <ul className="grid grid-cols-1 gap-1">
+                {conciergeLinks.map(link => (
+                  <li key={link.name}>
+                    <Link href={link.href} className="text-white block py-1.5 text-[1rem] transition-all duration-300 hover:text-[var(--color-accent)] hover:translate-x-1.5 hover:pl-1">
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             <div className="reveal delay-300">
-              <h4 className="font-semibold uppercase tracking-[0.15em] text-[var(--color-accent)] mb-8 text-[0.65rem]">Visit Our Studio</h4>
-              <ul className="flex flex-col gap-3 text-white/50 text-[0.9rem]">
-                <li className="flex items-start gap-3 py-1">
-                  <span className="text-[var(--color-accent)] mt-0.5 shrink-0">📍</span>
-                  <span>{settings.contact_address || 'Udaipur, Rajasthan, India'}</span>
-                </li>
-                <li className="flex items-start gap-3 py-1">
-                  <span className="text-[var(--color-accent)] mt-0.5 shrink-0">✉️</span>
-                  <a href={`mailto:${settings.contact_email || 'info@pushpaexport.com'}`} className="hover:text-white transition-colors">{settings.contact_email || 'info@pushpaexport.com'}</a>
-                </li>
-                <li className="flex items-start gap-3 py-1">
-                  <span className="text-[var(--color-accent)] mt-0.5 shrink-0">📞</span>
-                  <a href={`tel:${settings.contact_phone || '+919414162629'}`} className="hover:text-white transition-colors">{settings.contact_phone || '+91 94141 62629'}</a>
-                </li>
-              </ul>
+              <h4 className="font-semibold uppercase tracking-[0.15em] text-white mb-8 text-[0.7rem] border-b border-white pb-1 inline-block">CONNECT WITH US</h4>
+              <div className="flex flex-wrap gap-2 mb-12">
+                {connectPlatforms.map(platform => (
+                  <a
+                    key={platform.name}
+                    href={platform.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-12 h-12 ${platform.color} ${platform.name === 'Messenger' ? 'text-[#0084ff]' : 'text-white'} flex items-center justify-center rounded-sm transition-transform hover:scale-110 active:scale-95 shadow-lg`}
+                    title={platform.name}
+                  >
+                    <platform.icon className="w-6 h-6" />
+                  </a>
+                ))}
+              </div>
+
+              <h4 className="font-semibold uppercase tracking-[0.15em] text-white mb-8 text-[0.7rem] border-b border-white pb-1 inline-block">OUR SOCIALS</h4>
+              <div className="flex flex-wrap gap-2">
+                {socialPlatforms.map(platform => (
+                  <a
+                    key={platform.name}
+                    href={platform.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-12 h-12 ${platform.color} text-white flex items-center justify-center rounded-sm transition-transform hover:scale-110 active:scale-95 shadow-lg`}
+                    title={platform.name}
+                  >
+                    <platform.icon className="w-6 h-6" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* Memberships Section */}
+          {/* <div className="mt-24 pt-16 border-t border-white/5 reveal">
+             <h4 className="font-semibold uppercase tracking-[0.3em] text-white mb-12 text-[0.75rem] border-b border-white pb-1 inline-block">OUR MEMBERSHIPS</h4>
+             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-5 items-center">
+                {memberships.map(m => (
+                  <div key={m.name} className="bg-white p-3 aspect-square flex flex-col items-center justify-center gap-2 rounded-sm transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 group">
+                    <div className="flex-1 flex items-center justify-center w-full">
+                       <span className="text-3xl filter group-hover:scale-110 transition-transform">{m.logo}</span>
+                    </div>
+                    <span className="text-[0.45rem] uppercase tracking-widest font-bold text-black text-center leading-tight">{m.name}</span>
+                  </div>
+                ))}
+             </div>
+          </div> */}
 
           {/* Bottom Bar */}
           <div className="border-t border-white/8 mt-16 pt-8 pb-4">

@@ -51,8 +51,8 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
   return (
     <QuickViewProvider>
       <Header initialCategories={initialCategories} settings={settings} />
-      <main className=" lg:pt-[50px]">{children}</main>
-      <Footer settings={settings} />
+      <main>{children}</main>
+      <Footer settings={settings} categories={initialCategories} />
     </QuickViewProvider>
   );
 }

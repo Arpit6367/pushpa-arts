@@ -49,12 +49,12 @@ export default function Header({ initialCategories = [], settings = {} }) {
 
   return (
     <>
-      {/* Promo Bar (Dynamic height based on scroll) */}
-      <div className={`fixed top-0 left-0 right-0 z-[2001] bg-[#1A2F27] text-white text-[0.5rem] md:text-[0.55rem] uppercase tracking-[0.3em] font-bold py-2.5 text-center transition-transform duration-500 ${scrolled ? '-translate-y-full' : 'translate-y-0'}`}>
+      {/* Promo Bar (Dynamic height and transparency) */}
+      {/* <div className={`fixed top-0 left-0 right-0 z-[2001] text-white text-[0.5rem] md:text-[0.55rem] uppercase tracking-[0.3em] font-bold py-2.5 text-center transition-all duration-500 ${scrolled ? '-translate-y-full' : 'translate-y-0'} ${!scrolled && pathname === '/' ? 'bg-transparent' : 'bg-[#1A2F27]'}`}>
         Curating Generations of Udaipur Craftsmanship
-      </div>
+      </div> */}
 
-      <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm py-2 translate-y-0' : 'bg-white py-3 pt-8 translate-y-0'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-[2000] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) ${scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm py-2' : 'bg-transparent py-4'}`}>
         <div className="max-w-[1700px] mx-auto px-[var(--spacing-container)]">
 
           <div className="flex items-center justify-between lg:justify-start gap-12 lg:gap-16 min-h-[50px] lg:min-h-[80px]">
@@ -66,7 +66,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
               <img
                 src="/images/Pushpa-Exports.svg"
                 alt="Pushpa Exports"
-                className={`transition-all duration-700 object-contain h-10 md:h-14`}
+                className={`transition-all duration-700 object-contain h-10 md:h-14 ${!scrolled && pathname === '/' ? 'brightness-0 invert' : ''}`}
               />
             </Link>
 
@@ -80,13 +80,13 @@ export default function Header({ initialCategories = [], settings = {} }) {
                   <div key={parent.id} className="group/dropdown py-4 relative h-full flex items-center">
                     <Link
                       href={`/product-category/${parent.slug_path}`}
-                      className={`group flex items-center gap-2 text-[1rem] xl:text-[1rem] font-medium leading-tight transition-all whitespace-nowrap ${isActive ? 'text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
+                      className={`group flex items-center gap-2 text-[1rem] xl:text-[1rem] font-medium leading-tight transition-all whitespace-nowrap ${isActive ? 'text-[#B4975A]' : (!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]')}`}
                     >
                       <div className="flex flex-col items-start text-left">
                         <span className="block leading-none mb-0.5">{parent.name.replace(' Furniture', '')}</span>
-                        <span className="block leading-none text-[0.8rem] opacity-60">{parent.name.includes('Furniture') ? 'Furniture' : parent.name.includes('Work') ? 'Work' : ''}</span>
+                        <span className={`block leading-none text-[0.8rem] transition-opacity duration-700 ${!scrolled && pathname === '/' ? 'opacity-40' : 'opacity-60'}`}>{parent.name.includes('Furniture') ? 'Furniture' : parent.name.includes('Work') ? 'Work' : ''}</span>
                       </div>
-                      {children.length > 0 && <ChevronDown className="w-4 h-4 transition-transform duration-500 group-hover/dropdown:rotate-180 opacity-40" />}
+                      {children.length > 0 && <ChevronDown className={`w-4 h-4 transition-all duration-500 group-hover/dropdown:rotate-180 ${!scrolled && pathname === '/' ? 'opacity-50' : 'opacity-40'}`} />}
                     </Link>
 
                     {children.length > 0 && (
@@ -154,9 +154,10 @@ export default function Header({ initialCategories = [], settings = {} }) {
 
             {/* Mobile: Hamburger (Right) */}
             <button
-              className="lg:hidden p-2 text-black hover:text-[#B4975A] transition-all active:scale-90"
+              className={`lg:hidden p-2 transition-all active:scale-90 ${!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
               onClick={() => setMobileOpen(true)}
               aria-label="Open Menu"
+              suppressHydrationWarning
             >
               <Menu className="w-7 h-7" />
             </button>
@@ -172,6 +173,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
             className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/5 rounded-full hover:bg-black hover:text-white transition-colors"
             onClick={() => setMobileOpen(false)}
             aria-label="Close Menu"
+            suppressHydrationWarning
           >
             <X className="w-5 h-5 md:w-6 h-6" />
           </button>
@@ -197,6 +199,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : parent.id)}
                         className={`w-12 h-12 flex items-center justify-center bg-black/[0.03] rounded-full transition-transform duration-500 ${isExpanded ? 'rotate-180' : ''}`}
+                        suppressHydrationWarning
                       >
                         <ChevronDown className="w-5 h-5" />
                       </button>
