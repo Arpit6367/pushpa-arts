@@ -103,7 +103,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
                             </div>
 
                             <div className="grid grid-cols-2 gap-x-10 gap-y-5">
-                              {children.map(child => (
+                              {children.slice(0, 15).map(child => (
                                 <Link
                                   key={child.id}
                                   href={`/product-category/${child.slug_path}`}
@@ -115,6 +115,17 @@ export default function Header({ initialCategories = [], settings = {} }) {
                                   <div className="w-0 h-[1px] bg-[var(--color-accent)]/30 transition-all duration-500 group-hover/item:w-8"></div>
                                 </Link>
                               ))}
+
+                              {children.length > 15 && (
+                                <Link
+                                  href={`/product-category/${parent.slug_path}`}
+                                  className="group/item flex flex-col gap-1 transition-all pt-2"
+                                >
+                                  <span className="text-[0.6rem] xl:text-[0.65rem] uppercase tracking-[0.25em] font-bold text-[var(--color-accent)] hover:underline flex items-center gap-1">
+                                    View All {children.length} Series
+                                  </span>
+                                </Link>
+                              )}
                             </div>
                           </div>
 
@@ -207,9 +218,9 @@ export default function Header({ initialCategories = [], settings = {} }) {
                   </div>
 
                   {children.length > 0 && (
-                    <div className={`overflow-hidden transition-all duration-700 ease-in-out ${isExpanded ? 'max-h-[1000px] mt-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className={`overflow-hidden transition-all duration-700 ease-in-out ${isExpanded ? 'max-h-[1500px] mt-8 opacity-100' : 'max-h-0 opacity-0'}`}>
                       <div className="flex flex-col gap-5 pl-6 border-l-2 border-[var(--color-accent)]/20">
-                        {children.map(child => (
+                        {children.slice(0, 15).map(child => (
                           <Link
                             key={child.id}
                             href={`/product-category/${child.slug_path}`}
@@ -219,6 +230,15 @@ export default function Header({ initialCategories = [], settings = {} }) {
                             {child.name}
                           </Link>
                         ))}
+                        {children.length > 15 && (
+                          <Link
+                            href={`/product-category/${parent.slug_path}`}
+                            className="text-[0.65rem] uppercase tracking-[0.25em] font-bold text-[var(--color-accent)] pt-4"
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            View All {children.length} Series
+                          </Link>
+                        )}
                       </div>
                     </div>
                   )}

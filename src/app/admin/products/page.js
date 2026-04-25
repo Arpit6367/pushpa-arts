@@ -238,16 +238,47 @@ export default function AdminProductsPage() {
         </div>
 
         {pagination && pagination.pages > 1 && (
-          <div className="flex gap-2 justify-center mt-10">
-            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(p => (
-              <button
-                key={p}
-                className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-all cursor-pointer border ${p === page ? 'bg-[#0071e3] text-white border-[#0071e3]' : 'bg-white text-[#1d1d1f] border-black/10 hover:border-[#0071e3]'}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
+          <div className="flex gap-2 justify-center mt-10 flex-wrap">
+            {(() => {
+              const totalPages = pagination.pages;
+              const current = page;
+              const delta = 1;
+              const range = [];
+              const rangeWithDots = [];
+              let l;
+
+              for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= current - delta && i <= current + delta)) {
+                  range.push(i);
+                }
+              }
+
+              for (let i of range) {
+                if (l) {
+                  if (i - l === 2) {
+                    rangeWithDots.push(l + 1);
+                  } else if (i - l !== 1) {
+                    rangeWithDots.push('...');
+                  }
+                }
+                rangeWithDots.push(i);
+                l = i;
+              }
+
+              return rangeWithDots.map((p, idx) => (
+                p === '...' ? (
+                  <span key={`dots-${idx}`} className="w-10 h-10 flex items-center justify-center text-black/30">...</span>
+                ) : (
+                  <button
+                    key={p}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-all cursor-pointer border ${p === page ? 'bg-[#0071e3] text-white border-[#0071e3]' : 'bg-white text-[#1d1d1f] border-black/10 hover:border-[#0071e3]'}`}
+                    onClick={() => setPage(p)}
+                  >
+                    {p}
+                  </button>
+                )
+              ));
+            })()}
           </div>
         )}
       </div>
