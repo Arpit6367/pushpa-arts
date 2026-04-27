@@ -1,6 +1,32 @@
 import Image from 'next/image';
+import { getPageBySlug } from '@/lib/cms';
+import { getStudioPageMetadata } from '@/lib/metadata';
 
-export default function AboutPage() {
+export async function generateMetadata() {
+  return getStudioPageMetadata('about', 'Learn about Pushpa Exports, our heritage, and our commitment to handcrafted excellence since 1982.');
+}
+
+export default async function AboutPage() {
+  const page = await getPageBySlug('about');
+
+  // If the page content in DB is more than just the default dummy content, we use it.
+  // Otherwise we use the premium hardcoded template.
+  const isCustomContent = page && page.content && page.content.length > 200;
+
+  if (isCustomContent) {
+    return (
+      <main className="pt-32 pb-20">
+        <div className="max-w-[1200px] mx-auto px-[var(--spacing-container)]">
+          <h1 className="text-4xl md:text-5xl font-heading mb-10">{page.title}</h1>
+          <div
+            className="prose prose-lg max-w-none prose-headings:font-heading prose-p:text-black/70 prose-p:leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: page.content }}
+          />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <>
       <script
@@ -9,8 +35,8 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            "name": "About Pushpa Exports",
-            "description": "Learn about Pushpa Exports, a renowned manufacturer and exporter of luxury handcrafted furniture based in Udaipur, Rajasthan, India.",
+            "name": page?.title || "About Pushpa Exports",
+            "description": page?.meta_description || "Learn about Pushpa Exports, a renowned manufacturer and exporter of luxury handcrafted furniture based in Udaipur, Rajasthan, India.",
             "publisher": {
               "@type": "Organization",
               "name": "Pushpa Exports",
@@ -79,7 +105,7 @@ export default function AboutPage() {
                 A Heritage of <br />
                 <span className="text-[#B8860B] italic">Excellence</span>
               </h2>
-              <div className="space-y-6 text-[#4A4A4A] leading-[1.9] text-[1rem] font-light">
+              <div className="space-y-6 text-[#4A4A4A] leading-[2.1] text-[1rem] font-light">
                 <p>
                   Pushpa Exports is a renowned manufacturer and exporter of luxury handcrafted
                   furniture based in the historic city of Udaipur, Rajasthan. For decades,
@@ -92,14 +118,6 @@ export default function AboutPage() {
                   contemporary luxury. Every piece is a testament to the patient dedication that manual
                   artistry demands.
                 </p>
-                <div className="pt-4">
-                  <div className="flex items-center gap-4 group cursor-pointer">
-                    <div className="w-12 h-12 rounded-full border border-[#B8860B] flex items-center justify-center text-[#B8860B] group-hover:bg-[#B8860B] group-hover:text-white transition-all">
-                      <span className="text-xl">→</span>
-                    </div>
-                    <span className="text-[0.7rem] uppercase tracking-[0.3em] font-bold text-[#1F1F1F]">Discover our process</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -173,26 +191,6 @@ export default function AboutPage() {
                 <h3 className="font-heading text-2xl mb-4 text-[#1F1F1F]">{item.title}</h3>
                 <p className="text-[#8C8C8C] text-[0.95rem] font-light leading-relaxed">{item.desc}</p>
                 <div className="w-0 h-[2px] bg-[#B8860B] mt-8 group-hover:w-16 transition-all duration-500"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-[clamp(5rem,10vw,9rem)] bg-[#F5F1EE] reveal">
-        <div className="container">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-            {[
-              { title: "Artisan Made", desc: "Every piece tells a story of human skill and patience.", icon: "🎨" },
-              { title: "World Export", desc: "Secure specialized transport to any corner of the globe.", icon: "🌍" },
-              { title: "Bespoke Design", desc: "Custom creations tailored to your unique architectural vision.", icon: "📐" },
-              { title: "Lifetime Quality", desc: "Heirloom-grade construction meant to last generations.", icon: "🏆" }
-            ].map((f, i) => (
-              <div key={i} className="flex flex-col items-center text-center group">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-3xl mb-8 shadow-sm border border-[#E5E0DA] group-hover:bg-[#1F1F1F] group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">{f.icon}</div>
-                <h3 className="font-heading text-xl text-[#1F1F1F] mb-4">{f.title}</h3>
-                <p className="text-[#8C8C8C] text-sm leading-relaxed font-light">{f.desc}</p>
               </div>
             ))}
           </div>

@@ -1,57 +1,75 @@
-export default function TermsAndConditions() {
+import { getPageBySlug } from '@/lib/cms';
+import { getStudioPageMetadata } from '@/lib/metadata';
+import Link from 'next/link';
+
+export async function generateMetadata() {
+  return getStudioPageMetadata('terms-conditions', 'Review our terms and conditions for bespoke furniture commissions.');
+}
+
+export default async function TermsPage() {
+  const page = await getPageBySlug('terms-conditions');
+  if (!page) return notFound();
+
+  const sidebarSections = [
+    { id: 'policy', title: 'Terms of Service' },
+    { id: 'custom-orders', title: 'Custom Orders' },
+    { id: 'shipping', title: 'Shipping Policy' }
+  ];
+
   return (
-    <main className="min-h-screen pt-32 pb-20 bg-[#FCFAF8]">
-      <div className="container max-w-[900px]">
-        <div className="reveal mb-16">
-          <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6 italic">Our Standards</p>
-          <h1 className="text-[clamp(2.5rem,8vw,4rem)] font-heading leading-tight mb-8 text-[#1F1F1F]">
-            Terms of <span className="text-[#B8860B] italic">Service</span>
-          </h1>
-          <div className="w-24 h-[2px] bg-gradient-to-r from-[#B8860B] to-transparent mb-10"></div>
-          <p className="text-[0.7rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C]">Last Updated: April 2024</p>
-        </div>
+    <main className="bg-[#FCFAF8] min-h-screen pt-32 pb-20">
+      <div className="container max-w-[1200px]">
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* Sidebar Navigation */}
+          <aside className="lg:w-1/4 hidden lg:block h-fit sticky top-32">
+            <h3 className="text-[0.7rem] uppercase tracking-[0.3em] text-[#B8860B] font-bold mb-8">Legal Index</h3>
+            <ul className="space-y-4">
+              {sidebarSections.map(s => (
+                <li key={s.id}>
+                  <a href={`#${s.id}`} className="text-[#86868b] hover:text-[#B8860B] text-sm transition-colors block py-1">
+                    {s.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-12 p-6 bg-white border border-black/5 rounded-2xl">
+              <p className="text-xs text-[#86868b] leading-relaxed">
+                Last Updated:<br />
+                <strong>{new Date(page.updated_at || page.created_at).toLocaleDateString()}</strong>
+              </p>
+            </div>
+          </aside>
 
-        <div className="reveal prose prose-neutral max-w-none space-y-12 text-[#4A4A4A] leading-[1.8] font-light">
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">1. Agreement to Terms</h2>
-            <p>
-              By accessing the digital atelier of Pushpa Exports, you agree to be bound by these Terms of Service and all applicable international trade laws and regulations.
-            </p>
-          </section>
+          {/* Content Area */}
+          <div className="lg:w-3/4">
+            <header className="mb-16 reveal">
+              <h1 className="text-4xl md:text-6xl font-heading mb-8 text-[#1d1d1f] italic">
+                {page.title.split(' & ')[0]} <span className="text-[#B8860B]">& {page.title.split(' & ')[1] || 'Conditions'}</span>
+              </h1>
+              <p className="text-[#86868b] text-lg font-light leading-relaxed max-w-2xl">
+                The governing framework for our artisan partnership. Please review these terms carefully before commissioning your bespoke masterpiece.
+              </p>
+            </header>
 
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">2. Intellectual Property</h2>
-            <p>
-              The designs, craftsmanship patterns, and imagery showcased on this platform are the intellectual property of Pushpa Exports. Any reproduction or use of these patterns without written consent is strictly prohibited.
-            </p>
-          </section>
+            <div className="space-y-16">
+              <section id="policy" className="reveal border-b border-black/5 pb-12 last:border-0">
+                <div 
+                  className="prose prose-lg text-[#4A4A4A] font-light leading-relaxed prose-headings:font-heading prose-headings:text-2xl prose-headings:text-[#1d1d1f] prose-headings:mt-12 prose-headings:mb-6"
+                  dangerouslySetInnerHTML={{ __html: page.content }}
+                />
+              </section>
+            </div>
 
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">3. Custom Commissions</h2>
-            <p>
-              Bespoke furniture commissions require a detailed consultation. Lead times, material costs, and shipping logistics will be outlined in a formal agreement provided before the commencement of any handcrafted work.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">4. International Shipping</h2>
-            <p>
-              We specialize in museum-grade export. While we ensure the highest standards of packaging, international duties and taxes are the responsibility of the recipient unless otherwise specified in the commercial invoice.
-            </p>
-          </section>
-        </div>
-
-        <div className="mt-20 pt-12 border-t border-[#E5E0DA] reveal">
-          <h3 className="font-heading text-xl text-[#1F1F1F] mb-8 italic">Ready to Begin Your <span className="text-[#B8860B]">Journey?</span></h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a href="/shop" className="p-8 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all group">
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C] block mb-2">Signature</span>
-              <span className="text-lg font-heading text-[#1F1F1F]">Browse Full Shop →</span>
-            </a>
-            <a href="/" className="p-8 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all group">
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C] block mb-2">Overview</span>
-              <span className="text-lg font-heading text-[#1F1F1F]">Back to Home →</span>
-            </a>
+            <div className="mt-20 p-10 bg-[#1d1d1f] rounded-3xl text-white reveal">
+              <h3 className="text-2xl font-heading mb-4 italic">Have a Legal Inquiry?</h3>
+              <p className="text-white/60 mb-8 font-light">Our administrative team is available to clarify any points regarding our service agreements.</p>
+              <Link 
+                href="/contact" 
+                className="inline-block px-10 py-4 bg-[#B8860B] text-white rounded-full font-bold uppercase tracking-widest hover:bg-[#a67a0a] transition-all"
+              >
+                Contact Administration
+              </Link>
+            </div>
           </div>
         </div>
       </div>

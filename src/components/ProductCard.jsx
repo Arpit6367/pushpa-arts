@@ -7,7 +7,7 @@ import { useQuickView } from '@/context/QuickViewContext';
 export default function ProductCard({ product }) {
   const { openQuickView } = useQuickView();
   const imageUrl = product.primary_image || product.first_image;
-  const catSlug = product.category_slug_path || product.categories?.[0]?.slug_path || 'uncategorized';
+  const catSlug = product.category_slug_path || product.categories?.[0]?.slug_path || 'collection';
 
   return (
     <div className="group relative bg-white border border-black/[0.04] rounded-md transition-all duration-700 hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] hover:border-black/[0.08] overflow-hidden">

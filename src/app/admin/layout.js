@@ -61,9 +61,16 @@ export default function AdminLayout({ children }) {
 
   const navItems = [
     { href: '/admin', label: 'Overview', icon: '📊' },
+    { href: '/admin/hero-slides', label: 'Hero Sections', icon: '🎬' },
+    { href: '/admin/material-mastery', label: 'Material Art', icon: '💎' },
     { href: '/admin/categories', label: 'Collections', icon: '📁' },
     { href: '/admin/products', label: 'Masterpieces', icon: '📦' },
-    { href: '/admin/products/new', label: 'New Masterpiece', icon: '➕' },
+    { href: '/admin/blogs', label: 'Art Journal', icon: '✍️' },
+    { href: '/admin/projects', label: 'Exhibitions', icon: '🏛️' },
+    { href: '/admin/clients', label: 'Patrons', icon: '🤝' },
+    { href: '/admin/testimonials', label: 'Client Voices', icon: '💬' },
+    { href: '/admin/faqs', label: 'Curator Q&A', icon: '❓' },
+    { href: '/admin/pages', label: 'Studio Pages', icon: '📄' },
     { href: '/admin/inquiries', label: 'Inquiries', icon: '📩' },
     { href: '/admin/file-manager', label: 'Studio Gallery', icon: '🖼️' },
   ];

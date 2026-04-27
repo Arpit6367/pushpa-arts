@@ -1,63 +1,75 @@
-export default function PrivacyPolicy() {
+import { getPageBySlug } from '@/lib/cms';
+import { getStudioPageMetadata } from '@/lib/metadata';
+import Link from 'next/link';
+
+export async function generateMetadata() {
+  return getStudioPageMetadata('privacy-policy', 'Our commitment to protecting your privacy and data security.');
+}
+
+export default async function PrivacyPage() {
+  const page = await getPageBySlug('privacy-policy');
+  if (!page) return notFound();
+
+  const sidebarSections = [
+    { id: 'policy', title: 'Privacy Policy' },
+    { id: 'collection', title: 'Data Collection' },
+    { id: 'usage', title: 'Data Usage' }
+  ];
+
   return (
-    <main className="min-h-screen pt-32 pb-20 bg-[#FCFAF8]">
-      <div className="container max-w-[900px]">
-        <div className="reveal mb-16">
-          <p className="text-[0.6rem] uppercase tracking-[0.5em] text-[#B8860B] font-bold mb-6 italic">Our Commitment</p>
-          <h1 className="text-[clamp(2.5rem,8vw,4rem)] font-heading leading-tight mb-8 text-[#1F1F1F]">
-            Privacy <span className="text-[#B8860B] italic">Policy</span>
-          </h1>
-          <div className="w-24 h-[2px] bg-gradient-to-r from-[#B8860B] to-transparent mb-10"></div>
-          <p className="text-[0.7rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C]">Last Updated: April 2024</p>
-        </div>
-
-        <div className="reveal prose prose-neutral max-w-none space-y-12 text-[#4A4A4A] leading-[1.8] font-light">
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">1. Introduction</h2>
-            <p>
-              At Pushpa Exports, we value your privacy and are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website or interact with our digital atelier.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">2. Information We Collect</h2>
-            <p>
-              We may collect personal information such as your name, email address, phone number, and architectural interests when you fill out an inquiry form or contact our artisans directly.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">3. How We Use Your Data</h2>
-            <p>
-              The information we collect is used primarily to:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Respond to your bespoke furniture inquiries.</li>
-              <li>Provide personalized design consultations.</li>
-              <li>Improve our website's curated experience.</li>
-              <li>Comply with international export and legal requirements.</li>
+    <main className="bg-[#FCFAF8] min-h-screen pt-32 pb-20">
+      <div className="container max-w-[1200px]">
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* Sidebar Navigation */}
+          <aside className="lg:w-1/4 hidden lg:block h-fit sticky top-32">
+            <h3 className="text-[0.7rem] uppercase tracking-[0.3em] text-[#B8860B] font-bold mb-8">Privacy Index</h3>
+            <ul className="space-y-4">
+              {sidebarSections.map(s => (
+                <li key={s.id}>
+                  <a href={`#${s.id}`} className="text-[#86868b] hover:text-[#B8860B] text-sm transition-colors block py-1">
+                    {s.title}
+                  </a>
+                </li>
+              ))}
             </ul>
-          </section>
+            <div className="mt-12 p-6 bg-white border border-black/5 rounded-2xl">
+              <p className="text-xs text-[#86868b] leading-relaxed">
+                Last Updated:<br />
+                <strong>{new Date(page.updated_at || page.created_at).toLocaleDateString()}</strong>
+              </p>
+            </div>
+          </aside>
 
-          <section>
-            <h2 className="font-heading text-2xl text-[#1F1F1F] mb-6 italic">4. Data Security</h2>
-            <p>
-              We implement industry-standard security measures to protect your data from unauthorized access or disclosure. Your trust is as valuable to us as our handcrafted masterpieces.
-            </p>
-          </section>
-        </div>
+          {/* Content Area */}
+          <div className="lg:w-3/4">
+            <header className="mb-16 reveal">
+              <h1 className="text-4xl md:text-6xl font-heading mb-8 text-[#1d1d1f] italic">
+                {page.title.split(' ')[0]} <span className="text-[#B8860B]">{page.title.split(' ')[1] || 'Policy'}</span>
+              </h1>
+              <p className="text-[#86868b] text-lg font-light leading-relaxed max-w-2xl">
+                Your trust is our most valuable asset. This policy outlines how we handle your personal information with the same care and integrity we apply to our craftsmanship.
+              </p>
+            </header>
 
-        <div className="mt-20 pt-12 border-t border-[#E5E0DA] reveal">
-          <h3 className="font-heading text-xl text-[#1F1F1F] mb-8 italic">Navigate Back to the <span className="text-[#B8860B]">Gallery</span></h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a href="/product-category" className="p-8 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all group">
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C] block mb-2">Explore</span>
-              <span className="text-lg font-heading text-[#1F1F1F]">Artisanal Collections →</span>
-            </a>
-            <a href="/contact" className="p-8 bg-white border border-[#F0EDE6] hover:border-[#B8860B] transition-all group">
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold text-[#8C8C8C] block mb-2">Connect</span>
-              <span className="text-lg font-heading text-[#1F1F1F]">Contact Our Artisans →</span>
-            </a>
+            <div className="space-y-16">
+              <section id="policy" className="reveal border-b border-black/5 pb-12 last:border-0">
+                <div 
+                  className="prose prose-lg text-[#4A4A4A] font-light leading-relaxed prose-headings:font-heading prose-headings:text-2xl prose-headings:text-[#1d1d1f] prose-headings:mt-12 prose-headings:mb-6"
+                  dangerouslySetInnerHTML={{ __html: page.content }}
+                />
+              </section>
+            </div>
+
+            <div className="mt-20 p-10 bg-[#1d1d1f] rounded-3xl text-white reveal">
+              <h3 className="text-2xl font-heading mb-4 italic">Privacy Concerns?</h3>
+              <p className="text-white/60 mb-8 font-light">If you have any questions about how your data is handled, our data protection officer is here to help.</p>
+              <Link 
+                href="/contact" 
+                className="inline-block px-10 py-4 bg-[#B8860B] text-white rounded-full font-bold uppercase tracking-widest hover:bg-[#a67a0a] transition-all"
+              >
+                Inquire About Data
+              </Link>
+            </div>
           </div>
         </div>
       </div>

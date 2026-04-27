@@ -20,32 +20,42 @@ const testimonials = [
   }
 ];
 
-export default function Testimonials() {
+export default function Testimonials({ items = [] }) {
+  const displayItems = items.length > 0 ? items : testimonials.map(t => ({
+    content: t.text,
+    name: t.author,
+    designation: t.location
+  }));
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
+    if (displayItems.length <= 1) return;
     const timer = setInterval(() => {
       handleNext();
     }, 6000);
     return () => clearInterval(timer);
-  }, [current]);
+  }, [current, displayItems]);
 
   const handleNext = () => {
+    if (displayItems.length <= 1) return;
     setIsAnimating(true);
     setTimeout(() => {
-      setCurrent((prev) => (prev + 1) % testimonials.length);
+      setCurrent((prev) => (prev + 1) % displayItems.length);
       setIsAnimating(false);
-    }, 400 - 100);
+    }, 300);
   };
 
   const handlePrev = () => {
+    if (displayItems.length <= 1) return;
     setIsAnimating(true);
     setTimeout(() => {
-      setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+      setCurrent((prev) => (prev - 1 + displayItems.length) % displayItems.length);
       setIsAnimating(false);
-    }, 400 - 100);
+    }, 300);
   };
+
+  if (displayItems.length === 0) return null;
 
   return (
     <section className="py-[var(--spacing-section)] bg-white overflow-hidden">
@@ -57,51 +67,53 @@ export default function Testimonials() {
 
             <div className={`transition-all duration-700 ease-in-out ${isAnimating ? 'opacity-0 scale-98' : 'opacity-100 scale-100'}`}>
               <p className="text-[clamp(1.1rem,2.5vw,1.6rem)] font-heading leading-relaxed text-[var(--color-text-primary)] mb-12 italic font-light">
-                "{testimonials[current].text}"
+                "{displayItems[current].content}"
               </p>
               <div className="flex flex-col items-center">
                 <div className="w-12 h-[1px] bg-[var(--color-accent)] mb-6" />
                 <h4 className="text-[0.75rem] uppercase tracking-[0.4em] font-bold text-[var(--color-text-primary)] mb-3">
-                  {testimonials[current].author}
+                  {displayItems[current].name}
                 </h4>
                 <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-                  {testimonials[current].location}
+                  {displayItems[current].designation}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center gap-12 mt-20">
-            <button
-              onClick={handlePrev}
-              className="group flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-all"
-              suppressHydrationWarning
-            >
-              <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold">Prev</span>
-            </button>
+          {displayItems.length > 1 && (
+            <div className="flex items-center gap-12 mt-20">
+              <button
+                onClick={handlePrev}
+                className="group flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-all"
+                suppressHydrationWarning
+              >
+                <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+                <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold">Prev</span>
+              </button>
 
-            <div className="flex gap-4">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`w-2 h-2 rounded-full transition-all duration-500 ${current === i ? 'bg-[var(--color-accent)] scale-150' : 'bg-black/10'}`}
-                  suppressHydrationWarning
-                />
-              ))}
+              <div className="flex gap-4">
+                {displayItems.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    className={`w-2 h-2 rounded-full transition-all duration-500 ${current === i ? 'bg-[var(--color-accent)] scale-150' : 'bg-black/10'}`}
+                    suppressHydrationWarning
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNext}
+                className="group flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-all"
+                suppressHydrationWarning
+              >
+                <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold">Next</span>
+                <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </button>
             </div>
-
-            <button
-              onClick={handleNext}
-              className="group flex items-center gap-2 text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-all"
-              suppressHydrationWarning
-            >
-              <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold">Next</span>
-              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </section>

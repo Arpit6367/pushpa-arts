@@ -30,7 +30,14 @@ export default function Header({ initialCategories = [], settings = {} }) {
   }, []);
 
   useEffect(() => {
-    if (initialCategories.length === 0) {
+    if (initialCategories && initialCategories.length > 0) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
+
+  useEffect(() => {
+    // Only fetch if we have no categories and none were provided from server
+    if (categories.length === 0 && (!initialCategories || initialCategories.length === 0)) {
       fetch('/api/categories?active_only=true')
         .then(res => res.json())
         .then(data => {
@@ -39,10 +46,8 @@ export default function Header({ initialCategories = [], settings = {} }) {
           }
         })
         .catch(() => { });
-    } else {
-      setCategories(initialCategories);
     }
-  }, [initialCategories]);
+  }, []); // Run once on mount to avoid loops
 
   const parentCategories = categories.filter(c => !c.parent_id);
   const getChildren = (parentId) => categories.filter(c => c.parent_id === parentId);

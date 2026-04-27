@@ -26,14 +26,29 @@ const materials = [
   }
 ];
 
-export default function MaterialShowcase() {
-  const [active, setActive] = useState(materials[0].id);
+export default function MaterialShowcase({ items = [] }) {
+  const displayItems = items.length > 0 ? items.map(item => ({
+    id: item.id.toString(),
+    title: item.title,
+    subtitle: 'Mosaic Artistry', // Default subtitle or could be added to DB
+    desc: item.description,
+    image: item.image
+  })) : materials;
+  const [active, setActive] = useState(displayItems[0]?.id);
+
+  useEffect(() => {
+    if (displayItems.length > 0 && !active) {
+      setActive(displayItems[0].id);
+    }
+  }, [displayItems, active]);
+
+  if (displayItems.length === 0) return null;
 
   return (
     <section className="py-[var(--spacing-section)] bg-[#FDFDFD] overflow-hidden relative">
       {/* Dynamic Floating Background Label */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10rem] lg:text-[20rem] font-heading text-black/[0.01] select-none pointer-events-none hidden md:block uppercase tracking-[0.3em] transition-all duration-1000">
-        {active}
+        {displayItems.find(m => m.id === active)?.title?.split(' ')[0]}
       </div>
 
       <div className="max-w-[1600px] mx-auto px-[var(--spacing-container)] relative z-10">
@@ -47,7 +62,7 @@ export default function MaterialShowcase() {
             </div>
 
             <div className="flex flex-col gap-12 md:gap-16">
-              {materials.map((m, i) => (
+              {displayItems.map((m, i) => (
                 <div
                   key={m.id}
                   className={`group cursor-pointer transition-all duration-700 relative pl-10 md:pl-16 py-4 stagger-${i + 3}`}
@@ -81,18 +96,22 @@ export default function MaterialShowcase() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-br from-[var(--color-accent)]/10 to-transparent rounded-full blur-[120px] animate-pulse" />
 
             <div className="relative h-full w-full overflow-hidden shadow-2xl rounded-sm group">
-              {materials.map((m) => (
+              {displayItems.map((m) => (
                 <div
                   key={m.id}
                   className={`absolute inset-0 transition-all duration-[1200ms] cubic-bezier(0.16, 1, 0.3, 1) ${active === m.id ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
                 >
-                  <Image
-                    src={m.image}
-                    alt={m.title}
-                    fill
-                    className="object-cover transition-transform duration-[15s] ease-linear group-hover:scale-110"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
+                  {m.image ? (
+                    <Image
+                      src={m.image}
+                      alt={m.title}
+                      fill
+                      className="object-cover transition-transform duration-[15s] ease-linear group-hover:scale-110"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+                  )}
                   {/* Subtle glass overlay for a premium look */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
                 </div>
@@ -101,14 +120,6 @@ export default function MaterialShowcase() {
               {/* Corner accent border */}
               <div className="absolute inset-8 border border-white/20 pointer-events-none group-hover:inset-12 transition-all duration-1000"></div>
             </div>
-
-            {/* Elegant Floating Badge */}
-            {/* <div className="absolute -bottom-8 -left-8 lg:-bottom-12 lg:-left-12 bg-white p-8 lg:p-12 shadow-[30px_30px_60px_-15px_rgba(0,0,0,0.15)] hidden sm:block animate-float">
-              <div className="border border-[var(--color-accent)]/30 p-6 lg:p-8">
-                <span className="text-[0.5rem] uppercase tracking-[0.5em] font-bold text-[var(--color-accent)] block mb-4">Udaipur Artistry</span>
-                <span className="text-xl lg:text-3xl font-heading text-[var(--color-text-primary)] leading-tight">Mastery in <br /> Selection</span>
-              </div>
-            </div> */}
           </div>
 
         </div>

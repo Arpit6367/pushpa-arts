@@ -9,113 +9,256 @@ USE pushpa_art;
 -- 1. SCHEMA DEFINITION
 -- ==========================================
 
--- Categories table (supports parent-child hierarchy)
-CREATE TABLE IF NOT EXISTS categories (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  slug VARCHAR(255) NOT NULL UNIQUE,
-  description TEXT,
-  image VARCHAR(500),
-  parent_id INT NULL,
-  sort_order INT DEFAULT 0,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
-);
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(500) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `parent_id` (`parent_id`),
+  CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Products table
-CREATE TABLE IF NOT EXISTS products (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  slug VARCHAR(255) NOT NULL UNIQUE,
-  short_description VARCHAR(500),
-  description TEXT,
-  sku VARCHAR(100),
-  category_id INT, -- Legacy categorisation
-  is_featured BOOLEAN DEFAULT FALSE,
-  is_active BOOLEAN DEFAULT TRUE,
-  sort_order INT DEFAULT 0,
-  meta_title VARCHAR(255),
-  meta_description VARCHAR(500),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-);
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `short_description` varchar(500) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `sku` varchar(100) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `is_featured` tinyint(1) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 0,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Product-Category relationship table (Many-to-Many)
-CREATE TABLE IF NOT EXISTS product_categories (
-  product_id INT NOT NULL,
-  category_id INT NOT NULL,
-  PRIMARY KEY (product_id, category_id),
-  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `product_categories` (
+  `product_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`product_id`,`category_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `product_categories_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `product_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Product images table (multiple images per product)
-CREATE TABLE IF NOT EXISTS product_images (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  product_id INT NOT NULL,
-  file_path VARCHAR(500) NOT NULL,
-  alt_text VARCHAR(255),
-  sort_order INT DEFAULT 0,
-  is_primary BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `product_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `file_path` varchar(500) NOT NULL,
+  `alt_text` varchar(255) DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `is_primary` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Site settings table
-CREATE TABLE IF NOT EXISTS site_settings (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  setting_key VARCHAR(100) NOT NULL UNIQUE,
-  setting_value TEXT,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+-- --------------------------------------------------------
+-- CMS & Studio Page Tables
+-- --------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS contact_inquiries (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(50) DEFAULT NULL,
-    subject VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    status ENUM('new', 'read', 'replied', 'archived') DEFAULT 'new',
-    admin_notes TEXT DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
+CREATE TABLE IF NOT EXISTS `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `content` longtext DEFAULT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- ==========================================
--- 2. INITIAL SEED DATA
--- ==========================================
+CREATE TABLE IF NOT EXISTS `blogs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `content` longtext DEFAULT NULL,
+  `image` varchar(500) DEFAULT NULL,
+  `excerpt` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insert default settings
-INSERT IGNORE INTO site_settings (setting_key, setting_value) VALUES
-('site_name', 'Pushpa Arts'),
-('site_tagline', 'Exquisite Handcrafted Furniture'),
-('contact_email', 'info@pushpaexport.com'),
-('contact_phone', '+91-XXXXXXXXXX'),
-('contact_address', 'Udaipur, Rajasthan, India'),
-('whatsapp_number', '+91XXXXXXXXXX');
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `image` varchar(500) DEFAULT NULL,
+  `client_name` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at?` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insert sample categories
-INSERT IGNORE INTO categories (name, slug, description, image, sort_order) VALUES
-('Silver Furniture', 'silver-furniture', 'Pure Silver on Hand Carved Ethnic Style Wooden Furniture. Royal and luxurious products.', '/uploads/products/silver_chair.png', 1),
-('White Metal Furniture', 'white-metal-furniture', 'Wood covered with white metal sheet. Looks like silver but at affordable prices.', NULL, 2),
-('Marble & Stone Furniture', 'marble-stone-furniture', 'Made from different kinds of stones - White Marble, Pink Sandstone, Red Sandstone and more.', NULL, 3),
-('Bone Inlay Furniture', 'bone-inlay-furniture', 'Hand Carved pieces of bone pasted on wood to create beautiful floral and geometric designs.', '/uploads/products/bone_inlay_table.png', 4),
-('MOP Inlay Furniture', 'mop-inlay-furniture', 'Mother of Pearl inlay work on premium wooden furniture.', NULL, 5);
+-- --------------------------------------------------------
+-- Home Page Content Tables
+-- --------------------------------------------------------
 
--- Insert sample products
-INSERT IGNORE INTO products (name, slug, short_description, description, sku, category_id, is_featured, is_active, sort_order) VALUES
-('Royal Silver Carved Chair', 'royal-silver-carved-chair', 'Handcrafted pure silver on hand carved ethnic style wooden chair.', 'This royal chair is meticulously handcrafted by our master artisans in Udaipur. It features intricate carving and is covered with pure silver sheet. Perfect for adding a touch of royalty to your living space.', 'SC-001', (SELECT id FROM categories WHERE slug = 'silver-furniture'), TRUE, TRUE, 1),
-('Floral Bone Inlay Console', 'floral-bone-inlay-console', 'Intricate floral pattern bone inlay console table with charcoal background.', 'Our signature bone inlay console table features delicate floral patterns hand-carved from camel bone and set in a charcoal colored resin. Each piece takes weeks of craftsmanship.', 'BI-C01', (SELECT id FROM categories WHERE slug = 'bone-inlay-furniture'), TRUE, TRUE, 1);
+CREATE TABLE IF NOT EXISTS `hero_slides` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `subtitle` varchar(255) DEFAULT NULL,
+  `image` varchar(500) NOT NULL,
+  `button_text` varchar(100) DEFAULT 'Explore Collection',
+  `button_link` varchar(255) DEFAULT '/',
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Map product-categories for many-to-many bridging
-INSERT IGNORE INTO product_categories (product_id, category_id)
-SELECT id, category_id FROM products WHERE category_id IS NOT NULL;
+CREATE TABLE IF NOT EXISTS `material_mastery` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description?` text DEFAULT NULL,
+  `image` varchar(500) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insert product images
-INSERT IGNORE INTO product_images (product_id, file_path, alt_text, sort_order, is_primary) VALUES
-((SELECT id FROM products WHERE slug = 'royal-silver-carved-chair'), '/uploads/products/silver_chair.png', 'Royal Silver Carved Chair', 1, TRUE),
-((SELECT id FROM products WHERE slug = 'floral-bone-inlay-console'), '/uploads/products/bone_inlay_table.png', 'Floral Bone Inlay Console Table', 1, TRUE);
+CREATE TABLE IF NOT EXISTS `testimonials` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `designation` varchar(255) DEFAULT NULL,
+  `content` text NOT NULL,
+  `image` varchar(500) DEFAULT NULL,
+  `rating` int(11) DEFAULT 5,
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `logo` varchar(500) DEFAULT NULL,
+  `website_url` varchar(500) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+-- Utility Tables
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `faqs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `contact_inquiries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('new','read','replied','archived') DEFAULT 'new',
+  `admin_notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `site_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` text DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `setting_key` (`setting_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+
+
+
+
+
+
+
+
+-- Pushpa Arts Dummy Data Seed Script
+-- Run this after schema.sql to populate the CMS and UI sections
+
+-- 1. Hero Slides
+INSERT INTO `hero_slides` (`title`, `subtitle`, `image`, `button_text`, `button_link`, `sort_order`) VALUES
+('The Art of Inlay', 'Handcrafted Bone Inlay & Mother of Pearl Masterpieces from Udaipur.', '/images/hero/hero-1.png', 'Explore Collection', '/product-category/bone-inlay-furniture', 1),
+('Royal Silver Heritage', 'Exquisite Silver Embossed Furniture for the Discerning Interior.', '/images/hero/hero-2.png', 'View Silver Collection', '/product-category/silver-furniture', 2),
+('Marble Elegance', 'Bespoke Stone Inlay pieces inspired by the palaces of Rajasthan.', '/images/hero/hero-3.png', 'Discover Marble', '/product-category/marble-stone-furniture', 3);
+
+-- 2. Material Mastery
+INSERT INTO `material_mastery` (`title`, `description`, `image`, `link`, `sort_order`) VALUES
+('Ethical Bone Inlay', 'Meticulously hand-carved camel bone set in organic resin.', '/images/materials/bone-inlay.jpg', '/material-mastery/bone-inlay', 1),
+('Sterling Silver Work', 'Traditional Thikaikari technique using 99% pure silver foil.', '/images/materials/silver.jpg', '/material-mastery/silver', 2),
+('Mother of Pearl', 'Iridescent ocean treasures meeting land-based craftsmanship.', '/images/materials/mop.jpg', '/material-mastery/mop', 3);
+
+-- 3. Testimonials
+INSERT INTO `testimonials` (`name`, `designation`, `content`, `rating`, `sort_order`) VALUES
+('Julianne Moore', 'Interior Designer, London', 'The level of detail in the bone inlay chest we received is simply breathtaking. It is the centerpiece of our latest project.', 5, 1),
+('Rajesh Mehta', 'Architect, Dubai', 'Pushpa Exports delivers the authentic soul of Udaipur with professional logistics that match international standards.', 5, 2),
+('Sophie Laurent', 'Collector, Paris', 'Commissioning a silver-embossed bed was a seamless experience. Truly royal craftsmanship.', 5, 3);
+
+-- 4. FAQs
+INSERT INTO `faqs` (`question`, `answer`, `sort_order`) VALUES
+('Do you ship internationally?', 'Yes, we provide worldwide white-glove shipping from our studio in Udaipur to your doorstep, handling all export documentation and insurance.', 1),
+('Can I customize the dimensions?', 'Absolutely. As a bespoke studio, every piece can be tailored to your specific architectural requirements and aesthetic preferences.', 2),
+('How do I maintain my inlay furniture?', 'Clean with a soft, slightly damp cloth. Avoid harsh chemicals and direct sunlight to preserve the organic resin and delicate inlay work.', 3);
+
+-- 5. Clients (Logos)
+INSERT INTO `clients` (`name`, `logo`, `sort_order`) VALUES
+('The Taj Group', '/images/clients/taj.png', 1),
+('Oberoi Hotels', '/images/clients/oberoi.png', 2),
+('Aman Resorts', '/images/clients/aman.png', 3);
+
+-- 6. Sample Blog Post
+INSERT INTO `blogs` (`title`, `slug`, `excerpt`, `content`, `image`) VALUES
+('The History of Bone Inlay in Udaipur', 'history-of-bone-inlay-udaipur', 'Discover how an ancient Egyptian craft became the heartbeat of Rajasthani furniture.', '<p>The art of bone inlay is a centuries-old tradition that found its true home in the princely state of Mewar...</p>', '/images/blog/blog-1.jpg');
+
+-- 7. Site Settings
+INSERT INTO `site_settings` (`setting_key`, `setting_value`) VALUES
+('contact_email', 'info@pushpaexports.com'),
+('contact_phone', '+91 94141 62629'),
+('contact_address', 'Plot No. 1, Udaipur, Rajasthan, India'),
+('whatsapp_number', '919414162629'),
+('instagram_url', 'https://instagram.com/pushpaexports'),
+('facebook_url', 'https://facebook.com/pushpaexports');

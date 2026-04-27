@@ -54,10 +54,13 @@ export const getProductBySlug = cache(async function getProductBySlug(slug) {
       ...p,
       category_name: winningCat ? winningCat.name : p.category_name,
       category_slug: winningCat ? winningCat.slug : p.category_slug,
-      category_slug_path: winningCat ? winningCat.slug_path : (p.category_slug || 'uncategorized'),
+      category_slug_path: winningCat ? winningCat.slug_path : (p.category_slug || 'collection'),
       categories: categoriesWithPaths,
       images,
-      related_products: related
+      related_products: related.map(rp => ({
+        ...rp,
+        category_slug_path: categoryMap.get(rp.category_id)?.slug_path || p.category_slug_path || 'collection'
+      }))
     };
   } catch (error) {
     console.error('Error in getProductBySlug:', error);
@@ -101,7 +104,10 @@ export const getProductsByCategory = cache(async function getProductsByCategory(
       LIMIT ? OFFSET ?
     `;
 
-    const products = await query(sql, [limit, offset]);
+    const products = (await query(sql, [limit, offset])).map(p => ({
+      ...p,
+      category_slug_path: category.slug_path
+    }));
 
     const countSql = `
       SELECT COUNT(*) as total FROM products p
@@ -151,7 +157,7 @@ export const getFeaturedMasterpieces = cache(async function getFeaturedMasterpie
 
     return products.map(p => ({
       ...p,
-      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+      category_slug_path: (categoryMap.get(p.category_id) || categoryMap.get(String(p.category_id)))?.slug_path || p.category_slug || 'collection'
     }));
   } catch (error) {
     console.error('Error in getFeaturedMasterpieces:', error);
@@ -179,7 +185,7 @@ export const getNewArrivals = cache(async function getNewArrivals(limit = 8) {
     allCategories.forEach(cat => categoryMap.set(cat.id, cat));
     return products.map(p => ({
       ...p,
-      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+      category_slug_path: (categoryMap.get(p.category_id) || categoryMap.get(String(p.category_id)))?.slug_path || p.category_slug || 'collection'
     }));
   } catch (error) {
     console.error('Error in getNewArrivals:', error);
@@ -219,7 +225,7 @@ export const getBestSellers = cache(async function getBestSellers(limit = 8) {
     allCategories.forEach(cat => categoryMap.set(cat.id, cat));
     return products.map(p => ({
       ...p,
-      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+      category_slug_path: (categoryMap.get(p.category_id) || categoryMap.get(String(p.category_id)))?.slug_path || p.category_slug || 'collection'
     }));
   } catch (error) {
     console.error('Error in getBestSellers:', error);
@@ -258,7 +264,7 @@ export const getHandcraftedProducts = cache(async function getHandcraftedProduct
     allCategories.forEach(cat => categoryMap.set(cat.id, cat));
     return products.map(p => ({
       ...p,
-      category_slug_path: categoryMap.get(p.category_id)?.slug_path || p.category_slug || 'uncategorized'
+      category_slug_path: (categoryMap.get(p.category_id) || categoryMap.get(String(p.category_id)))?.slug_path || p.category_slug || 'collection'
     }));
   } catch (error) {
     console.error('Error in getHandcraftedProducts:', error);

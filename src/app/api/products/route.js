@@ -94,7 +94,7 @@ export async function GET(request) {
         ...p,
         category_name: winningCat ? winningCat.name : p.category_name,
         category_slug: winningCat ? winningCat.slug : p.category_slug,
-        category_slug_path: winningCat ? winningCat.slug_path : (p.category_slug || 'uncategorized'),
+        category_slug_path: winningCat ? winningCat.slug_path : (p.category_slug || 'collection'),
         categories: categoriesWithPaths
       };
     }));

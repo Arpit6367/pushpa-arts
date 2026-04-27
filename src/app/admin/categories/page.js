@@ -242,7 +242,7 @@ export default function AdminCategoriesPage() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Order</label>
-                  <input type="number" className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none" value={form.sort_order} onChange={e => setForm({ ...form, sort_order: e.target.value })} />
+                  <input type="number" className="bg-[#f5f5f7] border border-transparent px-5 py-3.5 rounded-xl text-base w-full transition-all focus:bg-white focus:border-[#0071e3] focus:ring-4 focus:ring-[#0071e3]/10 outline-none" value={form.sort_order ?? 0} onChange={e => setForm({ ...form, sort_order: parseInt(e.target.value) || 0 })} />
                 </div>
               </div>
               <div className="flex flex-col gap-2 mb-6">
