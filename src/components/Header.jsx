@@ -71,7 +71,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
               <img
                 src="/images/Pushpa-Exports.svg"
                 alt="Pushpa Exports"
-                className={`transition-all duration-700 object-contain h-10 md:h-14 ${!scrolled && pathname === '/' ? 'brightness-0 invert' : ''}`}
+                className={`transition-all duration-700 object-contain h-10 md:h-14 w-auto ${!scrolled && pathname === '/' ? 'brightness-0 invert' : ''}`}
               />
             </Link>
 
@@ -184,7 +184,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 bg-white z-[5000] flex flex-col transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) lg:hidden ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between p-6 md:p-8 border-b border-black/[0.05]">
-          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Exports" className="h-10 md:h-12" />
+          <img src="/images/Pushpa-Exports.svg" alt="Pushpa Exports" className="h-10 md:h-12 w-auto" />
           <button
             className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-black/5 rounded-full hover:bg-black hover:text-white transition-colors"
             onClick={() => setMobileOpen(false)}

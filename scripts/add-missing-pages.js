@@ -45,11 +45,10 @@ async function addMissingPages() {
       await connection.execute(
         `INSERT INTO pages (slug, title, content, meta_title, meta_description) 
          VALUES (?, ?, ?, ?, ?) 
-         ON DUPLICATE KEY UPDATE slug=slug`, 
+         ON DUPLICATE KEY UPDATE slug=slug`,
         [page.slug, page.title, page.content, page.meta_title, page.meta_description]
       );
     }
-    console.log('✅ Missing pages added.');
   } catch (err) {
     console.error(err);
   } finally {

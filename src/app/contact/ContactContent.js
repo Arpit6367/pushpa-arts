@@ -35,7 +35,7 @@ export default function ContactContent({ page, faqs = [] }) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const isCustomContent = page && page.content && page.content.length > 200;
 

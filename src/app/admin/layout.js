@@ -41,6 +41,25 @@ export default function AdminLayout({ children }) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const [openMenus, setOpenMenus] = useState({
+    Website: pathname.includes('/hero-slides') ||
+      pathname.includes('/material-mastery') ||
+      pathname.includes('/blogs') ||
+      pathname.includes('/projects') ||
+      pathname.includes('/clients') ||
+      pathname.includes('/testimonials') ||
+      pathname.includes('/faqs') ||
+      pathname.includes('/pages') ||
+      pathname.includes('/file-manager')
+  });
+
+  const toggleMenu = (label) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
+
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -59,20 +78,27 @@ export default function AdminLayout({ children }) {
 
   if (!isAuthenticated) return null;
 
+
   const navItems = [
     { href: '/admin', label: 'Overview', icon: '📊' },
-    { href: '/admin/hero-slides', label: 'Hero Sections', icon: '🎬' },
-    { href: '/admin/material-mastery', label: 'Material Art', icon: '💎' },
-    { href: '/admin/categories', label: 'Collections', icon: '📁' },
-    { href: '/admin/products', label: 'Masterpieces', icon: '📦' },
-    { href: '/admin/blogs', label: 'Art Journal', icon: '✍️' },
-    { href: '/admin/projects', label: 'Exhibitions', icon: '🏛️' },
-    { href: '/admin/clients', label: 'Patrons', icon: '🤝' },
-    { href: '/admin/testimonials', label: 'Client Voices', icon: '💬' },
-    { href: '/admin/faqs', label: 'Curator Q&A', icon: '❓' },
-    { href: '/admin/pages', label: 'Studio Pages', icon: '📄' },
+    { href: '/admin/categories', label: 'Categories', icon: '📁' },
+    { href: '/admin/products', label: 'Products', icon: '📦' },
+    {
+      label: 'Website',
+      icon: '🌐',
+      children: [
+        { href: '/admin/hero-slides', label: 'Hero Sections', icon: '🎬' },
+        { href: '/admin/material-mastery', label: 'Showcase', icon: '💎' },
+        { href: '/admin/blogs', label: 'Blogs', icon: '✍️' },
+        { href: '/admin/projects', label: 'Projects', icon: '🏛️' },
+        { href: '/admin/clients', label: 'Partners', icon: '🤝' },
+        { href: '/admin/testimonials', label: 'Testimonials', icon: '💬' },
+        { href: '/admin/faqs', label: 'FAQs', icon: '❓' },
+        { href: '/admin/pages', label: 'Pages', icon: '📄' },
+        { href: '/admin/file-manager', label: 'Gallery', icon: '🖼️' },
+      ]
+    },
     { href: '/admin/inquiries', label: 'Inquiries', icon: '📩' },
-    { href: '/admin/file-manager', label: 'Studio Gallery', icon: '🖼️' },
   ];
 
   return (
@@ -82,7 +108,7 @@ export default function AdminLayout({ children }) {
           ☰
         </button>
         <div className="brand-logo">
-          <img src="/images/Pushpa-Exports.svg" alt="Logo" className="h-6 brightness-0" />
+          <img src="/images/Pushpa-Exports.svg" alt="Logo" className="h-6 w-auto brightness-0" />
         </div>
         <div className="w-10"></div>
       </div>
@@ -94,6 +120,45 @@ export default function AdminLayout({ children }) {
         </div>
         <nav className="flex-1 py-4 px-3 overflow-y-auto">
           {navItems.map(item => {
+            if (item.children) {
+              const isExpanded = openMenus[item.label];
+              const hasActiveChild = item.children.some(child =>
+                pathname.startsWith(child.href) && (pathname.length === child.href.length || pathname[child.href.length] === '/')
+              );
+
+              return (
+                <div key={item.label} className="mb-1">
+                  <button
+                    onClick={() => toggleMenu(item.label)}
+                    className={`w-full flex items-center justify-between px-5 py-3 text-[0.95rem] transition-all duration-200 rounded-[10px] ${hasActiveChild && !isExpanded ? 'bg-black/5 font-medium' : 'text-[#1d1d1f] font-normal hover:bg-black/5'}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-[1.2rem]">{item.icon}</span>
+                      {item.label}
+                    </div>
+                    <span className={`text-[0.6rem] transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[500px] mt-1' : 'max-h-0'}`}>
+                    <div className="flex flex-col gap-1 pl-4">
+                      {item.children.map(child => {
+                        const isActive = pathname.startsWith(child.href) && (pathname.length === child.href.length || pathname[child.href.length] === '/');
+                        return (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className={`flex items-center gap-4 px-5 py-2.5 text-[0.85rem] transition-all duration-200 rounded-[10px] ${isActive ? 'bg-[#0071e3] text-white font-medium' : 'text-[#86868b] font-normal hover:bg-black/5 hover:text-[#1d1d1f]'}`}
+                          >
+                            <span className="text-[1.1rem]">{child.icon}</span>
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
             const isActive = item.href === '/admin'
               ? pathname === '/admin'
               : pathname.startsWith(item.href) && (pathname.length === item.href.length || pathname[item.href.length] === '/');

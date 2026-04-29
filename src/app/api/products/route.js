@@ -36,13 +36,24 @@ export async function GET(request) {
     }
 
     if (category_slug) {
-      // Find all products that belong to this category (including many-to-many)
-      conditions.push(`EXISTS (
-        SELECT 1 FROM product_categories pc 
-        JOIN categories cat ON pc.category_id = cat.id 
-        WHERE pc.product_id = p.id AND cat.slug = ?
-      )`);
-      params.push(category_slug);
+      const category = allCategories.find(c => c.slug === category_slug);
+      if (category) {
+        const getChildIds = (parentId) => {
+          const children = allCategories.filter(c => c.parent_id === parentId);
+          let ids = [parentId];
+          children.forEach(child => {
+            ids = [...ids, ...getChildIds(child.id)];
+          });
+          return ids;
+        };
+        const categoryIds = getChildIds(category.id);
+        conditions.push(`EXISTS (
+          SELECT 1 FROM product_categories pc 
+          WHERE pc.product_id = p.id AND pc.category_id IN (${categoryIds.join(',')})
+        )`);
+      } else {
+        conditions.push('FALSE'); // Category not found
+      }
     }
 
     if (featured === 'true') {

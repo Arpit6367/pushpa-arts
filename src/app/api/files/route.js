@@ -11,7 +11,6 @@ export async function GET() {
     }
 
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products');
-    console.log('Admin File Manager: Listing files from', uploadDir);
 
     // Ensure directory exists
     try {
@@ -24,7 +23,6 @@ export async function GET() {
     try {
       const fileNames = await readdir(uploadDir);
       for (const fileName of fileNames) {
-        // Skip hidden files
         if (fileName.startsWith('.')) continue;
 
         const filePath = path.join(uploadDir, fileName);
@@ -54,9 +52,9 @@ export async function GET() {
     return NextResponse.json({ files });
   } catch (error) {
     console.error('CRITICAL: Error listing files in File Manager:', error);
-    return NextResponse.json({ 
-      error: 'Failed to list files', 
-      details: error.message 
+    return NextResponse.json({
+      error: 'Failed to list files',
+      details: error.message
     }, { status: 500 });
   }
 }

@@ -22,8 +22,8 @@ export default async function NotFound() {
           <p className="text-[1.1rem] text-[#4A4A4A] max-w-[600px] mx-auto font-light leading-relaxed mb-12">
             The masterpiece you are looking for has either been moved to another gallery or never existed. Let us guide you back to our collections.
           </p>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-block bg-[#1F1F1F] text-white px-12 py-5 text-[0.7rem] font-bold uppercase tracking-[0.3em] hover:bg-[#B8860B] transition-all duration-500 hover:-translate-y-1 shadow-xl"
           >
             Return to Atelier
@@ -38,16 +38,16 @@ export default async function NotFound() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {parentCategories.map((cat) => (
-              <Link 
-                key={cat.id} 
+              <Link
+                key={cat.id}
                 href={`/product-category/${cat.slug}`}
                 className="group relative aspect-[4/5] overflow-hidden rounded-[4px] bg-[#F5F1EE] flex flex-col justify-end p-8"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 opacity-60 group-hover:opacity-80 transition-opacity duration-700"></div>
                 {cat.image ? (
-                  <Image 
-                    src={cat.image} 
-                    alt={cat.name} 
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
                     fill
                     className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110"
                   />

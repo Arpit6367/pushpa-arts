@@ -37,6 +37,7 @@ export default function ProductCard({ product }) {
               e.stopPropagation();
               openQuickView(product);
             }}
+            suppressHydrationWarning
             className="px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm text-black text-[0.55rem] uppercase tracking-[0.15em] font-bold flex items-center gap-2 shadow-lg translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 hover:bg-[var(--color-accent)] hover:text-white"
             aria-label="Quick View"
           >

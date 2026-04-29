@@ -149,6 +149,7 @@ export default function ProductDetailClient({ product }) {
             {images.map((img, index) => (
               <button
                 key={img.id}
+                suppressHydrationWarning
                 className={`relative w-20 h-20 flex-shrink-0 bg-white/5 rounded-sm overflow-hidden border transition-all duration-500 ${index === activeImage ? 'border-[var(--color-accent)]' : 'border-transparent opacity-40 hover:opacity-100'}`}
                 onClick={() => setActiveImage(index)}
               >
@@ -222,6 +223,7 @@ export default function ProductDetailClient({ product }) {
                     {images.map((img, index) => (
                       <button
                         key={img.id}
+                        suppressHydrationWarning
                         className={`relative aspect-square w-24 md:w-32 flex-shrink-0 bg-white cursor-pointer overflow-hidden border transition-all duration-700 snap-start ${index === activeImage ? 'border-[var(--color-accent)] shadow-2xl shadow-[var(--color-accent)]/10 scale-95' : 'border-black/5 opacity-40 hover:opacity-100'}`}
                         onClick={() => setActiveImage(index)}
                       >
@@ -322,7 +324,7 @@ export default function ProductDetailClient({ product }) {
                 </div>
                 {/* Subtle background icon */}
                 <div className="absolute bottom-[-20%] right-[-10%] opacity-[0.03] rotate-12 transition-transform duration-1000 group-hover:rotate-0">
-                  <Image src="/images/Pushpa-Exports.svg" alt="logo" width={300} height={300} className="brightness-0" />
+                  <Image src="/images/Pushpa-Exports.svg" alt="logo" width={300} height={300} className="brightness-0" style={{ width: 'auto', height: 'auto' }} />
                 </div>
               </div>
             </div>
