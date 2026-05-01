@@ -54,6 +54,7 @@ export default function CategorySubcategoryTabs({ allCategories }) {
                     e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                   }}
                   className={`group relative text-[0.6rem] md:text-[0.65rem] uppercase tracking-[0.25em] font-bold pb-4 transition-all whitespace-nowrap flex-shrink-0 cursor-pointer ${activeTabId === cat.id ? 'text-[var(--color-text-primary)]' : 'text-black/30 hover:text-black/60'}`}
+                  suppressHydrationWarning
                 >
                   <span className="italic mr-1">Buy</span>
                   <span>{cat.name.replace(/^Buy\s+/i, '')}</span>

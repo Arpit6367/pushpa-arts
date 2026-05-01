@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { getAdminFromCookies } from '@/lib/auth';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
 
 // POST - Submit a new contact inquiry (public)
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { name, email, phone, subject, message } = body;
+    const formData = await request.formData();
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const phone = formData.get('phone');
+    const subject = formData.get('subject');
+    const message = formData.get('message');
+    const document = formData.get('document');
 
     // Validation
     if (!name || !email || !subject || !message) {
@@ -38,9 +45,28 @@ export async function POST(request) {
       );
     }
 
+    // Handle file upload
+    let documentUrl = null;
+    if (document && typeof document !== 'string' && document.size > 0) {
+      const bytes = await document.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'contact');
+      try {
+        await mkdir(uploadDir, { recursive: true });
+      } catch (err) {
+        // Directory might already exist
+      }
+
+      const filename = `${Date.now()}-${document.name.replace(/\s+/g, '_')}`;
+      const filePath = path.join(uploadDir, filename);
+      await writeFile(filePath, buffer);
+      documentUrl = `/uploads/contact/${filename}`;
+    }
+
     const result = await query(
-      `INSERT INTO contact_inquiries (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)`,
-      [name.trim(), email.trim(), phone?.trim() || null, subject.trim(), message.trim()]
+      `INSERT INTO contact_inquiries (name, email, phone, subject, message, document_url) VALUES (?, ?, ?, ?, ?, ?)`,
+      [name.trim(), email.trim(), phone?.trim() || null, subject.trim(), message.trim(), documentUrl]
     );
 
     return NextResponse.json(

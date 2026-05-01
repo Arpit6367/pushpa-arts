@@ -89,7 +89,12 @@ export async function PUT(request, { params }) {
 
     const { id } = await params;
     const body = await request.json();
-    const { name, short_description, description, sku, category_id, category_ids, is_featured, is_active, sort_order, meta_title, meta_description, images } = body;
+    const { 
+      name, short_description, description, sku, 
+      price, sale_price, weight, length, width, height,
+      category_id, category_ids, is_featured, is_active, 
+      sort_order, meta_title, meta_description, images 
+    } = body;
 
     const fields = [];
     const values = [];
@@ -103,6 +108,14 @@ export async function PUT(request, { params }) {
     if (short_description !== undefined) { fields.push('short_description = ?'); values.push(short_description); }
     if (description !== undefined) { fields.push('description = ?'); values.push(description); }
     if (sku !== undefined) { fields.push('sku = ?'); values.push(sku); }
+    
+    // E-commerce & Technical fields
+    if (price !== undefined) { fields.push('price = ?'); values.push(price || null); }
+    if (sale_price !== undefined) { fields.push('sale_price = ?'); values.push(sale_price || null); }
+    if (weight !== undefined) { fields.push('weight = ?'); values.push(weight || null); }
+    if (length !== undefined) { fields.push('length = ?'); values.push(length || null); }
+    if (width !== undefined) { fields.push('width = ?'); values.push(width || null); }
+    if (height !== undefined) { fields.push('height = ?'); values.push(height || null); }
     
     // Update primary category_id
     const primaryCategoryId = category_id || (category_ids && category_ids.length > 0 ? category_ids[0] : undefined);

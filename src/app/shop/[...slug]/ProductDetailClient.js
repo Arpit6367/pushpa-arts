@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
+import { useSettings } from '@/context/SettingsContext';
+import { useCart } from '@/context/CartContext';
+import { ShoppingCart, Ruler, Weight, Package } from 'lucide-react';
 
 export default function ProductDetailClient({ product }) {
   const [activeImage, setActiveImage] = useState(0);
@@ -10,6 +13,12 @@ export default function ProductDetailClient({ product }) {
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const [isZooming, setIsZooming] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
+  const { is_ecommerce } = useSettings();
+  const { addToCart } = useCart();
+
+  const price = parseFloat(product.price);
+  const salePrice = parseFloat(product.sale_price);
+  const hasDiscount = salePrice > 0 && salePrice < price;
 
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -272,33 +281,95 @@ export default function ProductDetailClient({ product }) {
                 </div>
               </div>
 
+              {is_ecommerce && (
+                <div className="reveal stagger-3.5 mb-10">
+                   {hasDiscount ? (
+                     <div className="flex items-center gap-6">
+                        <span className="text-[1.2rem] text-[#86868b] line-through font-light">₹{price.toLocaleString()}</span>
+                        <span className="text-[2.5rem] font-heading text-[var(--color-accent)] italic">₹{salePrice.toLocaleString()}</span>
+                        <span className="bg-[#ff3b30] text-white px-3 py-1 text-[0.6rem] font-bold uppercase tracking-widest rounded-sm">Save ₹{(price - salePrice).toLocaleString()}</span>
+                     </div>
+                   ) : price > 0 ? (
+                     <span className="text-[2.5rem] font-heading text-[var(--color-text-primary)] italic">₹{price.toLocaleString()}</span>
+                   ) : (
+                     <span className="text-[1.2rem] uppercase tracking-[0.3em] font-bold text-[#86868b]">Bespoke Pricing</span>
+                   )}
+                </div>
+              )}
+
               {product.description && (
                 <div
-                  className="reveal stagger-4 text-[1rem] md:text-[1.05rem] text-[var(--color-text-secondary)] leading-[1.8] mb-12 font-light space-y-6"
-                  dangerouslySetInnerHTML={{ 
-                    __html: product.description
-                      .replace(/\n\n/g, '<br/><br/>')
-                      .replace(/\n/g, '<br/>')
-                  }}
+                  className="reveal stagger-4 text-[1rem] md:text-[1.05rem] text-[var(--color-text-secondary)] leading-[1.8] mb-12 font-light artisan-description"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
                 />
+              )}
+
+              {/* Technical Specifications (from Excel/CSV) */}
+              {(product.weight || product.length || product.width || product.height) && (
+                <div className="reveal stagger-4.5 grid grid-cols-2 sm:grid-cols-4 gap-6 mb-16 p-8 bg-[#F9F7F5] border border-black/[0.03]">
+                  {product.weight > 0 && (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-[0.55rem] font-bold uppercase tracking-widest text-[#86868b]">
+                        <Weight className="w-3.5 h-3.5" /> Weight
+                      </div>
+                      <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{product.weight} kg</p>
+                    </div>
+                  )}
+                  {product.length > 0 && (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-[0.55rem] font-bold uppercase tracking-widest text-[#86868b]">
+                        <Ruler className="w-3.5 h-3.5" /> Length
+                      </div>
+                      <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{product.length} cm</p>
+                    </div>
+                  )}
+                  {product.width > 0 && (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-[0.55rem] font-bold uppercase tracking-widest text-[#86868b]">
+                        <Package className="w-3.5 h-3.5" /> Width
+                      </div>
+                      <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{product.width} cm</p>
+                    </div>
+                  )}
+                  {product.height > 0 && (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-[0.55rem] font-bold uppercase tracking-widest text-[#86868b]">
+                        <Ruler className="w-3.5 h-3.5 rotate-90" /> Height
+                      </div>
+                      <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{product.height} cm</p>
+                    </div>
+                  )}
+                </div>
               )}
 
               <div className="reveal stagger-5 space-y-8 pt-12 border-t border-black/[0.03]">
                 <div className="flex flex-col sm:flex-row gap-6">
-                  <a
-                    href={`https://wa.me/919414162629?text=Greetings, I am very interested in the ${product.name}. Could you please provide more details?`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-[1.2] flex items-center justify-center gap-4 px-10 py-5 bg-black text-white text-[0.7rem] uppercase tracking-[0.4em] font-bold transition-all hover:bg-[var(--color-accent)] hover:shadow-2xl hover:shadow-[var(--color-accent)]/20 group relative overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center gap-4">
-                      <span className="text-lg">💬</span> Artisan Inquiry
-                    </span>
-                    <div className="absolute inset-0 bg-[var(--color-accent)] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                  </a>
+                  {is_ecommerce ? (
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="flex-[1.2] flex items-center justify-center gap-4 px-10 py-5 bg-black text-white text-[0.7rem] uppercase tracking-[0.4em] font-bold transition-all hover:bg-[var(--color-accent)] hover:shadow-2xl hover:shadow-[var(--color-accent)]/20 group relative overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center gap-4">
+                        <ShoppingCart className="w-5 h-5" /> Add to Collection
+                      </span>
+                      <div className="absolute inset-0 bg-[var(--color-accent)] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    </button>
+                  ) : (
+                    <a
+                      href={`https://wa.me/919414162629?text=Greetings, I am very interested in the ${product.name}. Could you please provide more details?`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-[1.2] flex items-center justify-center gap-4 px-10 py-5 bg-black text-white text-[0.7rem] uppercase tracking-[0.4em] font-bold transition-all hover:bg-[var(--color-accent)] hover:shadow-2xl hover:shadow-[var(--color-accent)]/20 group relative overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center gap-4">
+                        <span className="text-lg">💬</span> Artisan Inquiry
+                      </span>
+                      <div className="absolute inset-0 bg-[var(--color-accent)] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    </a>
+                  )}
 
                   <Link href="/contact" className="flex-1 text-center inline-block px-10 py-5 border border-black/10 text-[0.7rem] uppercase tracking-[0.4em] font-bold transition-all hover:border-black hover:bg-black hover:text-white group">
-                    Contact Studio
+                    {is_ecommerce ? 'Request Bespoke' : 'Contact Studio'}
                   </Link>
                 </div>
 

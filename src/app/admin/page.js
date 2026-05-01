@@ -10,29 +10,34 @@ import {
   Plus,
   ArrowUpRight,
   Activity,
-  BarChart3
+  BarChart3,
+  ShoppingBag
 } from 'lucide-react';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ categories: 0, products: 0, files: 0, activeProds: 0, featured: 0, inquiries: 0, newInquiries: 0 });
+  const [stats, setStats] = useState({ categories: 0, products: 0, files: 0, activeProds: 0, featured: 0, inquiries: 0, newInquiries: 0, orders: 0, newOrders: 0 });
   const [recentProducts, setRecentProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isEcommerce, setIsEcommerce] = useState(false);
+  const [updatingSettings, setUpdatingSettings] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const [catRes, prodRes, fileRes, inqRes] = await Promise.all([
+        const [catRes, prodRes, fileRes, inqRes, orderRes] = await Promise.all([
           fetch('/api/categories'),
           fetch('/api/products?limit=5'),
           fetch('/api/files'),
-          fetch('/api/contact')
+          fetch('/api/contact'),
+          fetch('/api/admin/orders')
         ]);
 
         const catData = await catRes.json();
         const prodData = await prodRes.json();
         const fileData = await fileRes.json();
         const inqData = await inqRes.json();
+        const orderData = await orderRes.json();
 
         if (Array.isArray(catData)) setStats(s => ({ ...s, categories: catData.length }));
 
@@ -51,6 +56,21 @@ export default function AdminDashboard() {
         if (inqData.pagination) {
           setStats(s => ({ ...s, inquiries: inqData.pagination.total, newInquiries: inqData.statusCounts?.new || 0 }));
         }
+
+        if (Array.isArray(orderData)) {
+          setStats(s => ({
+            ...s,
+            orders: orderData.length,
+            newOrders: orderData.filter(o => o.status === 'pending').length
+          }));
+        }
+
+        // Fetch site settings for e-commerce toggle
+        const settingsRes = await fetch('/api/admin/settings');
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
+          setIsEcommerce(settings.is_ecommerce === 'true');
+        }
       } catch (err) {
         console.error('Dashboard fetch error:', err);
       }
@@ -58,6 +78,24 @@ export default function AdminDashboard() {
     };
     fetchData();
   }, []);
+
+  const toggleEcommerceMode = async () => {
+    setUpdatingSettings(true);
+    try {
+      const newValue = !isEcommerce;
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setting_key: 'is_ecommerce', setting_value: String(newValue) })
+      });
+      if (res.ok) {
+        setIsEcommerce(newValue);
+      }
+    } catch (err) {
+      console.error('Failed to update mode:', err);
+    }
+    setUpdatingSettings(false);
+  };
 
   if (loading) {
     return (
@@ -127,11 +165,29 @@ export default function AdminDashboard() {
                 {stats.featured} Masterpieces
               </p>
             </div>
-            <div>
+            {/* <div>
               <p className="text-[0.65rem] uppercase font-bold text-[#86868b]">Total Outreach</p>
               <p className="text-2xl font-bold text-[#1d1d1f]">
                 {stats.inquiries} Inquiries
               </p>
+            </div> */}
+          </div>
+        </div>
+
+        {/* Orders Card */}
+        <div className="md:col-span-4 md:row-span-2 bg-black rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 flex flex-col justify-between text-white shadow-xl shadow-black/10 hover:scale-[1.01] transition-transform group relative overflow-hidden min-h-[240px] md:min-h-0">
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+          <div className="relative z-10 flex flex-col h-full">
+            <div className="flex justify-between items-center mb-4">
+              <ShoppingBag size={24} />
+              <ArrowUpRight size={20} className="opacity-60 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="mt-auto">
+              <h3 className="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">{stats.newOrders}</h3>
+              <p className="text-white/90 text-[0.9rem] sm:text-[1rem] leading-tight font-medium">New Reservations pending processing.</p>
+              <Link href="/admin/orders" className="inline-block mt-6 px-5 py-2 bg-white/10 hover:bg-white/20 rounded-full text-[0.75rem] sm:text-[0.8rem] font-bold transition-all">
+                View Registry →
+              </Link>
             </div>
           </div>
         </div>
@@ -173,6 +229,41 @@ export default function AdminDashboard() {
         <div className="md:col-span-3 bg-white rounded-[24px] border border-black/5 p-6 shadow-sm flex flex-col justify-between group hover:border-[#0071e3]/30 transition-colors">
           <div className="flex justify-between text-[#86868b]"><TrendingUp size={18} /> <span className="text-[0.65rem] font-bold uppercase tracking-widest">Live Now</span></div>
           <h4 className="text-2xl font-bold mt-4 text-[#34c759]">{stats.activeProds}</h4>
+        </div>
+
+        {/* Storefront Mode Toggle */}
+        <div className="md:col-span-12 bg-white rounded-[32px] border border-black/5 p-8 sm:p-10 mt-4 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#0071e3]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[#0071e3]/10 transition-colors"></div>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="space-y-2 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-3">
+                <div className={`w-3 h-3 rounded-full animate-pulse ${isEcommerce ? 'bg-[#34c759]' : 'bg-[#ff9500]'}`}></div>
+                <h3 className="text-xl font-bold text-[#1d1d1f]">Storefront Mode</h3>
+              </div>
+              <p className="text-[#86868b] text-[0.9rem] max-w-xl">
+                {isEcommerce
+                  ? "Your studio is currently in Shop Mode. Prices are visible and clients can add masterpieces to their cart for direct purchase."
+                  : "Your studio is in Catalog Mode. Prices are hidden and clients are encouraged to make inquiries via WhatsApp or email."
+                }
+              </p>
+            </div>
+
+            <button
+              onClick={toggleEcommerceMode}
+              disabled={updatingSettings}
+              className={`relative inline-flex h-10 w-24 items-center rounded-full transition-all duration-500 focus:outline-none ${isEcommerce ? 'bg-[#34c759]' : 'bg-[#d2d2d7]'} ${updatingSettings ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <span className={`inline-block h-8 w-8 transform rounded-full bg-white shadow-md transition-transform duration-500 ${isEcommerce ? 'translate-x-14' : 'translate-x-2'}`}>
+                {updatingSettings && (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
+                  </div>
+                )}
+              </span>
+              <span className={`absolute left-3 text-[0.6rem] font-bold uppercase tracking-wider text-white transition-opacity ${isEcommerce ? 'opacity-100' : 'opacity-0'}`}>Shop</span>
+              <span className={`absolute right-3 text-[0.6rem] font-bold uppercase tracking-wider text-[#86868b] transition-opacity ${isEcommerce ? 'opacity-0' : 'opacity-100'}`}>Catalog</span>
+            </button>
+          </div>
         </div>
 
         {/* Recent Products Grid */}

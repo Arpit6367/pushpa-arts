@@ -5,40 +5,66 @@ import slugify from 'slugify';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
-// Helper to parse CSV robustly
+// Robust CSV Parser that handles multi-line quoted fields
 function parseCSV(csvText) {
-  const lines = csvText.split(/\r?\n/);
-  const result = [];
-  const header = parseCSVLine(lines[0]);
+  const rows = [];
+  let currentRow = [];
+  let currentField = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < csvText.length; i++) {
+    const char = csvText[i];
+    const nextChar = csvText[i + 1];
+
+    if (inQuotes) {
+      if (char === '"') {
+        if (nextChar === '"') {
+          // Escaped quote
+          currentField += '"';
+          i++;
+        } else {
+          // End of quote
+          inQuotes = false;
+        }
+      } else {
+        currentField += char;
+      }
+    } else {
+      if (char === '"') {
+        inQuotes = true;
+      } else if (char === ',') {
+        currentRow.push(currentField);
+        currentField = '';
+      } else if (char === '\n' || (char === '\r' && nextChar === '\n')) {
+        currentRow.push(currentField);
+        rows.push(currentRow);
+        currentRow = [];
+        currentField = '';
+        if (char === '\r') i++; // Skip the \n
+      } else {
+        currentField += char;
+      }
+    }
+  }
   
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const values = parseCSVLine(lines[i]);
+  if (currentRow.length > 0 || currentField) {
+    currentRow.push(currentField);
+    rows.push(currentRow);
+  }
+
+  const header = rows[0].map(h => h.trim().toLowerCase());
+  const result = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (row.length === 0 || (row.length === 1 && !row[0].trim())) continue;
+    
     const obj = {};
     header.forEach((h, index) => {
-      obj[h.trim().toLowerCase()] = values[index] ? values[index].trim() : '';
+      obj[h] = row[index] ? row[index].trim() : '';
     });
     result.push(obj);
   }
-  return result;
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"' && (i === 0 || line[i - 1] !== '\\')) {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.replace(/^"|"$/g, '').replace(/""/g, '"'));
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  result.push(current.replace(/^"|"$/g, '').replace(/""/g, '"'));
   return result;
 }
 
@@ -118,35 +144,57 @@ export async function POST(request) {
 
     for (const p of products) {
       try {
-        if (!p.name) {
+        // Map headers (supporting both lowercase internal names and WooCommerce style)
+        const name = p.name || p['title'];
+        if (!name) {
           results.failed++;
           results.errors.push(`Row ${results.success + results.failed}: Name is missing`);
           continue;
         }
 
-        const name = p.name;
-        const slug = slugify(name, { lower: true, strict: true }) + '-' + Math.floor(Math.random() * 10000); // Ensure uniqueness for bulk
+        const slug = slugify(name, { lower: true, strict: true }) + '-' + Math.floor(Math.random() * 10000);
         const sku = p.sku || null;
-        const category_name = p.category_name || '';
-        const category_id = categoryMap[category_name.toLowerCase()] || null;
-        const short_description = p.short_description || null;
-        const description = (p.description || '').replace(/\\n/g, '\n');
-        const is_featured = p.is_featured === '1' || p.is_featured?.toLowerCase() === 'true';
-        const is_active = p.is_active === '0' || p.is_active?.toLowerCase() === 'false' ? false : true;
-        const meta_title = p.meta_title || null;
-        const meta_description = p.meta_description || null;
+        
+        // E-commerce fields from WooCommerce CSV
+        const price = parseFloat(p['regular price'] || p['price'] || 0) || null;
+        const sale_price = parseFloat(p['sale price'] || p['sale_price'] || 0) || null;
+        const weight = parseFloat(p['weight (kg)'] || p['weight'] || 0) || null;
+        const length = parseFloat(p['length (cm)'] || p['length'] || 0) || null;
+        const width = parseFloat(p['width (cm)'] || p['width'] || 0) || null;
+        const height = parseFloat(p['height (cm)'] || p['height'] || 0) || null;
+
+        // Categories handling
+        const category_name = p['categories'] || p['category_name'] || '';
+        let category_id = null;
+        
+        // If multiple categories are provided (comma-separated), take the first one or the primary one
+        const catList = category_name.split(',').map(c => c.trim().toLowerCase());
+        if (catList.length > 0) {
+          category_id = categoryMap[catList[0]] || null;
+        }
+
+        const short_description = p['short description'] || p['short_description'] || null;
+        const description = (p['description'] || '').replace(/\\n/g, '\n');
+        
+        const is_featured = p['is featured?'] === '1' || p['is_featured'] === '1' || p['is_featured']?.toLowerCase() === 'true';
+        const is_active = p['is_active'] === '0' || p['is_active']?.toLowerCase() === 'false' ? false : true;
+        
+        // SEO fields
+        const meta_title = p['meta: _yoast_wpseo_title'] || p['meta_title'] || null;
+        const meta_description = p['meta: _yoast_wpseo_metadesc'] || p['meta_description'] || null;
 
         const productInsert = await query(
-          `INSERT INTO products (name, slug, short_description, description, sku, category_id, is_featured, is_active, meta_title, meta_description)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [name, slug, short_description, description, sku, category_id, is_featured, is_active, meta_title, meta_description]
+          `INSERT INTO products (name, slug, short_description, description, sku, price, sale_price, weight, length, width, height, category_id, is_featured, is_active, meta_title, meta_description)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [name, slug, short_description, description, sku, price, sale_price, weight, length, width, height, category_id, is_featured, is_active, meta_title, meta_description]
         );
 
         const productId = productInsert.insertId;
 
-        // Handle images
-        if (p.image_urls) {
-          const urls = p.image_urls.split(',').map(u => u.trim());
+        // Handle images (WooCommerce uses 'Images' column with comma-separated URLs)
+        const imageField = p['images'] || p['image_urls'];
+        if (imageField) {
+          const urls = imageField.split(',').map(u => u.trim()).filter(u => u);
           for (let i = 0; i < urls.length; i++) {
             const uploadedPath = await downloadImage(urls[i], uploadDir);
             if (uploadedPath) {

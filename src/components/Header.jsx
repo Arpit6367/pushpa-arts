@@ -3,14 +3,20 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, MessageSquare, X, Menu, Search, ShoppingBag } from 'lucide-react';
+import { ChevronDown, MessageSquare, X, Menu, Search, ShoppingBag, ShoppingCart } from 'lucide-react';
+import { useSettings } from '@/context/SettingsContext';
+import { useCart } from '@/context/CartContext';
 
 export default function Header({ initialCategories = [], settings = {} }) {
   const [categories, setCategories] = useState(initialCategories);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const settingsFromContext = useSettings();
+  const isEcommerce = settingsFromContext.is_ecommerce;
+  const { cartCount, setIsCartOpen } = useCart();
 
   useEffect(() => {
     if (mobileOpen) {
@@ -22,6 +28,7 @@ export default function Header({ initialCategories = [], settings = {} }) {
   }, [mobileOpen]);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
@@ -168,15 +175,33 @@ export default function Header({ initialCategories = [], settings = {} }) {
               })}
             </nav>
 
-            {/* Mobile: Hamburger (Right) */}
-            <button
-              className={`lg:hidden p-2 transition-all active:scale-90 ${!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open Menu"
-              suppressHydrationWarning
-            >
-              <Menu className="w-7 h-7" />
-            </button>
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+              {isEcommerce && (
+                <button
+                  onClick={() => setIsCartOpen(true)}
+                  className={`p-2 transition-all active:scale-90 relative ${!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
+                  aria-label="View Cart"
+                  suppressHydrationWarning
+                >
+                  <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+                  {mounted && cartCount > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-[var(--color-accent)] text-white text-[0.6rem] flex items-center justify-center rounded-full font-bold animate-in zoom-in duration-300">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
+              <button
+                className={`lg:hidden p-2 transition-all active:scale-90 ${!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open Menu"
+                suppressHydrationWarning
+              >
+                <Menu className="w-7 h-7" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -259,8 +284,9 @@ export default function Header({ initialCategories = [], settings = {} }) {
               className="flex items-center justify-center gap-4 py-6 md:py-8 bg-black text-white text-[0.7rem] md:text-[0.8rem] uppercase tracking-[0.4em] font-bold hover:bg-[var(--color-accent)] transition-colors"
               target="_blank"
               rel="noopener noreferrer"
+              suppressHydrationWarning
             >
-              <MessageSquare className="w-5 h-5 md:w-6 h-6" /> WhatsApp Support
+              <MessageSquare className="w-5 h-5 md:w-6 h-6" /> {isEcommerce ? 'Shop Support' : 'WhatsApp Support'}
             </a>
           </div>
         </div>

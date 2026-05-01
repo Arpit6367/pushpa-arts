@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-export default function ContactContent({ page, faqs = [] }) {
+export default function ContactContent({ page, faqs = [], categories = [] }) {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [document, setDocument] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -12,12 +13,18 @@ export default function ContactContent({ page, faqs = [] }) {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSubmitted(false);
 
     try {
+      const formData = new FormData();
+      Object.keys(form).forEach(key => formData.append(key, form[key]));
+      if (document) {
+        formData.append('document', document);
+      }
+
       const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: formData,
       });
 
       const data = await res.json();
@@ -29,6 +36,11 @@ export default function ContactContent({ page, faqs = [] }) {
 
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      setDocument(null);
+      // Reset file input if possible
+      const fileInput = document.getElementById('contact-document');
+      if (fileInput) fileInput.value = '';
+      
       setTimeout(() => setSubmitted(false), 8000);
     } catch (err) {
       setError('Network error. Please check your connection and try again.');
@@ -55,6 +67,35 @@ export default function ContactContent({ page, faqs = [] }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <input type="text" placeholder="Name" className="w-full bg-white border border-black/10 px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3]" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
                 <input type="email" placeholder="Email" className="w-full bg-white border border-black/10 px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3]" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="tel" placeholder="Phone" className="w-full bg-white border border-black/10 px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3]" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+                <select className="w-full bg-white border border-black/10 px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3] cursor-pointer" value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} required>
+                  <option value="">Select Category</option>
+                  {categories.filter(c => !c.parent_id).map(category => (
+                    <option key={category.id} value={category.name}>{category.name}</option>
+                  ))}
+                  <option value="Custom Project">Bespoke Project</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-black/50 mb-2 ml-1">Upload Document (Max 10MB)</label>
+                <input 
+                  type="file" 
+                  className="w-full bg-white border border-black/10 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3] text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#1d1d1f] file:text-white"
+                  onChange={e => {
+                    const file = e.target.files[0];
+                    if (file && file.size > 10 * 1024 * 1024) {
+                      setError('File size exceeds 10MB limit.');
+                      e.target.value = '';
+                      setDocument(null);
+                      return;
+                    }
+                    setError('');
+                    setDocument(file);
+                  }}
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                />
               </div>
               <textarea placeholder="Message" rows="5" className="w-full bg-white border border-black/10 px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3] resize-none" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} required />
               <button type="submit" disabled={loading} className="bg-[#1d1d1f] text-white px-8 py-3 rounded-full font-semibold hover:bg-black transition-all disabled:opacity-50">
@@ -249,12 +290,34 @@ export default function ContactContent({ page, faqs = [] }) {
                         required
                       >
                         <option value="">Select Category</option>
-                        <option value="Silver Furniture">Silver Furniture</option>
-                        <option value="Bone Inlay">Bone Inlay</option>
-                        <option value="Mother of Pearl">Mother of Pearl</option>
-                        <option value="Marble & Stone">Marble & Stone</option>
+                        {categories.filter(c => !c.parent_id).map(category => (
+                          <option key={category.id} value={category.name}>{category.name}</option>
+                        ))}
                         <option value="Custom Project">Bespoke Project</option>
                       </select>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <label htmlFor="contact-document" className="text-[0.6rem] font-bold text-[#1F1F1F] uppercase tracking-[0.2em]">Upload Document (Max 10MB)</label>
+                    <div className="relative">
+                      <input
+                        id="contact-document"
+                        type="file"
+                        className="bg-transparent border-b border-[#E5E0DA] py-3 text-[0.8rem] w-full focus:border-[#B8860B] outline-none transition-colors cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#1F1F1F] file:text-white hover:file:bg-[#B8860B]"
+                        onChange={e => {
+                          const file = e.target.files[0];
+                          if (file && file.size > 10 * 1024 * 1024) {
+                            setError('File size exceeds 10MB limit.');
+                            e.target.value = '';
+                            setDocument(null);
+                            return;
+                          }
+                          setError('');
+                          setDocument(file);
+                        }}
+                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      />
                     </div>
                   </div>
 

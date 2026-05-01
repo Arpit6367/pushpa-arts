@@ -137,7 +137,12 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { name, short_description, description, sku, category_id, category_ids, is_featured, is_active, sort_order, meta_title, meta_description, images } = body;
+    const { 
+      name, short_description, description, sku, 
+      price, sale_price, weight, length, width, height,
+      category_id, category_ids, is_featured, is_active, 
+      sort_order, meta_title, meta_description, images 
+    } = body;
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -149,9 +154,13 @@ export async function POST(request) {
     const primaryCategoryId = category_id || (category_ids && category_ids.length > 0 ? category_ids[0] : null);
 
     const result = await query(
-      `INSERT INTO products (name, slug, short_description, description, sku, category_id, is_featured, is_active, sort_order, meta_title, meta_description)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, slug, short_description || null, description || null, sku || null, primaryCategoryId, is_featured || false, is_active !== false, sort_order || 0, meta_title || null, meta_description || null]
+      `INSERT INTO products (name, slug, short_description, description, sku, price, sale_price, weight, length, width, height, category_id, is_featured, is_active, sort_order, meta_title, meta_description)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        name, slug, short_description || null, description || null, sku || null, 
+        price || null, sale_price || null, weight || null, length || null, width || null, height || null,
+        primaryCategoryId, is_featured || false, is_active !== false, sort_order || 0, meta_title || null, meta_description || null
+      ]
     );
 
     const productId = result.insertId;

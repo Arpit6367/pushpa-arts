@@ -33,6 +33,12 @@ CREATE TABLE IF NOT EXISTS `products` (
   `short_description` varchar(500) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `sku` varchar(100) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `sale_price` decimal(10,2) DEFAULT NULL,
+  `weight` decimal(10,2) DEFAULT NULL,
+  `length` decimal(10,2) DEFAULT NULL,
+  `width` decimal(10,2) DEFAULT NULL,
+  `height` decimal(10,2) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
   `is_featured` tinyint(1) DEFAULT 0,
   `is_active` tinyint(1) DEFAULT 1,
@@ -191,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `contact_inquiries` (
   `phone` varchar(50) DEFAULT NULL,
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
+  `document_url` varchar(255) DEFAULT NULL,
   `status` enum('new','read','replied','archived') DEFAULT 'new',
   `admin_notes` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -205,6 +212,57 @@ CREATE TABLE IF NOT EXISTS `site_settings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `setting_key` (`setting_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_number` varchar(20) NOT NULL,
+  `customer_name` varchar(255) NOT NULL,
+  `customer_email` varchar(255) NOT NULL,
+  `customer_phone` varchar(50) NOT NULL,
+  `shipping_address` text NOT NULL,
+  `shipping_city` varchar(100) NOT NULL,
+  `shipping_state` varchar(100) NOT NULL,
+  `shipping_zip` varchar(20) NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL,
+  `coupon_code` varchar(50) DEFAULT NULL,
+  `discount_amount` decimal(12,2) DEFAULT 0,
+  `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_number` (`order_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `order_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `price` decimal(12,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `discount_type` enum('percentage','fixed') NOT NULL DEFAULT 'percentage',
+  `discount_value` decimal(10,2) NOT NULL,
+  `min_order_amount` decimal(12,2) DEFAULT NULL,
+  `max_discount_amount` decimal(12,2) DEFAULT NULL,
+  `usage_limit` int(11) DEFAULT NULL,
+  `used_count` int(11) DEFAULT 0,
+  `expires_at` datetime DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -261,4 +319,5 @@ INSERT INTO `site_settings` (`setting_key`, `setting_value`) VALUES
 ('contact_address', 'Plot No. 1, Udaipur, Rajasthan, India'),
 ('whatsapp_number', '919414162629'),
 ('instagram_url', 'https://instagram.com/pushpaexports'),
-('facebook_url', 'https://facebook.com/pushpaexports');
+('facebook_url', 'https://facebook.com/pushpaexports'),
+('is_ecommerce', 'false');

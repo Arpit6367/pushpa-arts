@@ -320,6 +320,21 @@ export default function AdminInquiriesPage() {
                     <p className="text-[0.85rem] text-[#1d1d1f]">{formatDate(selectedInquiry.created_at)}</p>
                   </div>
 
+                  {selectedInquiry.document_url && (
+                    <div>
+                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[#86868b] mb-2">Attached Document</p>
+                      <a
+                        href={selectedInquiry.document_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#f5f5f7] border border-black/5 rounded-xl text-[0.8rem] font-medium text-[#0071e3] hover:bg-[#0071e3]/5 transition-all"
+                      >
+                        <span>📄 View Attachment</span>
+                        <span className="text-[0.7rem] opacity-50">↗</span>
+                      </a>
+                    </div>
+                  )}
+
                   {/* Status Controls */}
                   <div>
                     <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[#86868b] mb-3">Status</p>

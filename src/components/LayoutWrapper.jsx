@@ -4,6 +4,9 @@ import { usePathname } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { QuickViewProvider } from '@/context/QuickViewContext';
+import { SettingsProvider } from '@/context/SettingsContext';
+import { CartProvider } from '@/context/CartContext';
+import MiniCart from '@/components/MiniCart';
 
 export default function LayoutWrapper({ children, initialCategories = [], settings = {} }) {
   const pathname = usePathname();
@@ -49,10 +52,15 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
   }
 
   return (
-    <QuickViewProvider>
-      <Header initialCategories={initialCategories} settings={settings} />
-      <main>{children}</main>
-      <Footer settings={settings} categories={initialCategories} />
-    </QuickViewProvider>
+    <SettingsProvider settings={settings}>
+      <CartProvider>
+        <QuickViewProvider>
+          <Header initialCategories={initialCategories} settings={settings} />
+          <MiniCart />
+          <main>{children}</main>
+          <Footer settings={settings} categories={initialCategories} />
+        </QuickViewProvider>
+      </CartProvider>
+    </SettingsProvider>
   );
 }

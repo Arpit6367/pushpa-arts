@@ -570,3 +570,27 @@
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
 }
+
+/* Artisan Description Styling */
+.artisan-description p {
+  margin-bottom: 1.5rem;
+}
+.artisan-description strong, .artisan-description b {
+  font-weight: 600;
+  color: #1d1d1f;
+}
+.artisan-description ul, .artisan-description ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+.artisan-description li {
+  margin-bottom: 0.5rem;
+  list-style: disc;
+}
+.artisan-description h1, .artisan-description h2, .artisan-description h3 {
+  font-family: var(--font-heading);
+  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  color: #1d1d1f;
+  font-style: italic;
+}

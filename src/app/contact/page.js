@@ -1,5 +1,6 @@
 import { getPageBySlug, getFaqs } from '@/lib/cms';
 import { getStudioPageMetadata } from '@/lib/metadata';
+import { getAllCategoriesWithPaths } from '@/lib/categories';
 import ContactContent from './ContactContent';
 
 export async function generateMetadata() {
@@ -7,12 +8,13 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const [page, faqs] = await Promise.all([
+  const [page, faqs, categories] = await Promise.all([
     getPageBySlug('contact'),
-    getFaqs()
+    getFaqs(),
+    getAllCategoriesWithPaths()
   ]);
 
-  return <ContactContent page={page} faqs={faqs} />;
+  return <ContactContent page={page} faqs={faqs} categories={categories} />;
 }
 
 

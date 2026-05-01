@@ -19,6 +19,12 @@ export default function AdminProductNewPage() {
     short_description: '',
     description: '',
     sku: '',
+    price: '',
+    sale_price: '',
+    weight: '',
+    length: '',
+    width: '',
+    height: '',
     category_id: '',
     is_featured: false,
     is_active: true,
@@ -230,6 +236,79 @@ export default function AdminProductNewPage() {
             </div>
 
             <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-sm">
+              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Commercials</h5>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Regular Price (₹)</label>
+                  <input
+                    type="number"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.price}
+                    onChange={e => setForm({ ...form, price: e.target.value })}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Sale Price (₹)</label>
+                  <input
+                    type="number"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.sale_price}
+                    onChange={e => setForm({ ...form, sale_price: e.target.value })}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-sm">
+              <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Technical Specs</h5>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Weight (kg)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.weight}
+                    onChange={e => setForm({ ...form, weight: e.target.value })}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Length (cm)</label>
+                  <input
+                    type="number"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.length}
+                    onChange={e => setForm({ ...form, length: e.target.value })}
+                    placeholder="0"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Width (cm)</label>
+                  <input
+                    type="number"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.width}
+                    onChange={e => setForm({ ...form, width: e.target.value })}
+                    placeholder="0"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.8rem] font-semibold text-[#1d1d1f] ml-1">Height (cm)</label>
+                  <input
+                    type="number"
+                    className="bg-[#f5f5f7] border border-transparent px-4 py-3 rounded-xl text-sm w-full transition-all focus:bg-white focus:border-[#0071e3] outline-none"
+                    value={form.height}
+                    onChange={e => setForm({ ...form, height: e.target.value })}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-black/10 rounded-3xl p-8 shadow-sm">
               <h5 className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold mb-6">Collections & Tags</h5>
               <div className="space-y-6">
                 <div className="flex flex-col gap-2">
@@ -242,7 +321,6 @@ export default function AdminProductNewPage() {
                     placeholder="e.g. MRB-001"
                   />
                 </div>
-
                 <SearchableSelect 
                   options={categories}
                   selectedIds={categoryIds}
