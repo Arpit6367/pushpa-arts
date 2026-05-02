@@ -86,7 +86,7 @@ export default async function HomePage() {
       />
 
       <Hero slides={heroSlides} />
-      <FeatureBar />
+      {/* <FeatureBar /> */}
       <CategoryGrid categories={parentCategories} />
       <ProductTabs
         products={featuredProducts}

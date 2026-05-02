@@ -84,6 +84,7 @@ export default function AdminLayout({ children }) {
     { href: '/admin/categories', label: 'Categories', icon: '📁' },
     { href: '/admin/products', label: 'Products', icon: '📦' },
     { href: '/admin/orders', label: 'Orders', icon: '🛍️' },
+    { href: '/admin/customers', label: 'Patrons', icon: '👤' },
     { href: '/admin/coupons', label: 'Coupons', icon: '🎫' },
     {
       label: 'Website',

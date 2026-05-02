@@ -84,10 +84,8 @@ export default function ProductCard({ product }) {
                   <span className="text-[0.7rem] text-[#86868b] line-through">₹{price.toLocaleString()}</span>
                   <span className="text-[1rem] font-bold text-[#1d1d1f]">₹{salePrice.toLocaleString()}</span>
                 </>
-              ) : price > 0 ? (
-                <span className="text-[1rem] font-bold text-[#1d1d1f]">₹{price.toLocaleString()}</span>
               ) : (
-                <span className="text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Contact for Price</span>
+                <span className="text-[1rem] font-bold text-[#1d1d1f]">₹{price.toLocaleString()}</span>
               )}
             </div>
           ) : (

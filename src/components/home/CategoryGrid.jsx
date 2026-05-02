@@ -13,12 +13,12 @@ export default function CategoryGrid({ categories }) {
           <h2 className="text-[clamp(2.5rem,5vw,3.8rem)] font-heading text-[var(--color-text-primary)]">Explore by Category</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="flex overflow-x-auto lg:grid lg:grid-cols-4 gap-6 md:gap-10 pb-10 lg:pb-0 no-scrollbar snap-x snap-mandatory">
           {categories.map((cat, i) => (
             <Link 
               key={cat.id} 
               href={`/product-category/${cat.slug_path}`}
-              className="group block"
+              className="group block flex-shrink-0 w-[240px] md:w-[300px] lg:w-auto snap-start"
             >
               <div className="relative aspect-[0.8] overflow-hidden mb-6 bg-white border border-black/5">
                 <Image

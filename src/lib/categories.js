@@ -7,10 +7,10 @@ export const getAllCategoriesWithPaths = cache(async function getAllCategoriesWi
     (SELECT COUNT(*) FROM product_categories pc WHERE pc.category_id = c.id) as product_count
     FROM categories c 
     LEFT JOIN categories p ON c.parent_id = p.id 
+    WHERE c.is_active = 1
     ORDER BY c.sort_order ASC, c.name ASC
   `;
   const allCategories = await query(sql);
-
 
   // Build category map for path resolution
   const categoryMap = new Map();

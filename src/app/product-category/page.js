@@ -101,12 +101,12 @@ export default async function CategoriesPage() {
                             </div>
 
                             {/* Floating Luxury Badges */}
-                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-center p-6 shadow-2xl animate-pulse-slow z-20">
+                            {/* <div className="absolute -top-10 -right-10 w-40 h-40 bg-[var(--color-accent)] rounded-full flex items-center justify-center text-center p-6 shadow-2xl animate-pulse-slow z-20">
                                 <div className="flex flex-col items-center">
                                     <Gem className="w-6 h-6 text-white mb-2" />
                                     <span className="text-white text-[0.55rem] uppercase tracking-widest font-bold leading-tight">Authentic <br />Mewar Art</span>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="absolute bottom-20 -left-16 bg-white p-8 shadow-2xl z-20 border-l-4 border-[var(--color-accent)] hidden md:block">
                                 <p className="text-black/30 text-[0.5rem] uppercase tracking-[0.4em] font-bold mb-4">Material Quality</p>

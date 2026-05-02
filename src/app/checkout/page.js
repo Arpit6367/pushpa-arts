@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, ShieldCheck, Truck, CreditCard, Tag, X } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Truck, CreditCard, Tag, X, User, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CheckoutPage() {
@@ -28,21 +28,72 @@ export default function CheckoutPage() {
     shipping_state: '',
     shipping_zip: '',
   });
+  const [customer, setCustomer] = useState(null);
+  const [addresses, setAddresses] = useState([]);
+  const [showAddressList, setShowAddressList] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved info from localStorage on mount
+  // Load saved info from localStorage and fetch customer profile
   useEffect(() => {
-    const savedInfo = localStorage.getItem('pushpa_checkout_info');
-    if (savedInfo) {
+    const init = async () => {
+      let customerData = null;
+
+      // 1. Check for logged in customer
       try {
-        const parsed = JSON.parse(savedInfo);
-        setForm(prev => ({ ...prev, ...parsed }));
+        const res = await fetch('/api/customer/me');
+        if (res.ok) {
+          customerData = await res.json();
+          setCustomer(customerData);
+          setAddresses(customerData.addresses || []);
+        }
       } catch (err) {
-        console.error('Failed to parse saved checkout info', err);
+        console.error('Failed to fetch customer info', err);
       }
-    }
-    setIsLoaded(true);
+
+      // 2. Load from localStorage
+      let savedData = {};
+      const savedInfo = localStorage.getItem('pushpa_checkout_info');
+      if (savedInfo) {
+        try {
+          savedData = JSON.parse(savedInfo);
+        } catch (err) {
+          console.error('Failed to parse saved checkout info', err);
+        }
+      }
+
+      // 3. Set form state - prioritize customerData if logged in
+      if (customerData) {
+        const defaultAddr = customerData.addresses?.find(a => a.is_default && a.address_type === 'shipping') || customerData.addresses?.[0];
+
+        setForm({
+          customer_name: `${customerData.first_name} ${customerData.last_name}`.trim(),
+          customer_email: customerData.email,
+          customer_phone: customerData.phone || savedData.customer_phone || '',
+          shipping_address: defaultAddr?.address_line || savedData.shipping_address || '',
+          shipping_city: defaultAddr?.city || savedData.shipping_city || '',
+          shipping_state: defaultAddr?.state || savedData.shipping_state || '',
+          shipping_zip: defaultAddr?.zip || savedData.shipping_zip || '',
+        });
+      } else if (Object.keys(savedData).length > 0) {
+        setForm(prev => ({ ...prev, ...savedData }));
+      }
+
+      setIsLoaded(true);
+    };
+
+    init();
   }, []);
+
+  const selectAddress = (addr) => {
+    setForm(prev => ({
+      ...prev,
+      shipping_address: addr.address_line,
+      shipping_city: addr.city,
+      shipping_state: addr.state,
+      shipping_zip: addr.zip
+    }));
+    setShowAddressList(false);
+  };
 
   // Save info to localStorage on change
   useEffect(() => {
@@ -195,7 +246,39 @@ export default function CheckoutPage() {
             </section>
 
             <section className="bg-white p-8 md:p-12 rounded-sm border border-black/5 shadow-sm">
-              <h2 className="text-2xl font-heading mb-10 italic">Destination Protocols</h2>
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="text-2xl font-heading italic">Destination Protocols</h2>
+                {customer && addresses.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAddressList(!showAddressList)}
+                    className="text-[0.6rem] uppercase tracking-widest font-bold text-[var(--color-accent)] flex items-center gap-2 hover:opacity-70"
+                  >
+                    Switch Protocol <ChevronDown className={`w-3 h-3 transition-transform ${showAddressList ? 'rotate-180' : ''}`} />
+                  </button>
+                )}
+              </div>
+
+              {showAddressList && customer && (
+                <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-4 duration-300">
+                  {addresses.map(addr => (
+                    <div
+                      key={addr.id}
+                      onClick={() => selectAddress(addr)}
+                      className={`p-5 border rounded-lg cursor-pointer transition-all ${form.shipping_address === addr.address_line ? 'border-black bg-black/5' : 'border-black/5 hover:border-black/20'
+                        }`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[0.55rem] uppercase tracking-widest font-bold text-black/40">{addr.address_type}</span>
+                        {form.shipping_address === addr.address_line && <CheckCircle2 className="w-4 h-4 text-black" />}
+                      </div>
+                      <p className="text-[0.8rem] font-medium truncate">{addr.address_line}</p>
+                      <p className="text-[0.7rem] text-black/60">{addr.city}, {addr.state}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-black/40">Street Address</label>
@@ -285,8 +368,8 @@ export default function CheckoutPage() {
                         <span className="text-[0.55rem] uppercase tracking-wider font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Applied</span>
                       </div>
                       <p className="text-[0.7rem] text-[var(--color-accent)]/70 mt-0.5">
-                        {appliedCoupon.discount_type === 'percentage' 
-                          ? `${appliedCoupon.discount_value}% off` 
+                        {appliedCoupon.discount_type === 'percentage'
+                          ? `${appliedCoupon.discount_value}% off`
                           : `₹${parseFloat(appliedCoupon.discount_value).toLocaleString()} off`}
                       </p>
                     </div>

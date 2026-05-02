@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, MessageSquare, X, Menu, Search, ShoppingBag, ShoppingCart } from 'lucide-react';
+import { ChevronDown, MessageSquare, X, Menu, Search, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 import { useSettings } from '@/context/SettingsContext';
 import { useCart } from '@/context/CartContext';
 
@@ -177,6 +177,19 @@ export default function Header({ initialCategories = [], settings = {} }) {
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+              {isEcommerce && (
+
+                <Link
+                  href="/my-account"
+                  className={`p-2 transition-all active:scale-90 relative ${!scrolled && pathname === '/' ? 'text-white hover:text-[#B4975A]' : 'text-black hover:text-[#B4975A]'}`}
+                  aria-label="My Account"
+                  suppressHydrationWarning
+                >
+                  <User className="w-5 h-5 md:w-6 md:h-6" />
+                </Link>
+              )}
+
+
               {isEcommerce && (
                 <button
                   onClick={() => setIsCartOpen(true)}
