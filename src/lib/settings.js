@@ -28,7 +28,6 @@ export const getSiteSettings = cache(async function getSiteSettings() {
     return settings;
   } catch (error) {
     console.error('Error fetching site settings:', error);
-    // Return defaults on error
     return {
       site_name: 'Pushpa Exports',
       site_tagline: 'Exquisite Handcrafted Furniture',

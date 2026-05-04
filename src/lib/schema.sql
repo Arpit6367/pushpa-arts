@@ -307,7 +307,6 @@ CREATE TABLE IF NOT EXISTS `coupons` (
 
 
 
--- Pushpa Arts Dummy Data Seed Script
 -- Run this after schema.sql to populate the CMS and UI sections
 
 -- 1. Hero Slides
