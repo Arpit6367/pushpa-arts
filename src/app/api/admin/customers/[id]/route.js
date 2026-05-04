@@ -10,9 +10,11 @@ export async function GET(request, { params }) {
     }
 
     const { id } = await params;
+    const customerId = Number(id);
 
     // Fetch basic customer info
-    const customers = await query('SELECT * FROM customers WHERE id = ?', [id]);
+    const customers = await query('SELECT * FROM customers WHERE id = ?', [customerId]);
+
     if (customers.length === 0) {
       return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
     }
@@ -20,14 +22,14 @@ export async function GET(request, { params }) {
     const customer = customers[0];
 
     // Fetch addresses
-    const addresses = await query('SELECT * FROM customer_addresses WHERE customer_id = ?', [id]);
+    const addresses = await query('SELECT * FROM customer_addresses WHERE customer_id = ?', [customerId]);
 
     // Fetch orders
     const orders = await query(`
       SELECT * FROM orders 
       WHERE customer_id = ? 
       ORDER BY created_at DESC
-    `, [id]);
+    `, [customerId]);
 
     // Get items for each order
     const ordersWithItems = await Promise.all(orders.map(async (order) => {

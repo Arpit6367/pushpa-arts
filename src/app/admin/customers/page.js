@@ -37,6 +37,10 @@ export default function AdminCustomersPage() {
         const data = await res.json();
         setSelectedPatron(data);
         setIsModalOpen(true);
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        console.error('Failed to fetch patron details:', res.status, errorData);
+        alert(`Error ${res.status}: ${errorData.error || 'Failed to fetch details'}`);
       }
     } catch (err) {
       console.error(err);

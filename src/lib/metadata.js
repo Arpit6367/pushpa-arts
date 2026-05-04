@@ -7,7 +7,7 @@ import { getPageBySlug } from './cms';
  */
 export async function getStudioPageMetadata(slug, fallbackDesc = '') {
   const page = await getPageBySlug(slug);
-  
+
   if (!page) {
     return {
       title: 'Pushpa Exports | Luxury Handcrafted Furniture',
