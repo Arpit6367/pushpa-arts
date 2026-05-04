@@ -48,9 +48,26 @@ function createNewPool() {
 }
 
 export async function query(sql, params = []) {
-  const pool = getPool();
-  const [rows] = await pool.execute(sql, params);
-  return rows;
+  try {
+    const pool = getPool();
+    const [rows] = await pool.execute(sql, params);
+    return rows;
+  } catch (error) {
+    console.error('Database query error:', {
+      message: error.message,
+      code: error.code,
+      sql: sql.substring(0, 100) + (sql.length > 100 ? '...' : '')
+    });
+    
+    // During build phase, we want to avoid crashing the entire build if the DB is unreachable
+    // This allows the site to build with empty/default data which will be updated on the client or during ISR
+    if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT' || error.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.warn('Database connection failed. Returning empty result set for safety during build/runtime.');
+      return [];
+    }
+    
+    throw error;
+  }
 }
 
 export default { getPool, query };
