@@ -51,16 +51,19 @@ export default function LayoutWrapper({ children, initialCategories = [], settin
     return <>{children}</>;
   }
 
+  const hideHeaderFooter = ['/cart', '/checkout', '/payment', '/my-account'].some(path => pathname?.startsWith(path));
+
   return (
     <SettingsProvider settings={settings}>
       <CartProvider>
         <QuickViewProvider>
-          <Header initialCategories={initialCategories} settings={settings} />
+          {!hideHeaderFooter && <Header initialCategories={initialCategories} settings={settings} />}
           <MiniCart />
           <main>{children}</main>
-          <Footer settings={settings} categories={initialCategories} />
+          {!hideHeaderFooter && <Footer settings={settings} categories={initialCategories} />}
         </QuickViewProvider>
       </CartProvider>
     </SettingsProvider>
   );
+
 }

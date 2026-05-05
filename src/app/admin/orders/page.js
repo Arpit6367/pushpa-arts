@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Eye, Package, Clock, CheckCircle, Truck, XCircle, Search, Filter, Trash2, X, ShoppingBag } from 'lucide-react';
+import { Eye, Package, Clock, CheckCircle, Truck, XCircle, Search, Filter, Trash2, X, ShoppingBag, Download } from 'lucide-react';
 import Image from 'next/image';
 
 export default function AdminOrdersPage() {
@@ -52,7 +52,7 @@ export default function AdminOrdersPage() {
 
   const handleDeleteOrder = async (orderId) => {
     if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
-    
+
     try {
       const res = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'DELETE',
@@ -90,11 +90,65 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const filteredOrders = orders.filter(o => 
+  const filteredOrders = orders.filter(o =>
     o.order_number.toLowerCase().includes(search.toLowerCase()) ||
     o.customer_name.toLowerCase().includes(search.toLowerCase()) ||
     o.customer_email.toLowerCase().includes(search.toLowerCase())
   );
+
+  const downloadCSV = (singleOrder = null) => {
+    const dataToExport = singleOrder ? [singleOrder] : filteredOrders;
+    if (dataToExport.length === 0) return;
+
+    // Define CSV Headers
+    const headers = [
+      'Order Number', 'Date', 'Customer Name', 'Email', 'Phone',
+      'Total Amount', 'Currency', 'Discount', 'Coupon', 'Payment Method',
+      'Payment Status', 'Order Status', 'Address', 'City', 'State', 'ZIP', 'Country'
+    ];
+
+    // Map orders to rows
+    const rows = dataToExport.map(o => [
+      o.order_number,
+      new Date(o.created_at).toLocaleDateString(),
+      `"${o.customer_name}"`,
+      o.customer_email,
+      o.customer_phone || 'N/A',
+      o.total_amount,
+      'INR',
+      o.discount_amount || 0,
+      o.coupon_code || 'None',
+      o.payment_method || 'N/A',
+      o.payment_status || 'pending',
+      o.status,
+      `"${o.shipping_address}"`,
+      o.shipping_city,
+      o.shipping_state,
+      o.shipping_zip,
+      o.shipping_country || 'India'
+    ]);
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    const fileName = singleOrder
+      ? `Order_${singleOrder.order_number}_${new Date().toISOString().split('T')[0]}.csv`
+      : `Pushpa_Arts_Orders_${new Date().toISOString().split('T')[0]}.csv`;
+
+    link.setAttribute('download', fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="bg-[#fbfbfd] min-h-screen">
@@ -107,17 +161,23 @@ export default function AdminOrdersPage() {
         <div className="flex flex-wrap gap-4 w-full md:w-auto">
           <div className="relative group flex-1 md:flex-none">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868b] transition-colors group-focus-within:text-[#0071e3]" />
-            <input 
-              type="text" 
-              placeholder="Search registry..." 
+            <input
+              type="text"
+              placeholder="Search registry..."
               className="bg-white border border-black/10 px-12 py-2.5 rounded-full text-[0.85rem] focus:outline-none focus:ring-2 focus:ring-[#0071e3]/20 w-full md:w-[300px] transition-all"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="bg-white border border-black/10 text-[#1d1d1f] px-6 py-2.5 rounded-full text-[0.85rem] font-semibold hover:bg-black/5 transition-all flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Filter
+          <button
+            onClick={downloadCSV}
+            className="bg-black text-white px-6 py-2.5 rounded-full text-[0.85rem] font-semibold hover:bg-[var(--color-accent)] transition-all flex items-center gap-2 shadow-lg"
+          >
+            <Download className="w-4 h-4" /> Download CSV
           </button>
+          {/* <button className="bg-white border border-black/10 text-[#1d1d1f] px-6 py-2.5 rounded-full text-[0.85rem] font-semibold hover:bg-black/5 transition-all flex items-center gap-2">
+            <Filter className="w-4 h-4" /> Filter
+          </button> */}
         </div>
       </div>
 
@@ -131,6 +191,7 @@ export default function AdminOrdersPage() {
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Order #</th>
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Consignee</th>
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Investment</th>
+                  <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Payment</th>
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Status</th>
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold">Date</th>
                   <th className="px-8 py-5 text-[0.7rem] uppercase tracking-widest text-[#86868b] font-bold text-right">Action</th>
@@ -168,17 +229,27 @@ export default function AdminOrdersPage() {
                         <span className="text-[0.9rem] font-bold text-[#1d1d1f]">₹{parseFloat(order.total_amount).toLocaleString()}</span>
                       </td>
                       <td className="px-8 py-6">
-                        <select 
+                        <div className="flex flex-col gap-1">
+                          <span className={`text-[0.6rem] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full w-fit ${order.payment_status === 'completed' ? 'bg-green-100 text-green-600' :
+                            order.payment_status === 'pending' ? 'bg-orange-100 text-orange-600' :
+                              'bg-red-100 text-red-600'
+                            }`}>
+                            {order.payment_status || 'pending'}
+                          </span>
+                          <span className="text-[0.7rem] text-[#86868b] font-medium">{order.payment_method?.replace(/_/g, ' ') || 'Not selected'}</span>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                        <select
                           value={order.status}
                           disabled={updating}
                           onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                          className={`text-[0.7rem] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer ${
-                            order.status === 'pending' ? 'bg-orange-100 text-orange-600' :
+                          className={`text-[0.7rem] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full border-none focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer ${order.status === 'pending' ? 'bg-orange-100 text-orange-600' :
                             order.status === 'processing' ? 'bg-blue-100 text-blue-600' :
-                            order.status === 'shipped' ? 'bg-purple-100 text-purple-600' :
-                            order.status === 'delivered' ? 'bg-green-100 text-green-600' :
-                            'bg-red-100 text-red-600'
-                          }`}
+                              order.status === 'shipped' ? 'bg-purple-100 text-purple-600' :
+                                order.status === 'delivered' ? 'bg-green-100 text-green-600' :
+                                  'bg-red-100 text-red-600'
+                            }`}
                         >
                           <option value="pending">Pending</option>
                           <option value="processing">Processing</option>
@@ -192,14 +263,21 @@ export default function AdminOrdersPage() {
                       </td>
                       <td className="px-8 py-6 text-right">
                         <div className="flex justify-end gap-2">
-                          <button 
+                          <button
+                            onClick={() => downloadCSV(order)}
+                            className="p-2.5 rounded-xl bg-[#f5f5f7] text-[#1d1d1f] hover:bg-green-600 hover:text-white transition-all shadow-sm"
+                            title="Download CSV"
+                          >
+                            <Download className="w-4 h-4" />
+                          </button>
+                          <button
                             onClick={() => viewOrderDetails(order.id)}
                             className="p-2.5 rounded-xl bg-[#f5f5f7] text-[#1d1d1f] hover:bg-black hover:text-white transition-all shadow-sm"
                             title="View Details"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleDeleteOrder(order.id)}
                             className="p-2.5 rounded-xl bg-[#fff2f2] text-[#ff3b30] hover:bg-[#ff3b30] hover:text-white transition-all shadow-sm"
                             title="Delete Order"
@@ -227,13 +305,12 @@ export default function AdminOrdersPage() {
               <div>
                 <div className="flex items-center gap-4 mb-2">
                   <h2 className="text-2xl font-bold font-heading text-[#1d1d1f]">Reservation {selectedOrder.order_number}</h2>
-                  <div className={`text-[0.65rem] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full ${
-                    selectedOrder.status === 'pending' ? 'bg-orange-100 text-orange-600' :
+                  <div className={`text-[0.65rem] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full ${selectedOrder.status === 'pending' ? 'bg-orange-100 text-orange-600' :
                     selectedOrder.status === 'processing' ? 'bg-blue-100 text-blue-600' :
-                    selectedOrder.status === 'shipped' ? 'bg-purple-100 text-purple-600' :
-                    selectedOrder.status === 'delivered' ? 'bg-green-100 text-green-600' :
-                    'bg-red-100 text-red-600'
-                  }`}>
+                      selectedOrder.status === 'shipped' ? 'bg-purple-100 text-purple-600' :
+                        selectedOrder.status === 'delivered' ? 'bg-green-100 text-green-600' :
+                          'bg-red-100 text-red-600'
+                    }`}>
                     {selectedOrder.status}
                   </div>
                 </div>
@@ -273,15 +350,58 @@ export default function AdminOrdersPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-[0.8rem] text-[#86868b] mb-0.5">City</p>
-                        <p className="text-[1rem] font-bold text-[#1d1d1f]">{selectedOrder.shipping_city}</p>
+                        <p className="text-[0.8rem] text-[#86868b] mb-0.5">City / State</p>
+                        <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{selectedOrder.shipping_city}, {selectedOrder.shipping_state}</p>
                       </div>
                       <div>
-                        <p className="text-[0.8rem] text-[#86868b] mb-0.5">State/ZIP</p>
-                        <p className="text-[1rem] font-bold text-[#1d1d1f]">{selectedOrder.shipping_state}, {selectedOrder.shipping_zip}</p>
+                        <p className="text-[0.8rem] text-[#86868b] mb-0.5">ZIP / Country</p>
+                        <p className="text-[0.9rem] font-bold text-[#1d1d1f]">{selectedOrder.shipping_zip}, {selectedOrder.shipping_country || 'India'}</p>
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Payment Details Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-black/5">
+                <div>
+                  <h3 className="text-[0.7rem] uppercase tracking-widest font-bold text-[#86868b] mb-6">Financial Settlement</h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center bg-[#f5f5f7] p-4 rounded-xl">
+                      <p className="text-[0.8rem] text-[#86868b]">Method</p>
+                      <p className="text-[0.9rem] font-bold text-[#1d1d1f] uppercase">{selectedOrder.payment_method?.replace(/_/g, ' ') || 'None'}</p>
+                    </div>
+                    <div className="flex justify-between items-center bg-[#f5f5f7] p-4 rounded-xl">
+                      <p className="text-[0.8rem] text-[#86868b]">Status</p>
+                      <span className={`text-[0.7rem] uppercase tracking-widest font-bold px-3 py-1 rounded-full ${selectedOrder.payment_status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
+                        }`}>
+                        {selectedOrder.payment_status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-[0.7rem] uppercase tracking-widest font-bold text-[#86868b] mb-6">Transaction Log</h3>
+                  {selectedOrder.payments && selectedOrder.payments.length > 0 ? (
+                    <div className="space-y-3">
+                      {selectedOrder.payments.map((p, idx) => (
+                        <div key={p.id} className={`p-4 rounded-xl border ${idx === 0 ? 'bg-[#f5f5f7] border-black/10' : 'bg-white border-black/5 opacity-60'}`}>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-[0.75rem] font-bold">{p.transaction_id}</span>
+                            <span className="text-[0.65rem] text-[#86868b]">{new Date(p.created_at).toLocaleString()}</span>
+                          </div>
+                          <div className="flex gap-4 text-[0.7rem]">
+                            <span>Amount: ₹{parseFloat(p.amount).toLocaleString()}</span>
+                            {p.card_last_four && <span>Card: **** {p.card_last_four} ({p.card_brand})</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="bg-[#f5f5f7] p-6 rounded-xl text-center">
+                      <p className="text-[0.8rem] text-[#86868b] italic">No transaction records found for this reservation.</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -345,7 +465,7 @@ export default function AdminOrdersPage() {
                   <span className="text-[0.75rem] font-bold text-[#86868b] uppercase tracking-widest">Update Lifecycle:</span>
                   <div className="flex bg-[#f5f5f7] rounded-full p-1 border border-black/5">
                     {['pending', 'processing', 'shipped', 'delivered'].map(s => (
-                      <button 
+                      <button
                         key={s}
                         onClick={() => handleUpdateStatus(selectedOrder.id, s)}
                         className={`px-4 py-1.5 rounded-full text-[0.6rem] uppercase tracking-[0.2em] font-bold transition-all ${selectedOrder.status === s ? 'bg-black text-white shadow-md' : 'text-[#86868b] hover:text-black'}`}
@@ -355,7 +475,7 @@ export default function AdminOrdersPage() {
                     ))}
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => handleDeleteOrder(selectedOrder.id)}
                   className="px-6 py-3 bg-[#fff2f2] text-[#ff3b30] text-[0.7rem] uppercase tracking-[0.3em] font-bold rounded-xl hover:bg-[#ff3b30] hover:text-white transition-all shadow-sm flex items-center gap-3"
                 >

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" fill="none">
+  <rect width="120" height="40" rx="4" fill="white" stroke="#D1D1D1" stroke-width="1"/>
+  <path d="M15 10H25V30H15V10Z" fill="#C1272D"/>
+  <path d="M17 12H23V28H17V12Z" fill="white"/>
+  <text x="20" y="22" text-anchor="middle" fill="#C1272D" font-family="Arial, sans-serif" font-size="12" font-weight="bold">M</text>
+  <text x="35" y="20" fill="#333333" font-family="Arial, sans-serif" font-size="14" font-weight="bold">McAfee</text>
+  <text x="35" y="32" fill="#666666" font-family="Arial, sans-serif" font-size="10">SECURE</text>
+</svg>

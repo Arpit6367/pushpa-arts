@@ -197,7 +197,7 @@ export default function MyAccountPage() {
   // Guest View: Login / Register
   if (!customer) {
     return (
-      <div className="min-h-screen pt-32 pb-20 bg-[#FBFBFD] px-6">
+      <div className="min-h-screen pt-16 pb-16 bg-[#FBFBFD] px-6">
         <div className="max-w-[1000px] mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-heading mb-4 italic">The Heritage Registry</h1>
@@ -313,7 +313,7 @@ export default function MyAccountPage() {
 
   return (
     <>
-      <div className="min-h-screen pt-32 pb-32 bg-[#FBFBFD] px-6">
+      <div className="min-h-screen pt-16 pb-16 bg-[#FBFBFD] px-6">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col lg:flex-row gap-16">
 

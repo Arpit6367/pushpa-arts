@@ -27,6 +27,7 @@ export default function CheckoutPage() {
     shipping_city: '',
     shipping_state: '',
     shipping_zip: '',
+    shipping_country: 'India',
   });
   const [customer, setCustomer] = useState(null);
   const [addresses, setAddresses] = useState([]);
@@ -73,6 +74,7 @@ export default function CheckoutPage() {
           shipping_city: defaultAddr?.city || savedData.shipping_city || '',
           shipping_state: defaultAddr?.state || savedData.shipping_state || '',
           shipping_zip: defaultAddr?.zip || savedData.shipping_zip || '',
+          shipping_country: defaultAddr?.country || savedData.shipping_country || 'India',
         });
       } else if (Object.keys(savedData).length > 0) {
         setForm(prev => ({ ...prev, ...savedData }));
@@ -90,7 +92,8 @@ export default function CheckoutPage() {
       shipping_address: addr.address_line,
       shipping_city: addr.city,
       shipping_state: addr.state,
-      shipping_zip: addr.zip
+      shipping_zip: addr.zip,
+      shipping_country: addr.country || 'India'
     }));
     setShowAddressList(false);
   };
@@ -147,10 +150,8 @@ export default function CheckoutPage() {
 
       if (res.ok) {
         const data = await res.json();
-        setOrderNumber(data.order_number);
-        setOrderComplete(true);
-        clearCart();
-        localStorage.removeItem('pushpa_checkout_info'); // Clear saved info on success
+        // Redirect to payment page
+        router.push(`/payment?order_id=${data.order_id}&order_number=${data.order_number}`);
       } else {
         alert('Something went wrong. Please try again.');
       }
@@ -161,6 +162,7 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
+
 
   if (orderComplete) {
     return (
@@ -193,7 +195,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="pt-32 pb-32 bg-[#FBFBFD]">
+    <div className="pt-16 pb-16 bg-[#FBFBFD]">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex items-center justify-between mb-12">
           <Link href="/cart" className="flex items-center gap-3 text-[0.6rem] uppercase tracking-[0.3em] font-bold text-black/40 hover:text-black transition-colors group">
@@ -321,6 +323,25 @@ export default function CheckoutPage() {
                     onChange={e => setForm({ ...form, shipping_zip: e.target.value })}
                   />
                 </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-black/40">Country</label>
+                  <select
+                    required
+                    className="bg-[#f5f5f7] border-none px-5 py-4 rounded-sm text-[0.9rem] focus:bg-white focus:ring-1 focus:ring-[var(--color-accent)] transition-all outline-none appearance-none"
+                    value={form.shipping_country}
+                    onChange={e => setForm({ ...form, shipping_country: e.target.value })}
+                  >
+                    <option value="India">India</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="United Arab Emirates">United Arab Emirates</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
               </div>
             </section>
 
@@ -444,7 +465,7 @@ export default function CheckoutPage() {
                 disabled={loading}
                 className="w-full py-6 bg-black text-white text-[0.7rem] uppercase tracking-[0.4em] font-bold hover:bg-[var(--color-accent)] transition-all flex items-center justify-center gap-4 disabled:opacity-50"
               >
-                {loading ? 'Processing...' : 'Confirm Reservation'}
+                {loading ? 'Processing...' : 'Proceed to Payment'}
                 <CreditCard className="w-4 h-4" />
               </button>
 

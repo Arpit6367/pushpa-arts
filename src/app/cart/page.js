@@ -58,7 +58,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="pt-40 pb-32 bg-white">
+    <div className="pt-20 pb-20 bg-white">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
@@ -241,7 +241,7 @@ export default function CartPage() {
                 Proceed to Checkout
               </Link>
 
-              <div className="mt-12 space-y-6 pt-10 border-t border-black/5">
+              {/* <div className="mt-12 space-y-6 pt-10 border-t border-black/5">
                 <div className="flex items-center gap-4 group">
                   <div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center opacity-40 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm">🛡️</span>
@@ -254,7 +254,7 @@ export default function CartPage() {
                   </div>
                   <p className="text-[0.6rem] uppercase tracking-[0.2em] font-bold leading-tight">Worldwide Logistics</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </aside>
         </div>

@@ -45,10 +45,12 @@ export async function GET(request, { params }) {
     }
 
     const items = await query('SELECT * FROM order_items WHERE order_id = ?', [id]);
+    const payments = await query('SELECT * FROM payments WHERE order_id = ? ORDER BY created_at DESC', [id]);
 
     return NextResponse.json({
       ...orders[0],
-      items
+      items,
+      payments
     });
   } catch (error) {
     console.error('Error fetching order details:', error);

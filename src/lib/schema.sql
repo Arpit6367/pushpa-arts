@@ -1,6 +1,3 @@
--- Pushpa Arts Database Schema & Seeding
--- Run this SQL in your MySQL database to set up tables and initial data.
--- This file manages the complete schema and dummy seed data in one place.
 
 CREATE DATABASE IF NOT EXISTS pushpa_art;
 USE pushpa_art;
@@ -254,9 +251,12 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `shipping_city` varchar(100) NOT NULL,
   `shipping_state` varchar(100) NOT NULL,
   `shipping_zip` varchar(20) NOT NULL,
+  `shipping_country` varchar(100) DEFAULT 'India',
   `total_amount` decimal(12,2) NOT NULL,
   `coupon_code` varchar(50) DEFAULT NULL,
   `discount_amount` decimal(12,2) DEFAULT 0,
+  `payment_method` enum('paypal','credit_debit_card','google_pay','card','cod') DEFAULT NULL,
+  `payment_status` enum('pending','processing','completed','failed','refunded') DEFAULT 'pending',
   `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -297,6 +297,26 @@ CREATE TABLE IF NOT EXISTS `coupons` (
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `payment_method` enum('paypal','credit_debit_card','google_pay','card','cod') NOT NULL,
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `gateway_response` text DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` varchar(10) DEFAULT 'INR',
+  `status` enum('initiated','processing','completed','failed','refunded') DEFAULT 'initiated',
+  `card_last_four` varchar(4) DEFAULT NULL,
+  `card_brand` varchar(50) DEFAULT NULL,
+  `payer_email` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `transaction_id` (`transaction_id`),
+  CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 
 
@@ -310,41 +330,41 @@ CREATE TABLE IF NOT EXISTS `coupons` (
 -- Run this after schema.sql to populate the CMS and UI sections
 
 -- 1. Hero Slides
-INSERT INTO `hero_slides` (`title`, `subtitle`, `image`, `button_text`, `button_link`, `sort_order`) VALUES
+INSERT IGNORE INTO `hero_slides` (`title`, `subtitle`, `image`, `button_text`, `button_link`, `sort_order`) VALUES
 ('The Art of Inlay', 'Handcrafted Bone Inlay & Mother of Pearl Masterpieces from Udaipur.', '/images/hero/hero-1.png', 'Explore Collection', '/product-category/bone-inlay-furniture', 1),
 ('Royal Silver Heritage', 'Exquisite Silver Embossed Furniture for the Discerning Interior.', '/images/hero/hero-2.png', 'View Silver Collection', '/product-category/silver-furniture', 2),
 ('Marble Elegance', 'Bespoke Stone Inlay pieces inspired by the palaces of Rajasthan.', '/images/hero/hero-3.png', 'Discover Marble', '/product-category/marble-stone-furniture', 3);
 
 -- 2. Material Mastery
-INSERT INTO `material_mastery` (`title`, `description`, `image`, `link`, `sort_order`) VALUES
+INSERT IGNORE INTO `material_mastery` (`title`, `description`, `image`, `link`, `sort_order`) VALUES
 ('Ethical Bone Inlay', 'Meticulously hand-carved camel bone set in organic resin.', '/images/materials/bone-inlay.jpg', '/material-mastery/bone-inlay', 1),
 ('Sterling Silver Work', 'Traditional Thikaikari technique using 99% pure silver foil.', '/images/materials/silver.jpg', '/material-mastery/silver', 2),
 ('Mother of Pearl', 'Iridescent ocean treasures meeting land-based craftsmanship.', '/images/materials/mop.jpg', '/material-mastery/mop', 3);
 
 -- 3. Testimonials
-INSERT INTO `testimonials` (`name`, `designation`, `content`, `rating`, `sort_order`) VALUES
+INSERT IGNORE INTO `testimonials` (`name`, `designation`, `content`, `rating`, `sort_order`) VALUES
 ('Julianne Moore', 'Interior Designer, London', 'The level of detail in the bone inlay chest we received is simply breathtaking. It is the centerpiece of our latest project.', 5, 1),
 ('Rajesh Mehta', 'Architect, Dubai', 'Pushpa Exports delivers the authentic soul of Udaipur with professional logistics that match international standards.', 5, 2),
 ('Sophie Laurent', 'Collector, Paris', 'Commissioning a silver-embossed bed was a seamless experience. Truly royal craftsmanship.', 5, 3);
 
 -- 4. FAQs
-INSERT INTO `faqs` (`question`, `answer`, `sort_order`) VALUES
+INSERT IGNORE INTO `faqs` (`question`, `answer`, `sort_order`) VALUES
 ('Do you ship internationally?', 'Yes, we provide worldwide white-glove shipping from our studio in Udaipur to your doorstep, handling all export documentation and insurance.', 1),
 ('Can I customize the dimensions?', 'Absolutely. As a bespoke studio, every piece can be tailored to your specific architectural requirements and aesthetic preferences.', 2),
 ('How do I maintain my inlay furniture?', 'Clean with a soft, slightly damp cloth. Avoid harsh chemicals and direct sunlight to preserve the organic resin and delicate inlay work.', 3);
 
 -- 5. Clients (Logos)
-INSERT INTO `clients` (`name`, `logo`, `sort_order`) VALUES
+INSERT IGNORE INTO `clients` (`name`, `logo`, `sort_order`) VALUES
 ('The Taj Group', '/images/clients/taj.png', 1),
 ('Oberoi Hotels', '/images/clients/oberoi.png', 2),
 ('Aman Resorts', '/images/clients/aman.png', 3);
 
 -- 6. Sample Blog Post
-INSERT INTO `blogs` (`title`, `slug`, `excerpt`, `content`, `image`) VALUES
+INSERT IGNORE INTO `blogs` (`title`, `slug`, `excerpt`, `content`, `image`) VALUES
 ('The History of Bone Inlay in Udaipur', 'history-of-bone-inlay-udaipur', 'Discover how an ancient Egyptian craft became the heartbeat of Rajasthani furniture.', '<p>The art of bone inlay is a centuries-old tradition that found its true home in the princely state of Mewar...</p>', '/images/blog/blog-1.jpg');
 
 -- 7. Site Settings
-INSERT INTO `site_settings` (`setting_key`, `setting_value`) VALUES
+INSERT IGNORE INTO `site_settings` (`setting_key`, `setting_value`) VALUES
 ('contact_email', 'info@pushpaexports.com'),
 ('contact_phone', '+91 94141 62629'),
 ('contact_address', 'Plot No. 1, Udaipur, Rajasthan, India'),
