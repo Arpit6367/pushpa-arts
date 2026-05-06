@@ -2,6 +2,8 @@ import { getAllCategoriesWithPaths } from '@/lib/categories';
 import { getProductsByCategory } from '@/lib/products';
 import CollectionPageClient from './CollectionPageClient';
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const currentSlug = slug[slug.length - 1];

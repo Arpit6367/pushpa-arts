@@ -73,20 +73,20 @@ export default function ProjectForm({ id }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Project Title</label>
-              <input 
-                type="text" 
-                value={data.title} 
-                onChange={e => setData({...data, title: e.target.value})}
+              <input
+                type="text"
+                value={data.title}
+                onChange={e => setData({ ...data, title: e.target.value })}
                 className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all"
                 required
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Client / Location</label>
-              <input 
-                type="text" 
-                value={data.client_name || ''} 
-                onChange={e => setData({...data, client_name: e.target.value})}
+              <input
+                type="text"
+                value={data.client_name || ''}
+                onChange={e => setData({ ...data, client_name: e.target.value })}
                 className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all"
                 placeholder="e.g. Royal Palace, London"
               />
@@ -97,10 +97,10 @@ export default function ProjectForm({ id }) {
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Exhibition Image</label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <input 
-                  type="text" 
-                  value={data.image || ''} 
-                  onChange={e => setData({...data, image: e.target.value})}
+                <input
+                  type="text"
+                  value={data.image || ''}
+                  onChange={e => setData({ ...data, image: e.target.value })}
                   className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all"
                   placeholder="/uploads/projects/exhibition.jpg"
                 />
@@ -110,8 +110,8 @@ export default function ProjectForm({ id }) {
                   </div>
                 )}
               </div>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowMediaPicker(true)}
                 className="px-6 py-4 bg-[#1d1d1f] text-white rounded-xl font-semibold hover:bg-black transition-all"
               >
@@ -122,19 +122,19 @@ export default function ProjectForm({ id }) {
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Description (HTML)</label>
-            <textarea 
-              value={data.description || ''} 
-              onChange={e => setData({...data, description: e.target.value})}
+            <textarea
+              value={data.description || ''}
+              onChange={e => setData({ ...data, description: e.target.value })}
               className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all min-h-[300px] font-mono text-sm"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               id="is_active"
-              checked={data.is_active} 
-              onChange={e => setData({...data, is_active: e.target.checked})}
+              checked={data.is_active}
+              onChange={e => setData({ ...data, is_active: e.target.checked })}
               className="w-5 h-5 rounded border-gray-300 text-[#0071e3] focus:ring-[#0071e3]"
             />
             <label htmlFor="is_active" className="text-sm font-medium text-[#1d1d1f]">Active / Visible</label>
@@ -142,15 +142,15 @@ export default function ProjectForm({ id }) {
         </div>
 
         <div className="flex justify-end gap-4 pt-4">
-          <button 
+          <button
             type="button"
             onClick={() => router.back()}
             className="px-8 py-3 bg-[#f5f5f7] text-[#1d1d1f] rounded-full font-semibold hover:bg-black/5 transition-all"
           >
             Cancel
           </button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={saving}
             className="px-10 py-3 bg-[#0071e3] text-white rounded-full font-semibold hover:bg-[#0077ed] transition-all disabled:opacity-50"
           >
@@ -160,8 +160,8 @@ export default function ProjectForm({ id }) {
       </form>
 
       {showMediaPicker && (
-        <MediaPicker 
-          onSelect={(path) => setData({...data, image: path})}
+        <MediaPicker
+          onSelect={(path) => setData({ ...data, image: path })}
           onClose={() => setShowMediaPicker(false)}
         />
       )}

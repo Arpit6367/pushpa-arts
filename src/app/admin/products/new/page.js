@@ -321,7 +321,7 @@ export default function AdminProductNewPage() {
                     placeholder="e.g. MRB-001"
                   />
                 </div>
-                <SearchableSelect 
+                <SearchableSelect
                   options={categories}
                   selectedIds={categoryIds}
                   onToggle={toggleCategory}

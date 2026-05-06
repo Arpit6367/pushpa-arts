@@ -62,7 +62,7 @@ export default async function SitemapPage() {
             Visual <span className="text-[#B8860B]">Sitemap</span>
           </h1>
           {page?.content && (
-            <div 
+            <div
               className="prose prose-lg text-black/60 leading-relaxed font-light mx-auto"
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
@@ -78,7 +78,7 @@ export default async function SitemapPage() {
               <ul className="space-y-4">
                 {section.links.map(link => (
                   <li key={link.href}>
-                    <Link 
+                    <Link
                       href={link.href}
                       className="text-[#1d1d1f] text-[1rem] font-light hover:text-[#B8860B] hover:translate-x-1 transition-all inline-block"
                     >
@@ -98,7 +98,7 @@ export default async function SitemapPage() {
           <div className="text-[0.8rem] text-[#86868b] uppercase tracking-widest font-medium">
             Pushpa Exports • Artisan Directory
           </div>
-          <Link 
+          <Link
             href="/"
             className="text-[#B8860B] text-[0.85rem] font-semibold uppercase tracking-widest hover:underline"
           >

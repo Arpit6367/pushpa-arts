@@ -134,7 +134,7 @@ async function scrapeAndSeed(url, pool, parentId = null) {
             );
           }
         } catch (e) {
-          console.error(`      Error adding product ${name}:`, e.message);
+          console.error(`Error adding product ${name}:`, e.message);
         }
       }
     }

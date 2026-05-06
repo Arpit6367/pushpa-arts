@@ -1,7 +1,22 @@
 import './globals.css';
+import { Cinzel, Montserrat } from 'next/font/google';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import { getAllCategoriesWithPaths } from '@/lib/categories';
 import { getSiteSettings } from '@/lib/settings';
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-cinzel',
+  display: 'swap',
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
 
 export const metadata = {
   metadataBase: new URL('https://pushpaexports.com'),
@@ -52,8 +67,8 @@ export default async function RootLayout({ children }) {
   const settings = await getSiteSettings();
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${cinzel.variable} ${montserrat.variable}`}>
+      <body suppressHydrationWarning className="antialiased">
         <LayoutWrapper initialCategories={categories} settings={settings}>{children}</LayoutWrapper>
       </body>
     </html>

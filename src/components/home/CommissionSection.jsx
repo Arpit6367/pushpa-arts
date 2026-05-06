@@ -21,11 +21,11 @@ export default function CommissionSection() {
             <Link href="/contact" className="inline-block px-12 py-5 bg-[#B8860B] text-white text-[0.7rem] uppercase tracking-[0.2em] font-semibold transition-all shadow-xl hover:bg-white hover:text-[#1F1F1F]">Inquire for Customization</Link>
           </div>
           <div className="reveal delay-200 aspect-square relative mt-16 md:mt-0">
-            <Image 
-              src="/images/hero-luxury-1.png" 
-              alt="Custom Silver Throne" 
-              fill 
-              className="object-cover object-[center_20%]" 
+            <Image
+              src="/images/hero-luxury-1.png"
+              alt="Custom Silver Throne"
+              fill
+              className="object-cover object-[center_20%]"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute -bottom-10 -left-10 md:left-auto md:-right-10 bg-white p-10 shadow-2xl max-w-[300px] z-10 w-[80%]">

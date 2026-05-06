@@ -40,7 +40,7 @@ export default function ContactContent({ page, faqs = [], categories = [] }) {
       // Reset file input if possible
       const fileInput = document.getElementById('contact-document');
       if (fileInput) fileInput.value = '';
-      
+
       setTimeout(() => setSubmitted(false), 8000);
     } catch (err) {
       setError('Network error. Please check your connection and try again.');
@@ -80,8 +80,8 @@ export default function ContactContent({ page, faqs = [], categories = [] }) {
               </div>
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-black/50 mb-2 ml-1">Upload Document (Max 10MB)</label>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   className="w-full bg-white border border-black/10 px-4 py-2 rounded-lg outline-none focus:ring-2 focus:ring-[#0071e3] text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#1d1d1f] file:text-white"
                   onChange={e => {
                     const file = e.target.files[0];

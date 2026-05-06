@@ -5,11 +5,11 @@ export default function ProcessSection() {
   return (
     <section className="relative h-[100svh] min-h-[800px] overflow-hidden reveal">
       <div className="absolute inset-0 z-0">
-        <Image 
-          src="/images/workshop-ambient.png" 
-          alt="Artisan Workshop" 
-          fill 
-          className="object-cover" 
+        <Image
+          src="/images/workshop-ambient.png"
+          alt="Artisan Workshop"
+          fill
+          className="object-cover"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-black/40" />
@@ -26,11 +26,11 @@ export default function ProcessSection() {
           </p>
           <div className="flex flex-wrap gap-20 mt-16 border-t border-[#E5E0DA] pt-10">
             <div>
-              <strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">300+</strong> 
+              <strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">300+</strong>
               <span className="text-[0.65rem] uppercase tracking-[0.2em] text-[#8C8C8C] font-semibold">Hours/Piece</span>
             </div>
             <div>
-              <strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">100%</strong> 
+              <strong className="block text-[2.8rem] font-heading text-[#B8860B] leading-none mb-2">100%</strong>
               <span className="text-[0.65rem] uppercase tracking-[0.2em] text-[#8C8C8C] font-semibold">Handmade</span>
             </div>
           </div>

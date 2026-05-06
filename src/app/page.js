@@ -15,6 +15,8 @@ import CategorySubcategoryTabs from '@/components/home/CategorySubcategoryTabs';
 import InfoSection from '@/components/home/InfoSection';
 import Testimonials from '@/components/home/Testimonials';
 
+export const revalidate = 3600;
+
 export default async function HomePage() {
   const allCategories = await getAllCategoriesWithPaths();
   const parentCategories = allCategories.filter(c => !c.parent_id);

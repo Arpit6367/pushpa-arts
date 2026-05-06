@@ -11,6 +11,11 @@ export default function AdminOrdersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
 
+  // Advanced Filters
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [paymentFilter, setPaymentFilter] = useState('all');
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -90,11 +95,25 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const filteredOrders = orders.filter(o =>
-    o.order_number.toLowerCase().includes(search.toLowerCase()) ||
-    o.customer_name.toLowerCase().includes(search.toLowerCase()) ||
-    o.customer_email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredOrders = orders.filter(o => {
+    // Search match
+    const matchesSearch =
+      o.order_number.toLowerCase().includes(search.toLowerCase()) ||
+      o.customer_name.toLowerCase().includes(search.toLowerCase()) ||
+      o.customer_email.toLowerCase().includes(search.toLowerCase());
+
+    // Status matches
+    const matchesStatus = statusFilter === 'all' || o.status === statusFilter;
+    const matchesPayment = paymentFilter === 'all' || o.payment_status === paymentFilter;
+
+    // Date range matches
+    const orderDate = new Date(o.created_at).toISOString().split('T')[0];
+    const matchesDate =
+      (!dateRange.start || orderDate >= dateRange.start) &&
+      (!dateRange.end || orderDate <= dateRange.end);
+
+    return matchesSearch && matchesStatus && matchesPayment && matchesDate;
+  });
 
   const downloadCSV = (singleOrder = null) => {
     const dataToExport = singleOrder ? [singleOrder] : filteredOrders;
@@ -108,24 +127,35 @@ export default function AdminOrdersPage() {
     ];
 
     // Map orders to rows
+    // Map orders to rows and handle CSV escaping
+    const escapeCSV = (val) => {
+      if (val === null || val === undefined) return '';
+      const str = String(val);
+      // If contains comma, newline or double quote, wrap in quotes and escape internal quotes
+      if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
     const rows = dataToExport.map(o => [
-      o.order_number,
-      new Date(o.created_at).toLocaleDateString(),
-      `"${o.customer_name}"`,
-      o.customer_email,
-      o.customer_phone || 'N/A',
-      o.total_amount,
+      escapeCSV(o.order_number),
+      escapeCSV(new Date(o.created_at).toLocaleString()),
+      escapeCSV(o.customer_name),
+      escapeCSV(o.customer_email),
+      escapeCSV(o.customer_phone || 'N/A'),
+      escapeCSV(o.total_amount),
       'INR',
-      o.discount_amount || 0,
-      o.coupon_code || 'None',
-      o.payment_method || 'N/A',
-      o.payment_status || 'pending',
-      o.status,
-      `"${o.shipping_address}"`,
-      o.shipping_city,
-      o.shipping_state,
-      o.shipping_zip,
-      o.shipping_country || 'India'
+      escapeCSV(o.discount_amount || 0),
+      escapeCSV(o.coupon_code || 'None'),
+      escapeCSV(o.payment_method || 'N/A'),
+      escapeCSV(o.payment_status || 'pending'),
+      escapeCSV(o.status),
+      escapeCSV(o.shipping_address),
+      escapeCSV(o.shipping_city),
+      escapeCSV(o.shipping_state),
+      escapeCSV(o.shipping_zip),
+      escapeCSV(o.shipping_country || 'India')
     ]);
 
     // Combine headers and rows
@@ -170,14 +200,82 @@ export default function AdminOrdersPage() {
             />
           </div>
           <button
-            onClick={downloadCSV}
+            onClick={() => downloadCSV()}
             className="bg-black text-white px-6 py-2.5 rounded-full text-[0.85rem] font-semibold hover:bg-[var(--color-accent)] transition-all flex items-center gap-2 shadow-lg"
           >
             <Download className="w-4 h-4" /> Download CSV
           </button>
-          {/* <button className="bg-white border border-black/10 text-[#1d1d1f] px-6 py-2.5 rounded-full text-[0.85rem] font-semibold hover:bg-black/5 transition-all flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Filter
-          </button> */}
+        </div>
+      </div>
+
+      {/* Advanced Filters Bar */}
+      <div className="px-12 mb-6">
+        <div className="bg-white border border-black/10 rounded-2xl p-6 flex flex-wrap items-end gap-6 shadow-sm">
+          {/* Date Range */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[0.65rem] uppercase tracking-widest font-bold text-[#86868b]">Date Range</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="date"
+                className="bg-[#f5f5f7] border border-transparent px-4 py-2 rounded-xl text-[0.85rem] outline-none focus:bg-white focus:border-[#0071e3] transition-all"
+                value={dateRange.start}
+                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+              />
+              <span className="text-[#86868b]">to</span>
+              <input
+                type="date"
+                className="bg-[#f5f5f7] border border-transparent px-4 py-2 rounded-xl text-[0.85rem] outline-none focus:bg-white focus:border-[#0071e3] transition-all"
+                value={dateRange.end}
+                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+              />
+            </div>
+          </div>
+
+          {/* Status Filter */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[0.65rem] uppercase tracking-widest font-bold text-[#86868b]">Order Status</label>
+            <select
+              className="bg-[#f5f5f7] border border-transparent px-4 py-2 rounded-xl text-[0.85rem] outline-none focus:bg-white focus:border-[#0071e3] transition-all cursor-pointer min-w-[150px]"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          {/* Payment Filter */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[0.65rem] uppercase tracking-widest font-bold text-[#86868b]">Payment</label>
+            <select
+              className="bg-[#f5f5f7] border border-transparent px-4 py-2 rounded-xl text-[0.85rem] outline-none focus:bg-white focus:border-[#0071e3] transition-all cursor-pointer min-w-[150px]"
+              value={paymentFilter}
+              onChange={(e) => setPaymentFilter(e.target.value)}
+            >
+              <option value="all">All Payments</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
+          </div>
+
+          {/* Reset */}
+          <button
+            onClick={() => {
+              setDateRange({ start: '', end: '' });
+              setStatusFilter('all');
+              setPaymentFilter('all');
+              setSearch('');
+            }}
+            className="text-[0.85rem] font-medium text-[#0071e3] hover:underline pb-2 px-2"
+          >
+            Reset Filters
+          </button>
         </div>
       </div>
 
@@ -200,9 +298,16 @@ export default function AdminOrdersPage() {
               <tbody className="divide-y divide-black/5">
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="px-8 py-20 text-center">
-                      <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin mx-auto"></div>
-                      <p className="text-[0.85rem] text-[#86868b] mt-4 font-medium">Scanning the registry...</p>
+                    <td colSpan="7" className="px-8 py-20 text-center">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="relative w-12 h-12">
+                          <div className="absolute inset-0 rounded-full border-4 border-[#0071e3]/10"></div>
+                          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#0071e3] animate-spin"></div>
+                        </div>
+                        <p className="mt-4 text-[0.8rem] font-medium text-[#86868b] animate-pulse">
+                          Scanning the registry...
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 ) : filteredOrders.length === 0 ? (

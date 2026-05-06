@@ -330,7 +330,7 @@ export default function AdminProductEditPage({ params }) {
                     onChange={e => setForm({ ...form, sku: e.target.value })}
                   />
                 </div>
-                <SearchableSelect 
+                <SearchableSelect
                   options={categories}
                   selectedIds={categoryIds}
                   onToggle={toggleCategory}

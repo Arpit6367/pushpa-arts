@@ -157,7 +157,15 @@ export default function AdminCategoriesPage() {
         </div>
 
         {loading ? (
-          <div className="mx-auto my-16 w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="relative w-12 h-12">
+              <div className="absolute inset-0 rounded-full border-4 border-[#0071e3]/10"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#0071e3] animate-spin"></div>
+            </div>
+            <p className="mt-4 text-[0.8rem] font-medium text-[#86868b] animate-pulse">
+              Synchronizing Collections...
+            </p>
+          </div>
         ) : currentCategories.length > 0 ? (
           <div className="bg-white border border-black/10 rounded-2xl overflow-x-auto shadow-sm">
             <table className="w-full border-collapse">
@@ -247,7 +255,7 @@ export default function AdminCategoriesPage() {
               </div>
               <div className="flex flex-col gap-2 mb-6">
                 <label className="text-[0.85rem] font-semibold text-[#1d1d1f]">Image</label>
-                <div 
+                <div
                   className="border-2 border-dashed border-black/10 rounded-xl p-8 text-center cursor-pointer transition-colors hover:border-[#0071e3] bg-black/5 hover:bg-[#0071e3]/5 relative"
                   onClick={() => setShowMediaPicker(true)}
                 >
@@ -257,7 +265,7 @@ export default function AdminCategoriesPage() {
               </div>
 
               {showMediaPicker && (
-                <MediaPicker 
+                <MediaPicker
                   multiple={false}
                   onClose={() => setShowMediaPicker(false)}
                   onSelect={(path) => {

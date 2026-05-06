@@ -208,8 +208,14 @@ export default function AdminInquiriesPage() {
           {/* Inquiries List */}
           <div className="bg-white rounded-2xl border border-black/10 shadow-sm overflow-hidden">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="relative w-12 h-12">
+                  <div className="absolute inset-0 rounded-full border-4 border-[#0071e3]/10"></div>
+                  <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#0071e3] animate-spin"></div>
+                </div>
+                <p className="mt-4 text-[0.8rem] font-medium text-[#86868b] animate-pulse">
+                  Synchronizing Inbox...
+                </p>
               </div>
             ) : inquiries.length === 0 ? (
               <div className="text-center py-20 text-[#86868b]">

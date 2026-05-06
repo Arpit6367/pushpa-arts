@@ -41,10 +41,10 @@ export default function NewPage() {
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-black/5 space-y-6">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Page Title</label>
-            <input 
-              type="text" 
-              value={page.title} 
-              onChange={e => setPage({...page, title: e.target.value})}
+            <input
+              type="text"
+              value={page.title}
+              onChange={e => setPage({ ...page, title: e.target.value })}
               className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all"
               required
               placeholder="e.g. Our Story"
@@ -53,9 +53,9 @@ export default function NewPage() {
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Content (HTML)</label>
-            <textarea 
-              value={page.content} 
-              onChange={e => setPage({...page, content: e.target.value})}
+            <textarea
+              value={page.content}
+              onChange={e => setPage({ ...page, content: e.target.value })}
               className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all min-h-[400px] font-mono text-sm"
               required
               placeholder="<h1>Your Content</h1>..."
@@ -65,37 +65,37 @@ export default function NewPage() {
 
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-black/5 space-y-6">
           <h2 className="text-xl font-bold text-[#1d1d1f]">SEO Metadata</h2>
-          
+
           <div className="space-y-2">
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Meta Title</label>
-            <input 
-              type="text" 
-              value={page.meta_title || ''} 
-              onChange={e => setPage({...page, meta_title: e.target.value})}
+            <input
+              type="text"
+              value={page.meta_title || ''}
+              onChange={e => setPage({ ...page, meta_title: e.target.value })}
               className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-[#86868b] uppercase tracking-wider">Meta Description</label>
-            <textarea 
-              value={page.meta_description || ''} 
-              onChange={e => setPage({...page, meta_description: e.target.value})}
+            <textarea
+              value={page.meta_description || ''}
+              onChange={e => setPage({ ...page, meta_description: e.target.value })}
               className="w-full p-4 bg-[#f5f5f7] border-none rounded-xl focus:ring-2 focus:ring-[#0071e3] transition-all min-h-[100px]"
             />
           </div>
         </div>
 
         <div className="flex justify-end gap-4 pt-4">
-          <button 
+          <button
             type="button"
             onClick={() => router.back()}
             className="px-8 py-3 bg-[#f5f5f7] text-[#1d1d1f] rounded-full font-semibold hover:bg-black/5 transition-all"
           >
             Cancel
           </button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={saving}
             className="px-10 py-3 bg-[#0071e3] text-white rounded-full font-semibold hover:bg-[#0077ed] transition-all disabled:opacity-50"
           >

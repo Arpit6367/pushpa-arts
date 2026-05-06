@@ -37,7 +37,7 @@ export default function AdminTestimonials() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-[#1d1d1f]">Client Voices (Testimonials)</h1>
-        <Link 
+        <Link
           href="/admin/testimonials/new"
           className="px-6 py-3 bg-[#0071e3] text-white rounded-full font-semibold hover:bg-[#0077ed] transition-all"
         >
@@ -74,13 +74,13 @@ export default function AdminTestimonials() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right space-x-2">
-                  <Link 
+                  <Link
                     href={`/admin/testimonials/edit/${item.id}`}
                     className="text-[#0071e3] hover:underline font-medium text-sm"
                   >
                     Edit
                   </Link>
-                  <button 
+                  <button
                     onClick={() => deleteItem(item.id)}
                     className="text-[#ff3b30] hover:underline font-medium text-sm"
                   >

@@ -22,7 +22,7 @@ export default async function FaqPage() {
           <h1 className="text-4xl md:text-6xl font-heading mb-6 text-[#1d1d1f] italic">
             Frequently Asked <span className="text-[#B8860B]">Questions</span>
           </h1>
-          <div 
+          <div
             className="prose prose-lg text-black/60 leading-relaxed font-light max-w-2xl"
             dangerouslySetInnerHTML={{ __html: page.content }}
           />
@@ -30,8 +30,8 @@ export default async function FaqPage() {
 
         <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <details 
-              key={faq.id} 
+            <details
+              key={faq.id}
               className={`group bg-white border border-black/5 rounded-2xl overflow-hidden hover:border-[#B8860B]/30 transition-all shadow-sm reveal stagger-${(index % 5) + 1}`}
             >
               <summary className="list-none flex items-center justify-between p-6 sm:p-8 cursor-pointer select-none">
@@ -43,7 +43,7 @@ export default async function FaqPage() {
                 </span>
               </summary>
               <div className="px-6 sm:px-8 pb-8">
-                <div 
+                <div
                   className="prose prose-p:text-black/70 prose-p:leading-relaxed prose-p:font-light"
                   dangerouslySetInnerHTML={{ __html: faq.answer }}
                 />
@@ -61,8 +61,8 @@ export default async function FaqPage() {
         <div className="mt-20 p-10 bg-[#1d1d1f] rounded-3xl text-center text-white">
           <h3 className="text-2xl font-heading mb-4 italic">Still have questions?</h3>
           <p className="text-white/60 mb-8 font-light">Our concierge team is available to assist you with bespoke requests and detailed inquiries.</p>
-          <a 
-            href="/contact" 
+          <a
+            href="/contact"
             className="inline-block px-10 py-4 bg-[#B8860B] text-white rounded-full font-bold uppercase tracking-widest hover:bg-[#a67a0a] transition-all"
           >
             Contact Concierge

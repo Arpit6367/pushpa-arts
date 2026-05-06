@@ -1,6 +1,8 @@
 import { getProductBySlug } from '@/lib/products';
 import ProductDetailClient from './ProductDetailClient';
 
+export const revalidate = 3600; // revalidate every hour
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const productSlug = slug[slug.length - 1];

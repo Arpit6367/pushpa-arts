@@ -59,7 +59,7 @@ export default function MaterialShowcase({ items = [] }) {
             <h2 className="text-3xl font-heading leading-tight">Mastery in <span className="italic text-[var(--color-accent)]">Materials</span></h2>
           </div>
 
-          <div 
+          <div
             className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory gap-6 px-4 pb-10 -mx-4"
             onScroll={(e) => {
               const scrollLeft = e.currentTarget.scrollLeft;
@@ -71,24 +71,24 @@ export default function MaterialShowcase({ items = [] }) {
             }}
           >
             {displayItems.map((m, i) => (
-              <div 
+              <div
                 key={m.id}
                 className="flex-shrink-0 w-[85vw] snap-center relative"
               >
                 <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-xl mb-6">
-                   <Image 
-                     src={m.image}
-                     alt={m.title}
-                     fill
-                     className="object-cover"
-                   />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                   
-                   {/* Vertical Material Title */}
-                   <div className="absolute top-8 left-8">
-                      <span className="text-white/40 text-[0.5rem] uppercase tracking-[0.4em] font-bold block mb-2">Heritage Material</span>
-                      <h3 className="text-white text-2xl font-heading italic">{m.title}</h3>
-                   </div>
+                  <Image
+                    src={m.image}
+                    alt={m.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                  {/* Vertical Material Title */}
+                  <div className="absolute top-8 left-8">
+                    <span className="text-white/40 text-[0.5rem] uppercase tracking-[0.4em] font-bold block mb-2">Heritage Material</span>
+                    <h3 className="text-white text-2xl font-heading italic">{m.title}</h3>
+                  </div>
                 </div>
 
                 <div className="px-2">
@@ -103,11 +103,11 @@ export default function MaterialShowcase({ items = [] }) {
               </div>
             ))}
           </div>
-          
+
           {/* Slider Progress Indicator */}
           <div className="flex justify-center gap-3 mt-4">
             {displayItems.map((m) => (
-              <div 
+              <div
                 key={m.id}
                 className={`h-[2px] transition-all duration-500 ${active === m.id ? 'w-8 bg-[var(--color-accent)]' : 'w-2 bg-black/10'}`}
               />

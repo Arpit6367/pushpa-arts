@@ -5,7 +5,7 @@ export async function generateMetadata() {
   const page = await getPageBySlug('clients');
   const title = page?.title || 'Our Global Clients';
   const desc = page?.meta_description || 'Pushpa Exports takes pride in serving royal families, luxury hotel groups, and distinguished residences globally.';
-  
+
   return {
     title: `${title} | Pushpa Exports`,
     description: desc,

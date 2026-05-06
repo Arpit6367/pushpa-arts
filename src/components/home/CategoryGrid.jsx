@@ -15,8 +15,8 @@ export default function CategoryGrid({ categories }) {
 
         <div className="flex overflow-x-auto lg:grid lg:grid-cols-4 gap-6 md:gap-10 pb-10 lg:pb-0 no-scrollbar snap-x snap-mandatory">
           {categories.map((cat, i) => (
-            <Link 
-              key={cat.id} 
+            <Link
+              key={cat.id}
               href={`/product-category/${cat.slug_path}`}
               className="group block flex-shrink-0 w-[240px] md:w-[300px] lg:w-auto snap-start"
             >

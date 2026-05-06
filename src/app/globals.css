@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Montserrat:wght@200;300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -34,8 +33,8 @@
   --color-admin-text-secondary: #86868b;
   --color-admin-border: rgba(0, 0, 0, 0.08);
 
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Montserrat', sans-serif;
+  --font-heading: var(--font-cinzel), serif;
+  --font-body: var(--font-montserrat), sans-serif;
   --font-admin: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   --spacing-section: clamp(2rem, 5vw, 4rem);
@@ -575,19 +574,27 @@
 .artisan-description p {
   margin-bottom: 1.5rem;
 }
-.artisan-description strong, .artisan-description b {
+
+.artisan-description strong,
+.artisan-description b {
   font-weight: 600;
   color: #1d1d1f;
 }
-.artisan-description ul, .artisan-description ol {
+
+.artisan-description ul,
+.artisan-description ol {
   margin-bottom: 1.5rem;
   padding-left: 1.5rem;
 }
+
 .artisan-description li {
   margin-bottom: 0.5rem;
   list-style: disc;
 }
-.artisan-description h1, .artisan-description h2, .artisan-description h3 {
+
+.artisan-description h1,
+.artisan-description h2,
+.artisan-description h3 {
   font-family: var(--font-heading);
   margin-bottom: 1.5rem;
   margin-top: 2rem;

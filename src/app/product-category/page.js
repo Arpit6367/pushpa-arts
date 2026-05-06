@@ -4,6 +4,8 @@ import Link from 'next/link';
 import CategoryCard from '@/components/CategoryCard';
 import { ArrowRight, Sparkles, Hammer, Gem } from 'lucide-react';
 
+export const revalidate = 3600;
+
 export async function generateMetadata() {
     return {
         title: 'Luxury Furniture Collections | Pushpa Exports Udaipur',

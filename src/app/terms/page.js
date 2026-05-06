@@ -53,7 +53,7 @@ export default async function TermsPage() {
 
             <div className="space-y-16">
               <section id="policy" className="reveal border-b border-black/5 pb-12 last:border-0">
-                <div 
+                <div
                   className="prose prose-lg text-[#4A4A4A] font-light leading-relaxed prose-headings:font-heading prose-headings:text-2xl prose-headings:text-[#1d1d1f] prose-headings:mt-12 prose-headings:mb-6"
                   dangerouslySetInnerHTML={{ __html: page.content }}
                 />
@@ -63,8 +63,8 @@ export default async function TermsPage() {
             <div className="mt-20 p-10 bg-[#1d1d1f] rounded-3xl text-white reveal">
               <h3 className="text-2xl font-heading mb-4 italic">Have a Legal Inquiry?</h3>
               <p className="text-white/60 mb-8 font-light">Our administrative team is available to clarify any points regarding our service agreements.</p>
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="inline-block px-10 py-4 bg-[#B8860B] text-white rounded-full font-bold uppercase tracking-widest hover:bg-[#a67a0a] transition-all"
               >
                 Contact Administration

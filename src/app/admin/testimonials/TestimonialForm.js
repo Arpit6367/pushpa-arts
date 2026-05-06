@@ -165,7 +165,7 @@ export default function TestimonialForm({ id }) {
       </form>
 
       {showMediaPicker && (
-        <MediaPicker 
+        <MediaPicker
           onSelect={(path) => setItem({ ...item, image: path })}
           onClose={() => setShowMediaPicker(false)}
         />

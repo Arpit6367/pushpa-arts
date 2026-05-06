@@ -6,33 +6,6 @@ import Link from 'next/link';
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    if (pathname === '/admin/login') {
-      setChecking(false);
-      setIsAuthenticated(true);
-      return;
-    }
-
-    fetch('/api/files')
-      .then(res => {
-        if (res.ok) {
-          setIsAuthenticated(true);
-        } else if (res.status === 401) {
-          router.push('/admin/login');
-        } else {
-          setIsAuthenticated(true);
-        }
-        setChecking(false);
-      })
-      .catch(() => {
-        setIsAuthenticated(false);
-        router.push('/admin/login');
-        setChecking(false);
-      });
-  }, [pathname, router]);
 
   const handleLogout = async () => {
     await fetch('/api/admin/logout', { method: 'POST' });
@@ -67,16 +40,6 @@ export default function AdminLayout({ children }) {
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
-
-  if (checking) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#f5f5f7]">
-        <div className="w-8 h-8 rounded-full border-4 border-[#0071e3]/20 border-t-[#0071e3] animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) return null;
 
 
   const navItems = [
